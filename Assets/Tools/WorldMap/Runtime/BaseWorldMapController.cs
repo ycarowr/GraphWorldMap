@@ -18,7 +18,7 @@ namespace Tools.WorldMapCore.Runtime
         {
             ProfileMarker.Begin();
             WorldMapRoot = new GameObject("WorldMap");
-            WorldMapRoot.transform.position = -WorldMapParameters.WorldMapSize / 2;
+            WorldMapRoot.transform.position = -WorldMapParameters.WorldMapTotalWorldSize / 2;
             WorldMap = WorldMapParameters.GenerateWorldMap();
             ProfileMarker.End();
 

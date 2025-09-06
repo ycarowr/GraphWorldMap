@@ -45,7 +45,7 @@ namespace Tools.WorldMapCore.Runtime
         public void GenerateNodes()
         {
             amount = Data.Amount;
-            size = Data.Size;
+            size = Data.NodeWorldSize;
             for (index = 0; index < amount; ++index)
             {
                 worldPosition = GenerateRandomPosition();
@@ -117,7 +117,7 @@ namespace Tools.WorldMapCore.Runtime
 
         private Vector2 GenerateRandomPosition()
         {
-            bounds = Data.Bounds;
+            bounds = Data.WorldBounds;
             randX = Random.Range(bounds.xMin, bounds.xMax);
             randY = Random.Range(bounds.yMin, bounds.yMax);
             return new Vector2(randX, randY);

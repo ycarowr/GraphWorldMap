@@ -6,21 +6,28 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        [SerializeField] private int Amount = 32;
-        [SerializeField] private float MinDistance = 10;
-        [SerializeField] private Vector2 NodeSize = Vector2.one;
-        [SerializeField] private Vector2 Size = new(90, 60);
-        [SerializeField] private int iterations = 65535;
-        [SerializeField] private int seed = 1234;
-        [SerializeField] private bool useRandomSeed = true;
-        public Vector2 WorldMapSize => Size;
+        [SerializeField][Tooltip("Total amount of nodes that will be created.")]
+        private int amount = 32;
+        [SerializeField][Tooltip("Minimum distance between each node.")]
+        private float minDistance = 10;
+        [SerializeField][Tooltip("Node size in world units from each node.")]
+        private Vector2 nodeWorldSize = Vector2.one;
+        [SerializeField][Tooltip("Total world map size in world units.")]
+        private Vector2 totalWorldSize = new(90, 60);
+        [SerializeField][Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
+        private int iterations = 65535;
+        [SerializeField][Tooltip("Seed value used for generation of the map.")]
+        private int seed = 1234;
+        [SerializeField][Tooltip("Will the seed be used for generation of the map.")]
+        private bool useRandomSeed = true;
+        public Vector2 WorldMapTotalWorldSize => totalWorldSize;
 
         private WorldMapStaticData CreateData()
         {
-            var center = Size / 2;
-            var bounds = new Rect(center, Size);
+            var center = totalWorldSize / 2;
+            var bounds = new Rect(center, totalWorldSize);
             bounds.center = center;
-            return new WorldMapStaticData(Amount, NodeSize, MinDistance, bounds, seed, useRandomSeed);
+            return new WorldMapStaticData(amount, nodeWorldSize, minDistance, bounds, seed, useRandomSeed);
         }
 
         public WorldMap GenerateWorldMap()
@@ -35,13 +42,13 @@ namespace Tools.WorldMapCore.Database
 
                 // if this is the ideal number we return it
                 var currentAmount = worldMapInstance.Nodes.Count;
-                if (currentAmount == Amount)
+                if (currentAmount == amount)
                 {
                     return worldMapInstance;
                 }
 
                 // if not, we compare to with near ideal and perhaps keep it
-                var delta = Mathf.Abs(Amount - currentAmount);
+                var delta = Mathf.Abs(amount - currentAmount);
                 if (delta < nearIdealValue)
                 {
                     nearIdealValue = delta;
