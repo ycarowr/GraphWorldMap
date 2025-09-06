@@ -12,7 +12,8 @@ namespace Tools.WorldMapCore.Runtime
         public readonly Vector2 NodeWorldSize;
         public readonly Rect WorldBounds;
 
-        public WorldMapStaticData(int amount, Vector2 nodeWorldSize, float isolationDistance, Rect worldBounds, int seed, bool hasRandomSeed)
+        public WorldMapStaticData(int amount, Vector2 nodeWorldSize, float isolationDistance, Rect worldBounds,
+            int seed, bool hasRandomSeed)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -22,6 +23,5 @@ namespace Tools.WorldMapCore.Runtime
             HasRandomSeed = hasRandomSeed;
             MaxSeed = int.MaxValue;
         }
-
     }
 }

@@ -9,7 +9,7 @@ namespace Tools.WorldMapCore.Runtime
     {
         public abstract void Create();
     }
-    
+
     public abstract class BaseWorldMapController<TNode, TParameter> : BaseWorldMapController
         where TNode : BaseWorldMapNode
         where TParameter : WorldMapParameters
@@ -24,7 +24,13 @@ namespace Tools.WorldMapCore.Runtime
         {
             Create();
         }
-        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            WorldMap?.OnDrawGizmos();
+        }
+#endif
+
         [Button]
         public override void Create()
         {
@@ -34,7 +40,7 @@ namespace Tools.WorldMapCore.Runtime
             WorldMapRoot.transform.SetParent(transform);
             WorldMap = WorldMapParameters.GenerateWorldMap();
             ProfileMarker.End();
-            
+
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
@@ -44,11 +50,5 @@ namespace Tools.WorldMapCore.Runtime
                 worldMapNode.SetNode(node);
             }
         }
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            WorldMap?.OnDrawGizmos();
-        }
-#endif
     }
 }

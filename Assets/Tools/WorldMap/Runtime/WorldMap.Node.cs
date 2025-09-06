@@ -7,8 +7,6 @@ namespace Tools.WorldMapCore.Runtime
     {
         public readonly int ID;
         public readonly Rect WorldRect;
-        public Vector2 WorldPosition => WorldRect.center;
-        public Vector2 Size => WorldRect.size;
 
         public Node(int id, Vector2 worldPosition, Vector2 size)
         {
@@ -16,6 +14,9 @@ namespace Tools.WorldMapCore.Runtime
             WorldRect = new Rect(worldPosition, size);
             WorldRect.center = worldPosition;
         }
+
+        public Vector2 WorldPosition => WorldRect.center;
+        public Vector2 Size => WorldRect.size;
 
         public int CompareTo(Node other)
         {

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
   amount: 10
-  isolationDistance: -1
-  nodeWorldSize: {x: 5, y: 5}
-  totalWorldSize: {x: 50, y: 30}
+  isolationDistance: 10
+  nodeWorldSize: {x: 2, y: 2}
+  totalWorldSize: {x: 30, y: 30}
   iterations: 1
   seed: 109910114
   hasRandomSeed: 1

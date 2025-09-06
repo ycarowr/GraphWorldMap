@@ -1,6 +1,5 @@
 using Tools.WorldMapCore.Database;
 using Tools.WorldMapCore.Runtime;
-using UnityEngine;
 
 namespace Game
 {
@@ -10,7 +9,7 @@ namespace Game
         [UnityEditor.Callbacks.DidReloadScripts]
         private static void OnScriptsReloaded()
         {
-            GameObject.FindFirstObjectByType<BaseWorldMapController>().Create();
+            FindFirstObjectByType<BaseWorldMapController>().Create();
         }
 #endif
     }
