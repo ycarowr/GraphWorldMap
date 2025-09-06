@@ -8,7 +8,7 @@ namespace Tools.WorldMapCore.Database
     {
         [SerializeField] private int Amount = 32;
         [SerializeField] private float MinDistance = 10;
-        [SerializeField] private Vector2 RoomSize = Vector2.one;
+        [SerializeField] private Vector2 NodeSize = Vector2.one;
         [SerializeField] private Vector2 Size = new(90, 60);
         [SerializeField] private int iterations = 65535;
         [SerializeField] private int seed = 1234;
@@ -20,34 +20,36 @@ namespace Tools.WorldMapCore.Database
             var center = Size / 2;
             var bounds = new Rect(center, Size);
             bounds.center = center;
-            return new WorldMapStaticData(Amount, RoomSize, MinDistance, bounds, seed, useRandomSeed);
+            return new WorldMapStaticData(Amount, NodeSize, MinDistance, bounds, seed, useRandomSeed);
         }
 
-        public WorldMap GenerateDungeon()
+        public WorldMap GenerateWorldMap()
         {
-            WorldMap nearestWorldMap = null;
-            var distance = int.MaxValue;
+            WorldMap nearIdealWorldMap = null;
+            var nearIdealValue = int.MaxValue;
             for (var index = 0; index < iterations; index++)
             {
-                var dungeonData = CreateData();
-                var dungeon = new WorldMap(dungeonData);
-                dungeon.Create();
+                var worldData = CreateData();
+                var worldMapInstance = new WorldMap(worldData);
+                worldMapInstance.GenerateNodes();
 
-                var currentAmount = dungeon.Nodes.Count;
+                // if this is the ideal number we return it
+                var currentAmount = worldMapInstance.Nodes.Count;
                 if (currentAmount == Amount)
                 {
-                    return dungeon;
+                    return worldMapInstance;
                 }
 
-                var currentDistance = Mathf.Abs(Amount - currentAmount);
-                if (currentDistance < distance)
+                // if not, we compare to with near ideal and perhaps keep it
+                var delta = Mathf.Abs(Amount - currentAmount);
+                if (delta < nearIdealValue)
                 {
-                    distance = currentDistance;
-                    nearestWorldMap = dungeon;
+                    nearIdealValue = delta;
+                    nearIdealWorldMap = worldMapInstance;
                 }
             }
 
-            return nearestWorldMap;
+            return nearIdealWorldMap;
         }
     }
 }

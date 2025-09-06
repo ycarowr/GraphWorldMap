@@ -19,7 +19,7 @@ namespace Tools.WorldMapCore.Runtime
             ProfileMarker.Begin();
             WorldMapRoot = new GameObject("WorldMap");
             WorldMapRoot.transform.position = -WorldMapParameters.WorldMapSize / 2;
-            WorldMap = WorldMapParameters.GenerateDungeon();
+            WorldMap = WorldMapParameters.GenerateWorldMap();
             ProfileMarker.End();
 
             CreateNodes();
