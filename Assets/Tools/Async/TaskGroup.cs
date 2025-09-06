@@ -7,11 +7,13 @@ namespace Tools.Async
     public sealed class TaskGroup
     {
         private readonly Action OnComplete;
+        private readonly Action OnStart;
         private readonly List<Task> Tasks;
 
-        public TaskGroup(Action callback)
+        public TaskGroup(Action onStart = null, Action onComplete = null)
         {
-            OnComplete = callback;
+            OnStart = onStart;
+            OnComplete = onComplete;
             Tasks = new List<Task>();
         }
 
@@ -28,8 +30,9 @@ namespace Tools.Async
 
         public void ExecuteAll()
         {
+            OnStart?.Invoke();
             Task.WaitAll(Tasks.ToArray());
-            OnComplete.Invoke();
+            OnComplete?.Invoke();
         }
 
         public void Clear()

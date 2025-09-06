@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
@@ -14,15 +15,16 @@ namespace Tools.WorldMapCore.Runtime
             All = int.MaxValue,
         }
 
-        public readonly WorldMapStaticData Data;
+        private readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<Node>> Deletions;
         public readonly List<Node> Nodes;
+        public readonly WorldMapRandom Random;
 
         public WorldMap(WorldMapStaticData data)
         {
             Data = data;
             WorldMapHelper.ResetID();
-            WorldMapHelper.GenerateSeed(Data);
+            Random = new WorldMapRandom(Data);
             Nodes = new List<Node>();
             Deletions = new Dictionary<EDeletionReason, List<Node>>
             {
@@ -32,18 +34,27 @@ namespace Tools.WorldMapCore.Runtime
             };
         }
 
+
         public bool IsValid()
         {
             return Nodes != null && Nodes.Count != 0;
+        }
+
+        public bool IsPerfect()
+        {
+            return Nodes.Count == Data.Amount;
         }
 
         public void GenerateNodes()
         {
             var amountToCreate = Data.Amount;
             var worldSize = Data.NodeWorldSize;
-            while(Nodes.Count != amountToCreate)
+            var count = 0;
+            var maxCount = Mathf.Max(Data.Iterations, amountToCreate);
+            while (Nodes.Count != amountToCreate && count < maxCount)
             {
-                var worldPosition = WorldMapHelper.GenerateRandomPosition(Data);
+                count++;
+                var worldPosition = Random.GenerateRandomPosition(Data);
                 var newNode = new Node(WorldMapHelper.GenerateID(), worldPosition, worldSize);
 
                 if (WorldMapHelper.CheckOverlap(newNode, Nodes))

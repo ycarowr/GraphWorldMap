@@ -1,4 +1,3 @@
-using Tools.Async;
 using Tools.Attributes;
 using Tools.WorldMapCore.Database;
 using UnityEngine;
@@ -18,7 +17,7 @@ namespace Tools.WorldMapCore.Runtime
         [SerializeField] protected TParameter WorldMapParameters;
         protected WorldMap WorldMap;
         protected GameObject WorldMapRoot;
-        private TaskGroup WorldMapTask;
+
 
         protected virtual void Awake()
         {
@@ -37,19 +36,18 @@ namespace Tools.WorldMapCore.Runtime
             DestroyImmediate(WorldMapRoot);
             WorldMapRoot = new GameObject("WorldMap");
             WorldMapRoot.transform.SetParent(transform);
-            WorldMapTask = new TaskGroup(RefreshAsync);
-            WorldMapTask.AddTask(WorldMapParameters.GenerateWorldMap);
-            WorldMapTask.ExecuteAll();
+            WorldMap = null;
+            WorldMapParameters.GenerateWorldMap(RefreshAsync);
         }
 
         private void RefreshAsync()
         {
-            if (!WorldMapParameters.WorldMap.IsValid())
+            WorldMap = WorldMapParameters.GetWorldMap();
+            if (WorldMap == null)
             {
                 return;
             }
 
-            WorldMap = WorldMapParameters.WorldMap;
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
@@ -58,6 +56,8 @@ namespace Tools.WorldMapCore.Runtime
                 worldMapNode.name = "Node_" + index;
                 worldMapNode.SetNode(node);
             }
+
+            Debug.Log($"RefreshAsync: {WorldMap.Random.Seed} {WorldMapRoot.transform.childCount}");
         }
     }
 }

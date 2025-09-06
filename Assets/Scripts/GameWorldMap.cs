@@ -6,7 +6,7 @@ namespace Game
     public class GameWorldMap : BaseWorldMapController<GameWorldMapNode, WorldMapParameters>
     {
 #if UNITY_EDITOR
-        [UnityEditor.Callbacks.DidReloadScripts]
+        //[UnityEditor.Callbacks.DidReloadScripts]
         private static void OnScriptsReloaded()
         {
             FindFirstObjectByType<BaseWorldMapController>()?.Create();
