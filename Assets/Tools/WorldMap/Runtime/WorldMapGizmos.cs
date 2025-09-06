@@ -14,7 +14,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 // Draw center 
                 Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(data.WorldBounds.center, 0.3f);
+                Gizmos.DrawWireSphere(data.WorldBounds.center, 0.2f);
             }
 
             {
@@ -31,16 +31,16 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                Gizmos.color = Color.blue;
+                Gizmos.color = Color.green;
                 for (var i = 0; i < nodes.Count; i++)
                 {
                     var node = nodes[i];
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMin, 0),
-                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMax, 0),
-                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMax, 0),
-                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
                     Gizmos.DrawLineStrip(points, true);
                 }
@@ -55,10 +55,10 @@ namespace Tools.WorldMapCore.Runtime
                     var node = deleted[i];
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMin, 0),
-                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMax, 0),
-                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMax, 0),
-                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
                     Gizmos.DrawLineStrip(points, true);
                 }
@@ -73,10 +73,28 @@ namespace Tools.WorldMapCore.Runtime
                     var node = deleted[i];
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMin, 0),
-                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMax, 0),
-                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMax, 0),
-                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
+                    };
+                    Gizmos.DrawLineStrip(points, true);
+                }
+            }
+
+            {
+                // Draw Bounds
+                Gizmos.color = Color.yellow;
+                var deleted = deletions[WorldMap.EDeletionReason.OutOfBounds];
+                for (var i = 0; i < deleted.Count; i++)
+                {
+                    var node = deleted[i];
+                    ReadOnlySpan<Vector3> points = new[]
+                    {
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
                     Gizmos.DrawLineStrip(points, true);
                 }

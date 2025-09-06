@@ -5,18 +5,18 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class Node : IComparable<Node>
     {
+        public readonly Rect Bounds;
         public readonly int ID;
-        public readonly Rect WorldRect;
 
         public Node(int id, Vector2 worldPosition, Vector2 size)
         {
             ID = id;
-            WorldRect = new Rect(worldPosition, size);
-            WorldRect.center = worldPosition;
+            Bounds = new Rect(worldPosition, size);
+            Bounds.center = worldPosition;
         }
 
-        public Vector2 WorldPosition => WorldRect.center;
-        public Vector2 Size => WorldRect.size;
+        public Vector2 WorldPosition => Bounds.center;
+        public Vector2 Size => Bounds.size;
 
         public int CompareTo(Node other)
         {

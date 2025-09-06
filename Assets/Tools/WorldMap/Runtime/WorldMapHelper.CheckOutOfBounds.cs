@@ -4,7 +4,9 @@
     {
         public static bool CheckBounds(Node node, WorldMapStaticData data)
         {
-            return true;
+            var worldBounds = data.WorldBounds;
+            var nodeBounds = node.Bounds;
+            return CheckRectContains(worldBounds, nodeBounds);
         }
     }
 }
