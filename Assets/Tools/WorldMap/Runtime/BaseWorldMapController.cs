@@ -32,10 +32,6 @@ namespace Tools.WorldMapCore.Runtime
             DestroyImmediate(WorldMapRoot);
             WorldMapRoot = new GameObject("WorldMap");
             WorldMapRoot.transform.SetParent(transform);
-            if (WorldMapParameters.IsCentralizeInWorldZero)
-            {
-                WorldMapRoot.transform.position = -WorldMapParameters.WorldMapTotalWorldSize / 2;
-            }
             WorldMap = WorldMapParameters.GenerateWorldMap();
             ProfileMarker.End();
             

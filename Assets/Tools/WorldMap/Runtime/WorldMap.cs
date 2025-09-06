@@ -12,6 +12,7 @@ namespace Tools.WorldMapCore.Runtime
         
         public readonly WorldMapStaticData Data;
         public readonly List<Node> Nodes;
+        public readonly List<Node> OverlapNodes;
         public bool IsValid() => Nodes != null && Nodes.Count != 0;
 
         // Begin optimization
@@ -53,6 +54,7 @@ namespace Tools.WorldMapCore.Runtime
             }
             Random.InitState(seed);
             Nodes = new List<Node>();
+            OverlapNodes = new List<Node>();
             remove = new List<Node>();
         }
 
@@ -68,6 +70,10 @@ namespace Tools.WorldMapCore.Runtime
                 if (CheckOverlap(node))
                 {
                     Nodes.Add(node);
+                }
+                else
+                {
+                    OverlapNodes.Add(node);
                 }
             }
 
@@ -96,6 +102,11 @@ namespace Tools.WorldMapCore.Runtime
 
         private void CheckIsolationDistance()
         {
+            if (Data.IsolationDistance <= 0)
+            {
+                return;
+            }
+            
             remove.Clear();
             for (distanceIndexA = 0; distanceIndexA < Nodes.Count; distanceIndexA++)
             {
@@ -142,13 +153,13 @@ namespace Tools.WorldMapCore.Runtime
         {
             {
                 // Draw center 
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(Data.WorldBounds.center, 0.6f);
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawWireSphere(Data.WorldBounds.center, 0.3f);
             }
 
             {
-                // Draw center
-                Gizmos.color = Color.red;
+                // Draw borders
+                Gizmos.color = Color.magenta;
                 ReadOnlySpan<Vector3> points = new Vector3[]
                 {
                     new Vector3(bounds.xMin, bounds.yMin, 0),
@@ -164,6 +175,23 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < Nodes.Count; i++)
                 {
                     node = Nodes[i];
+                    ReadOnlySpan<Vector3> points = new Vector3[]
+                    {
+                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMin, 0),
+                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMax, 0),
+                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMax, 0),
+                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMin, 0),
+                    };
+                    Gizmos.DrawLineStrip(points, true);
+                }
+            }
+            
+            {
+                // Draw collisions
+                Gizmos.color = Color.red;
+                for (var i = 0; i < OverlapNodes.Count; i++)
+                {
+                    node = OverlapNodes[i];
                     ReadOnlySpan<Vector3> points = new Vector3[]
                     {
                         new Vector3(node.WorldRect.xMin, node.WorldRect.yMin, 0),

@@ -10,7 +10,7 @@ namespace Tools.WorldMapCore.Database
     {
         [SerializeField][Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
-        [SerializeField][Tooltip("Minimum distance necessary between two nodes in order to keep them alive.")]
+        [SerializeField][Tooltip("Minimum distance necessary between two nodes in order to keep them alive. Use a negative value to ignore.")]
         private float isolationDistance = 10;
         [SerializeField][Tooltip("Node size in world units from each node.")]
         private Vector2 nodeWorldSize = Vector2.one;
@@ -22,11 +22,6 @@ namespace Tools.WorldMapCore.Database
         private int seed;
         [SerializeField][Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
-        [SerializeField][Tooltip("Will the map centralized around the point Zero")]
-        private bool centralizeInWorldZero = false;
-        
-        public Vector2 WorldMapTotalWorldSize => totalWorldSize;
-        public bool IsCentralizeInWorldZero => centralizeInWorldZero;
         
         private WorldMapStaticData CreateData()
         {

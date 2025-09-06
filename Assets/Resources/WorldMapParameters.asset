@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  amount: 15
-  minDistance: 12
-  nodeWorldSize: {x: 1, y: 1}
-  totalWorldSize: {x: 100, y: 30}
-  iterations: 20000
+  amount: 10
+  isolationDistance: -1
+  nodeWorldSize: {x: 5, y: 5}
+  totalWorldSize: {x: 50, y: 30}
+  iterations: 1
   seed: 109910114
   hasRandomSeed: 1
-  centralizeInWorldZero: 0
