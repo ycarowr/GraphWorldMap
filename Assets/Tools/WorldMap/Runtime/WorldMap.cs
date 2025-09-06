@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -6,8 +7,12 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class WorldMap
     {
-        private readonly WorldMapStaticData Data;
+        private static int GenerateID() => ++NodeID;
+        private static int NodeID = 0;
+        
+        public readonly WorldMapStaticData Data;
         public readonly List<Node> Nodes;
+        public bool IsValid() => Nodes != null && Nodes.Count != 0;
 
         // Begin optimization
         private int amount;
@@ -21,7 +26,7 @@ namespace Tools.WorldMapCore.Runtime
         private Rect rectA;
         private Rect rectB;
         private readonly List<Node> remove;
-        private float minDistance;
+        private float isolationDistance;
         private float distance;
         private int distanceIndexA;
         private int distanceIndexB;
@@ -33,11 +38,20 @@ namespace Tools.WorldMapCore.Runtime
         
         public WorldMap(WorldMapStaticData data)
         {
+            NodeID = 0;
             Data = data;
-            if (!data.UseRandomSeed)
+            var seed = 0;
+            if (data.HasRandomSeed)
             {
-                Random.InitState(data.Seed);
+                seed = Random.Range(0, data.MaxSeed);
+                Debug.Log("Random Seed: " + seed);
             }
+            else
+            {
+                seed = data.Seed;
+                Debug.Log("Collected Seed: " + seed);
+            }
+            Random.InitState(seed);
             Nodes = new List<Node>();
             remove = new List<Node>();
         }
@@ -49,7 +63,7 @@ namespace Tools.WorldMapCore.Runtime
             for (index = 0; index < amount; ++index)
             {
                 worldPosition = GenerateRandomPosition();
-                node = new Node(worldPosition, size);
+                node = new Node(GenerateID(), worldPosition, size);
 
                 if (CheckOverlap(node))
                 {
@@ -58,7 +72,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             Nodes.Sort();
-            CheckDistance();
+            CheckIsolationDistance();
         }
 
         private bool CheckOverlap(Node nodeA)
@@ -80,13 +94,13 @@ namespace Tools.WorldMapCore.Runtime
             return true;
         }
 
-        private void CheckDistance()
+        private void CheckIsolationDistance()
         {
             remove.Clear();
             for (distanceIndexA = 0; distanceIndexA < Nodes.Count; distanceIndexA++)
             {
                 var nodeA = Nodes[distanceIndexA];
-                minDistance = float.MaxValue;
+                isolationDistance = float.MaxValue;
                 for (distanceIndexB = 0; distanceIndexB < Nodes.Count; distanceIndexB++)
                 {
                     var nodeB = Nodes[distanceIndexB];
@@ -96,13 +110,13 @@ namespace Tools.WorldMapCore.Runtime
                     }
 
                     distance = Vector2.Distance(nodeA.WorldPosition, nodeB.WorldPosition);
-                    if (distance < minDistance)
+                    if (distance < isolationDistance)
                     {
-                        minDistance = distance;
+                        isolationDistance = distance;
                     }
                 }
 
-                if (minDistance > Data.MinDistance)
+                if (isolationDistance > Data.IsolationDistance)
                 {
                     remove.Add(nodeA);
                 }
@@ -122,5 +136,46 @@ namespace Tools.WorldMapCore.Runtime
             randY = Random.Range(bounds.yMin, bounds.yMax);
             return new Vector2(randX, randY);
         }
+
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
+        {
+            {
+                // Draw center 
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(Data.WorldBounds.center, 0.6f);
+            }
+
+            {
+                // Draw center
+                Gizmos.color = Color.red;
+                ReadOnlySpan<Vector3> points = new Vector3[]
+                {
+                    new Vector3(bounds.xMin, bounds.yMin, 0),
+                    new Vector3(bounds.xMin, bounds.yMax, 0),
+                    new Vector3(bounds.xMax, bounds.yMax, 0),
+                    new Vector3(bounds.xMax, bounds.yMin, 0),
+                };
+                Gizmos.DrawLineStrip(points, true);
+            }
+
+            {
+                Gizmos.color = Color.blue;
+                for (var i = 0; i < Nodes.Count; i++)
+                {
+                    node = Nodes[i];
+                    ReadOnlySpan<Vector3> points = new Vector3[]
+                    {
+                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMin, 0),
+                        new Vector3(node.WorldRect.xMin, node.WorldRect.yMax, 0),
+                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMax, 0),
+                        new Vector3(node.WorldRect.xMax, node.WorldRect.yMin, 0),
+                    };
+                    Gizmos.DrawLineStrip(points, true);
+                }
+            }
+        }
+#endif
+        
     }
 }

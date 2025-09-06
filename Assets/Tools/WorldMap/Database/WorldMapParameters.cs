@@ -1,4 +1,6 @@
-﻿using Tools.WorldMapCore.Runtime;
+﻿using Game;
+using Tools.Attributes;
+using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Database
@@ -8,8 +10,8 @@ namespace Tools.WorldMapCore.Database
     {
         [SerializeField][Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
-        [SerializeField][Tooltip("Minimum distance between each node.")]
-        private float minDistance = 10;
+        [SerializeField][Tooltip("Minimum distance necessary between two nodes in order to keep them alive.")]
+        private float isolationDistance = 10;
         [SerializeField][Tooltip("Node size in world units from each node.")]
         private Vector2 nodeWorldSize = Vector2.one;
         [SerializeField][Tooltip("Total world map size in world units.")]
@@ -17,24 +19,29 @@ namespace Tools.WorldMapCore.Database
         [SerializeField][Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
         private int iterations = 65535;
         [SerializeField][Tooltip("Seed value used for generation of the map.")]
-        private int seed = 1234;
+        private int seed;
         [SerializeField][Tooltip("Will the seed be used for generation of the map.")]
-        private bool useRandomSeed = true;
+        private bool hasRandomSeed = true;
+        [SerializeField][Tooltip("Will the map centralized around the point Zero")]
+        private bool centralizeInWorldZero = false;
+        
         public Vector2 WorldMapTotalWorldSize => totalWorldSize;
-
+        public bool IsCentralizeInWorldZero => centralizeInWorldZero;
+        
         private WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
             var bounds = new Rect(center, totalWorldSize);
             bounds.center = center;
-            return new WorldMapStaticData(amount, nodeWorldSize, minDistance, bounds, seed, useRandomSeed);
+            return new WorldMapStaticData(amount, nodeWorldSize, isolationDistance, bounds, seed, hasRandomSeed);
         }
 
         public WorldMap GenerateWorldMap()
         {
             WorldMap nearIdealWorldMap = null;
             var nearIdealValue = int.MaxValue;
-            for (var index = 0; index < iterations; index++)
+            int index;
+            for (index = 0; index < iterations; index++)
             {
                 var worldData = CreateData();
                 var worldMapInstance = new WorldMap(worldData);
@@ -44,6 +51,7 @@ namespace Tools.WorldMapCore.Database
                 var currentAmount = worldMapInstance.Nodes.Count;
                 if (currentAmount == amount)
                 {
+                    Debug.Log($"Total Iterations: {index} Exact ");
                     return worldMapInstance;
                 }
 
@@ -56,7 +64,16 @@ namespace Tools.WorldMapCore.Database
                 }
             }
 
+            Debug.Log($"Total Iterations: {index} Amount: {nearIdealWorldMap?.Nodes.Count}");
             return nearIdealWorldMap;
         }
+#if UNITY_EDITOR
+        [Button]
+        private void Refresh()
+        {
+            GameObject.FindFirstObjectByType<BaseWorldMapController>().Create();
+        }
+#endif
+        
     }
 }

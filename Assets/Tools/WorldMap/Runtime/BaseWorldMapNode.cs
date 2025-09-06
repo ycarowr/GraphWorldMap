@@ -13,6 +13,7 @@ namespace Tools.WorldMapCore.Runtime
 
         public void SetNode(Node node)
         {
+            titleText.text = node.ID.ToString();
             transform.localPosition = node.WorldPosition;
             spriteRenderer.transform.localScale = node.Size;
         }

@@ -1,10 +1,16 @@
+using Tools.Attributes;
 using Tools.WorldMapCore.Database;
 using Unity.Profiling;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public abstract class BaseWorldMapController<TNode, TParameter> : MonoBehaviour
+    public abstract class BaseWorldMapController : MonoBehaviour
+    {
+        public abstract void Create();
+    }
+    
+    public abstract class BaseWorldMapController<TNode, TParameter> : BaseWorldMapController
         where TNode : BaseWorldMapNode
         where TParameter : WorldMapParameters
     {
@@ -16,17 +22,23 @@ namespace Tools.WorldMapCore.Runtime
 
         protected virtual void Awake()
         {
+            Create();
+        }
+        
+        [Button]
+        public override void Create()
+        {
             ProfileMarker.Begin();
+            DestroyImmediate(WorldMapRoot);
             WorldMapRoot = new GameObject("WorldMap");
-            WorldMapRoot.transform.position = -WorldMapParameters.WorldMapTotalWorldSize / 2;
+            WorldMapRoot.transform.SetParent(transform);
+            if (WorldMapParameters.IsCentralizeInWorldZero)
+            {
+                WorldMapRoot.transform.position = -WorldMapParameters.WorldMapTotalWorldSize / 2;
+            }
             WorldMap = WorldMapParameters.GenerateWorldMap();
             ProfileMarker.End();
-
-            CreateNodes();
-        }
-
-        protected virtual void CreateNodes()
-        {
+            
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
@@ -36,5 +48,11 @@ namespace Tools.WorldMapCore.Runtime
                 worldMapNode.SetNode(node);
             }
         }
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            WorldMap?.OnDrawGizmos();
+        }
+#endif
     }
 }
