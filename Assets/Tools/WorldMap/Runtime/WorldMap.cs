@@ -41,7 +41,7 @@ namespace Tools.WorldMapCore.Runtime
         {
             var amountToCreate = Data.Amount;
             var worldSize = Data.NodeWorldSize;
-            for (var index = 0; index < amountToCreate; ++index)
+            while(Nodes.Count != amountToCreate)
             {
                 var worldPosition = WorldMapHelper.GenerateRandomPosition(Data);
                 var newNode = new Node(WorldMapHelper.GenerateID(), worldPosition, worldSize);

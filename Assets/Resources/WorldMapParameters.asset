@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  amount: 10
-  isolationDistance: 10
+  amount: 25
+  isolationDistance: 7
   nodeWorldSize: {x: 2, y: 2}
-  totalWorldSize: {x: 30, y: 30}
-  iterations: 1
+  totalWorldSize: {x: 80, y: 30}
+  iterations: 10000
   seed: 109910114
   hasRandomSeed: 1
   DebugValues:
     DrawGizmos: 1
-    DeletionReason: 0
+    DeletionReason: 2147483647
