@@ -9,7 +9,7 @@ namespace Game
         [UnityEditor.Callbacks.DidReloadScripts]
         private static void OnScriptsReloaded()
         {
-            FindFirstObjectByType<BaseWorldMapController>().Create();
+            FindFirstObjectByType<BaseWorldMapController>()?.Create();
         }
 #endif
     }

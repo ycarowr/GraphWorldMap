@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Tools.WorldMapCore.Database;
+using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
@@ -11,9 +12,15 @@ namespace Tools.WorldMapCore.Runtime
         public readonly float IsolationDistance;
         public readonly Vector2 NodeWorldSize;
         public readonly Rect WorldBounds;
+        public readonly WorldMapParameters.DebugData DebugData;
 
-        public WorldMapStaticData(int amount, Vector2 nodeWorldSize, float isolationDistance, Rect worldBounds,
-            int seed, bool hasRandomSeed)
+        public WorldMapStaticData(int amount,
+            Vector2 nodeWorldSize,
+            float isolationDistance,
+            Rect worldBounds,
+            int seed,
+            bool hasRandomSeed,
+            WorldMapParameters.DebugData debugData)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -22,6 +29,7 @@ namespace Tools.WorldMapCore.Runtime
             Seed = seed;
             HasRandomSeed = hasRandomSeed;
             MaxSeed = int.MaxValue;
+            DebugData = debugData;
         }
     }
 }

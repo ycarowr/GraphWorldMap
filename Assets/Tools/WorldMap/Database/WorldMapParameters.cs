@@ -1,4 +1,5 @@
-﻿using Tools.Attributes;
+﻿using System;
+using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 
@@ -30,12 +31,21 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
+        [SerializeField] private DebugData DebugValues;
+
         private WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
             var bounds = new Rect(center, totalWorldSize);
             bounds.center = center;
-            return new WorldMapStaticData(amount, nodeWorldSize, isolationDistance, bounds, seed, hasRandomSeed);
+            return new WorldMapStaticData(
+                amount,
+                nodeWorldSize,
+                isolationDistance,
+                bounds,
+                seed,
+                hasRandomSeed,
+                DebugValues);
         }
 
         public WorldMap GenerateWorldMap()
@@ -76,5 +86,11 @@ namespace Tools.WorldMapCore.Database
             FindFirstObjectByType<BaseWorldMapController>().Create();
         }
 #endif
+        [Serializable]
+        public class DebugData
+        {
+            public bool DrawGizmos = true;
+            public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
+        }
     }
 }

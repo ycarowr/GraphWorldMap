@@ -10,6 +10,8 @@ namespace Tools.WorldMapCore.Runtime
             Overlap = 1,
             OutOfBounds = 2,
             Isolation = 3,
+
+            All = int.MaxValue,
         }
 
         public readonly WorldMapStaticData Data;

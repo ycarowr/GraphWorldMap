@@ -19,3 +19,6 @@ MonoBehaviour:
   iterations: 1
   seed: 109910114
   hasRandomSeed: 1
+  DebugValues:
+    DrawGizmos: 1
+    DeletionReason: 0

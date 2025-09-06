@@ -11,6 +11,11 @@ namespace Tools.WorldMapCore.Runtime
         public static void DrawGizmos(WorldMapStaticData data, List<Node> nodes,
             Dictionary<WorldMap.EDeletionReason, List<Node>> deletions)
         {
+            if (!data.DebugData.DrawGizmos)
+            {
+                return;
+            }
+
             {
                 // Draw center 
                 Gizmos.color = Color.magenta;
@@ -46,57 +51,67 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
+            var isAll = data.DebugData.DeletionReason == WorldMap.EDeletionReason.All;
             {
-                // Draw collisions
-                Gizmos.color = Color.red;
-                var deleted = deletions[WorldMap.EDeletionReason.Overlap];
-                for (var i = 0; i < deleted.Count; i++)
+                if (isAll || data.DebugData.DeletionReason == WorldMap.EDeletionReason.Overlap)
                 {
-                    var node = deleted[i];
-                    ReadOnlySpan<Vector3> points = new[]
+                    // Draw Overlap
+                    Gizmos.color = Color.red;
+                    var deleted = deletions[WorldMap.EDeletionReason.Overlap];
+                    for (var i = 0; i < deleted.Count; i++)
                     {
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
-                    };
-                    Gizmos.DrawLineStrip(points, true);
+                        var node = deleted[i];
+                        ReadOnlySpan<Vector3> points = new[]
+                        {
+                            new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                            new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                            new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                            new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
+                        };
+                        Gizmos.DrawLineStrip(points, true);
+                    }
                 }
             }
 
             {
-                // Draw isolation
-                Gizmos.color = Color.white;
-                var deleted = deletions[WorldMap.EDeletionReason.Isolation];
-                for (var i = 0; i < deleted.Count; i++)
+                if (isAll || data.DebugData.DeletionReason == WorldMap.EDeletionReason.Isolation)
                 {
-                    var node = deleted[i];
-                    ReadOnlySpan<Vector3> points = new[]
+                    // Draw isolation
+                    Gizmos.color = Color.white;
+                    var deleted = deletions[WorldMap.EDeletionReason.Isolation];
+                    for (var i = 0; i < deleted.Count; i++)
                     {
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
-                    };
-                    Gizmos.DrawLineStrip(points, true);
+                        var node = deleted[i];
+                        ReadOnlySpan<Vector3> points = new[]
+                        {
+                            new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                            new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                            new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                            new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
+                        };
+                        Gizmos.DrawLineStrip(points, true);
+                    }
                 }
             }
 
             {
-                // Draw Bounds
-                Gizmos.color = Color.yellow;
-                var deleted = deletions[WorldMap.EDeletionReason.OutOfBounds];
-                for (var i = 0; i < deleted.Count; i++)
+                if (isAll || data.DebugData.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
                 {
-                    var node = deleted[i];
-                    ReadOnlySpan<Vector3> points = new[]
+                    // Draw Bounds
+                    Gizmos.color = Color.yellow;
+                    var deleted = deletions[WorldMap.EDeletionReason.OutOfBounds];
+                    for (var i = 0; i < deleted.Count; i++)
                     {
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
-                    };
-                    Gizmos.DrawLineStrip(points, true);
+                        var node = deleted[i];
+                        ReadOnlySpan<Vector3> points = new[]
+                        {
+                            new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                            new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                            new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                            new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
+                        };
+                        Gizmos.DrawLineStrip(points, true);
+                    }
                 }
             }
         }
