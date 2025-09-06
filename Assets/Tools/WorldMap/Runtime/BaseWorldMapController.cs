@@ -1,6 +1,6 @@
+using Tools.Async;
 using Tools.Attributes;
 using Tools.WorldMapCore.Database;
-using Unity.Profiling;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -14,11 +14,11 @@ namespace Tools.WorldMapCore.Runtime
         where TNode : BaseWorldMapNode
         where TParameter : WorldMapParameters
     {
-        protected static readonly ProfilerMarker ProfileMarker = new("WorldMapController::WorldMapController");
         [SerializeField] protected TNode WorldMapNodePrefab;
         [SerializeField] protected TParameter WorldMapParameters;
         protected WorldMap WorldMap;
         protected GameObject WorldMapRoot;
+        private TaskGroup WorldMapTask;
 
         protected virtual void Awake()
         {
@@ -34,13 +34,22 @@ namespace Tools.WorldMapCore.Runtime
         [Button]
         public override void Create()
         {
-            ProfileMarker.Begin();
             DestroyImmediate(WorldMapRoot);
             WorldMapRoot = new GameObject("WorldMap");
             WorldMapRoot.transform.SetParent(transform);
-            WorldMap = WorldMapParameters.GenerateWorldMap();
-            ProfileMarker.End();
+            WorldMapTask = new TaskGroup(RefreshAsync);
+            WorldMapTask.AddTask(WorldMapParameters.GenerateWorldMap);
+            WorldMapTask.ExecuteAll();
+        }
 
+        private void RefreshAsync()
+        {
+            if (!WorldMapParameters.WorldMap.IsValid())
+            {
+                return;
+            }
+
+            WorldMap = WorldMapParameters.WorldMap;
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {

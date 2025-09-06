@@ -33,6 +33,8 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private DebugData DebugValues;
 
+        public WorldMap WorldMap { get; private set; }
+
         private WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
@@ -48,7 +50,7 @@ namespace Tools.WorldMapCore.Database
                 DebugValues);
         }
 
-        public WorldMap GenerateWorldMap()
+        public void GenerateWorldMap()
         {
             WorldMap nearIdealWorldMap = null;
             var nearIdealValue = int.MaxValue;
@@ -64,7 +66,8 @@ namespace Tools.WorldMapCore.Database
                 if (currentAmount == amount)
                 {
                     Debug.Log($"Total Iterations: {index} Exact ");
-                    return worldMapInstance;
+                    WorldMap = worldMapInstance;
+                    break;
                 }
 
                 // if not, we compare to with near ideal and perhaps keep it
@@ -77,7 +80,7 @@ namespace Tools.WorldMapCore.Database
             }
 
             Debug.Log($"Total Iterations: {index} Amount: {nearIdealWorldMap?.Nodes.Count}");
-            return nearIdealWorldMap;
+            WorldMap = nearIdealWorldMap;
         }
 #if UNITY_EDITOR
         [Button]

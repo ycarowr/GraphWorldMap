@@ -18,7 +18,7 @@ MonoBehaviour:
   totalWorldSize: {x: 80, y: 30}
   iterations: 10000
   seed: 109910114
-  hasRandomSeed: 1
+  hasRandomSeed: 0
   DebugValues:
     DrawGizmos: 1
     DeletionReason: 2147483647
