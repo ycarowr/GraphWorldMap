@@ -16,4 +16,6 @@ MonoBehaviour:
   MinDistance: 10
   RoomSize: {x: 1, y: 1}
   Size: {x: 90, y: 60}
-  iterations: 65435
+  iterations: 1
+  seed: 714252191
+  useRandomSeed: 0

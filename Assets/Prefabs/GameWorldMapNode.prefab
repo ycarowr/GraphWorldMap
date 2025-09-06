@@ -114,7 +114,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5842543845117764331
@@ -126,9 +126,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2508776380680732635}
-  - component: {fileID: 8723155918659203437}
+  - component: {fileID: 6484865640850939378}
   m_Layer: 5
-  m_Name: UiWorldMapNode
+  m_Name: GameWorldMapNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ Transform:
   - {fileID: 4145835099411182659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8723155918659203437
+--- !u!114 &6484865640850939378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,11 +159,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5842543845117764331}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 432ab624771baac48b5ef9404fadbb8d, type: 3}
+  m_Script: {fileID: 11500000, guid: a4522951f31f4176869e80f3e50e1f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 660607606020897834}
   spriteRenderer: {fileID: 4764957661368576278}
+  titleText: {fileID: 9137734377902128098}
 --- !u!1 &8310074702042941445
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,12 +177,12 @@ GameObject:
   - component: {fileID: 8468560175901104841}
   - component: {fileID: 9137734377902128098}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5653259480599331306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -221,7 +222,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 21817435741267842, guid: c84d5a8079d5e364fa1c4b25230dc23f, type: 2}
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -263,13 +264,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Island
-
-'
+  m_text: Node
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c84d5a8079d5e364fa1c4b25230dc23f, type: 2}
-  m_sharedMaterial: {fileID: 21817435741267842, guid: c84d5a8079d5e364fa1c4b25230dc23f,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

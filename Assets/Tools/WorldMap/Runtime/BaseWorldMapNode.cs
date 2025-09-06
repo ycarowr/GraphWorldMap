@@ -1,13 +1,15 @@
-using Tools.WorldMapCreation;
+using TMPro;
 using UnityEngine;
 
-namespace Runtime.WorldMap
+namespace Tools.WorldMapCore.Runtime
 {
-    public class WorldMapNode : MonoBehaviour
+    public abstract class BaseWorldMapNode : MonoBehaviour
     {
         [SerializeField] private GameObject content;
 
         [SerializeField] private SpriteRenderer spriteRenderer;
+
+        [SerializeField] private TMP_Text titleText;
 
         public void SetNode(Node node)
         {

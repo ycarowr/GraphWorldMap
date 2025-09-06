@@ -1,7 +1,7 @@
-﻿using Tools.WorldMapCreation;
+﻿using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 
-namespace Database.WorldMap
+namespace Tools.WorldMapCore.Database
 {
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
@@ -9,8 +9,10 @@ namespace Database.WorldMap
         [SerializeField] private int Amount = 32;
         [SerializeField] private float MinDistance = 10;
         [SerializeField] private Vector2 RoomSize = Vector2.one;
-        [SerializeField] private Vector2 Size = new Vector2(90, 60);
+        [SerializeField] private Vector2 Size = new(90, 60);
         [SerializeField] private int iterations = 65535;
+        [SerializeField] private int seed = 1234;
+        [SerializeField] private bool useRandomSeed = true;
         public Vector2 WorldMapSize => Size;
 
         private WorldMapStaticData CreateData()
@@ -18,23 +20,22 @@ namespace Database.WorldMap
             var center = Size / 2;
             var bounds = new Rect(center, Size);
             bounds.center = center;
-            return new WorldMapStaticData(Amount, RoomSize, MinDistance, bounds);
+            return new WorldMapStaticData(Amount, RoomSize, MinDistance, bounds, seed, useRandomSeed);
         }
 
-        public Tools.WorldMapCreation.WorldMap GenerateDungeon()
+        public WorldMap GenerateDungeon()
         {
-            Tools.WorldMapCreation.WorldMap nearestWorldMap = null;
+            WorldMap nearestWorldMap = null;
             var distance = int.MaxValue;
             for (var index = 0; index < iterations; index++)
             {
                 var dungeonData = CreateData();
-                var dungeon = new Tools.WorldMapCreation.WorldMap(dungeonData);
+                var dungeon = new WorldMap(dungeonData);
                 dungeon.Create();
 
                 var currentAmount = dungeon.Nodes.Count;
                 if (currentAmount == Amount)
                 {
-                    Debug.Log("Exact");
                     return dungeon;
                 }
 

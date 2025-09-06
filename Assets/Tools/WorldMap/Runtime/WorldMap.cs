@@ -2,16 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Tools.WorldMapCreation
+namespace Tools.WorldMapCore.Runtime
 {
     public class WorldMap
     {
         private readonly WorldMapStaticData Data;
         public readonly List<Node> Nodes;
-        
+
         public WorldMap(WorldMapStaticData data)
         {
             Data = data;
+            if (!data.UseRandomSeed)
+            {
+                Random.InitState(data.Seed);
+            }
             Nodes = new List<Node>();
         }
 

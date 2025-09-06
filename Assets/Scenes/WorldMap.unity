@@ -269,7 +269,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2369326652349924901, guid: aa2268cccb3cddd44a88689c5ba5f9b2, type: 3}
       propertyPath: m_Name
-      value: UiWorldMap
+      value: GameWorldMap
       objectReference: {fileID: 0}
     - target: {fileID: 3323007370727446421, guid: aa2268cccb3cddd44a88689c5ba5f9b2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -311,7 +311,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5921032398131970070, guid: aa2268cccb3cddd44a88689c5ba5f9b2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

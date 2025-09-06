@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Tools.WorldMapCreation
+namespace Tools.WorldMapCore.Runtime
 {
     public class Node : IComparable<Node>
     {
