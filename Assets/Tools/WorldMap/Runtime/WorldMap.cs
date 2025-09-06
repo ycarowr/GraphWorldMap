@@ -9,6 +9,28 @@ namespace Tools.WorldMapCore.Runtime
         private readonly WorldMapStaticData Data;
         public readonly List<Node> Nodes;
 
+        // Begin optimization
+        private int amount;
+        private int index;
+        private Vector2 size;
+        private Vector3 worldPosition;
+        private Node node;
+        private Rect bounds;
+        private float randX;
+        private float randY;
+        private Rect rectA;
+        private Rect rectB;
+        private readonly List<Node> remove;
+        private float minDistance;
+        private float distance;
+        private int distanceIndexA;
+        private int distanceIndexB;
+        private int indexRemoval;
+        private int indexOverlap;
+        private Node nodeOverlap;
+        private int nodesCount;
+        // End optimization
+        
         public WorldMap(WorldMapStaticData data)
         {
             Data = data;
@@ -17,16 +39,17 @@ namespace Tools.WorldMapCore.Runtime
                 Random.InitState(data.Seed);
             }
             Nodes = new List<Node>();
+            remove = new List<Node>();
         }
 
-        public void Create()
+        public void GenerateNodes()
         {
-            var amount = Data.Amount;
-            var size = Data.Size;
-            for (var index = 0; index < amount; ++index)
+            amount = Data.Amount;
+            size = Data.Size;
+            for (index = 0; index < amount; ++index)
             {
-                var worldPosition = GenerateRandomPosition();
-                var node = new Node(worldPosition, size);
+                worldPosition = GenerateRandomPosition();
+                node = new Node(worldPosition, size);
 
                 if (CheckOverlap(node))
                 {
@@ -40,10 +63,11 @@ namespace Tools.WorldMapCore.Runtime
 
         private bool CheckOverlap(Node nodeA)
         {
-            foreach (var nodeB in Nodes)
+            for (indexOverlap = 0; indexOverlap < Nodes.Count; indexOverlap++)
             {
-                var rectA = new Rect(nodeA.WorldPosition, nodeA.Size);
-                var rectB = new Rect(nodeB.WorldPosition, nodeB.Size);
+                nodeOverlap = Nodes[indexOverlap];
+                rectA = new Rect(nodeA.WorldPosition, nodeA.Size);
+                rectB = new Rect(nodeOverlap.WorldPosition, nodeOverlap.Size);
                 if (rectA.x < rectB.x + rectB.size.x &&
                     rectA.y < rectB.y + rectB.size.y &&
                     rectB.x < rectA.x + rectA.size.x &&
@@ -58,18 +82,20 @@ namespace Tools.WorldMapCore.Runtime
 
         private void CheckDistance()
         {
-            var remove = new List<Node>();
-            foreach (var nodeA in Nodes)
+            remove.Clear();
+            for (distanceIndexA = 0; distanceIndexA < Nodes.Count; distanceIndexA++)
             {
-                var minDistance = float.MaxValue;
-                foreach (var nodeB in Nodes)
+                var nodeA = Nodes[distanceIndexA];
+                minDistance = float.MaxValue;
+                for (distanceIndexB = 0; distanceIndexB < Nodes.Count; distanceIndexB++)
                 {
+                    var nodeB = Nodes[distanceIndexB];
                     if (nodeA == nodeB)
                     {
                         continue;
                     }
 
-                    var distance = Vector2.Distance(nodeA.WorldPosition, nodeB.WorldPosition);
+                    distance = Vector2.Distance(nodeA.WorldPosition, nodeB.WorldPosition);
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -82,18 +108,19 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            foreach (var node in remove)
+            for (indexRemoval = 0; indexRemoval < remove.Count; indexRemoval++)
             {
+                node = remove[indexRemoval];
                 Nodes.Remove(node);
             }
         }
 
         private Vector2 GenerateRandomPosition()
         {
-            var bounds = Data.Bounds;
-            var x = Random.Range(bounds.xMin, bounds.xMax);
-            var y = Random.Range(bounds.yMin, bounds.yMax);
-            return new Vector2(x, y);
+            bounds = Data.Bounds;
+            randX = Random.Range(bounds.xMin, bounds.xMax);
+            randY = Random.Range(bounds.yMin, bounds.yMax);
+            return new Vector2(randX, randY);
         }
     }
 }
