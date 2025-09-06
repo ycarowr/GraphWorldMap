@@ -20,9 +20,9 @@ namespace Tools.WorldMapCore.Runtime
         public Vector2 GenerateRandomPosition(WorldMapStaticData data)
         {
             var bounds = data.WorldBounds;
-            var randX = RandomGenerator.Next((int)bounds.xMin, (int)bounds.xMax);
-            var randY = RandomGenerator.Next((int)bounds.yMin, (int)bounds.yMax);
-            return new Vector2(randX, randY);
+            var randX = RandomGenerator.NextDouble() * bounds.size.x;
+            var randY = RandomGenerator.NextDouble() * bounds.size.y;
+            return new Vector2((float)randX, (float)randY);
         }
     }
 }

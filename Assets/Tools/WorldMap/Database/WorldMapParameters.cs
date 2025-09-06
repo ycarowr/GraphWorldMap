@@ -9,6 +9,7 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
+        private const float FRACTION_THRESHOLD = 0.0001f;
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
 
@@ -43,17 +44,20 @@ namespace Tools.WorldMapCore.Database
         private TaskGroup ParallelTaskGroup;
         private WorldMap PerfectWorldMap;
 
-        public int Iterations => iterations;
+        private void OnEnable()
+        {
+            IsProcessing = false;
+        }
 
         public WorldMap GetWorldMap()
         {
             return PerfectWorldMap ?? NearIdealWorldMap;
         }
-
+        
         private WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize);
+            var bounds = new Rect(center, totalWorldSize + new Vector2(FRACTION_THRESHOLD, FRACTION_THRESHOLD));
             bounds.center = center;
             return new WorldMapStaticData(
                 amount,
@@ -76,7 +80,7 @@ namespace Tools.WorldMapCore.Database
             IsProcessing = true;
             ResetData();
 
-            if (ValidateParameters())
+            if (ValidateTotalArea())
             {
                 Debug.LogError("The requested amount of nodes is too large to fit in the area.");
                 return;
@@ -100,7 +104,7 @@ namespace Tools.WorldMapCore.Database
             }
         }
 
-        private bool ValidateParameters()
+        private bool ValidateTotalArea()
         {
             var totalArea = totalWorldSize.x * totalWorldSize.y;
             var nodeArea = nodeWorldSize.x * nodeWorldSize.y;
