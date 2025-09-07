@@ -36,8 +36,7 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
-        [SerializeField] [Tooltip("Runtime debug data.")]
-        private DebugData DebugValues;
+        [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
         public WorldMapStaticData CreateData()
         {
@@ -66,6 +65,7 @@ namespace Tools.WorldMapCore.Database
         [Serializable]
         public class DebugData
         {
+            public bool SelectOwnerOnCreate;
             public bool DrawGizmos = true;
             public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }

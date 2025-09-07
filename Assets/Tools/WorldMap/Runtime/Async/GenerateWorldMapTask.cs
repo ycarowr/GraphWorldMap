@@ -9,16 +9,12 @@ namespace Tools.WorldMapCore.Runtime
         public GenerateWorldMapTask(WorldMapStaticData data, Action onComplete) : base(null, onComplete)
         {
             Data = data;
+            OnStart += () => { Debug.Log("Parallel Iteration Started!"); };
 
-            OnStart += () =>
-            {
-                Debug.Log($"Parallel Iteration Started!");
-            };
-                
             OnComplete += () =>
             {
                 HasCompleted = true;
-                Debug.Log($"Parallel Iteration Completed!");
+                Debug.Log("Parallel Iteration Completed!");
             };
         }
 
@@ -71,6 +67,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
+
             Debug.Log($"Dispatching {Data.ParallelIterations} Iterations ...");
             HasStarted = true;
             ResetData();
