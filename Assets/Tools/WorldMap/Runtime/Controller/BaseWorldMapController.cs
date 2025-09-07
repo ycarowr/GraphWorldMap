@@ -44,12 +44,30 @@ namespace Tools.WorldMapCore.Runtime
         }
 
 #if UNITY_EDITOR
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             WorldMap?.OnDrawGizmos();
         }
 #endif
 
+        [Button]
+        public override void Create()
+        {
+            Clean();
+            SetupRoot();
+
+            var data = WorldMapParameters.CreateData();
+            GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
+            GenerateWorldMapTask.Dispatch();
+#if UNITY_EDITOR
+            if (WorldMapParameters.DebugValues.SelectOwnerOnCreate)
+            {
+                // keeping selection int this object for update while in the editor
+                Selection.objects = new Object[] { gameObject };
+            }
+#endif
+        }
+        
         [Button]
         public void Cancel()
         {
@@ -74,24 +92,6 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             Debug.Log("Refresh Map");
-        }
-
-        [Button]
-        public override void Create()
-        {
-            Clean();
-            SetupRoot();
-
-            var data = WorldMapParameters.CreateData();
-            GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
-            GenerateWorldMapTask.Dispatch();
-#if UNITY_EDITOR
-            if (WorldMapParameters.DebugValues.SelectOwnerOnCreate)
-            {
-                // keeping selection int this object for update while in the editor
-                Selection.objects = new Object[] { gameObject };
-            }
-#endif
         }
 
         private void SetupRoot()

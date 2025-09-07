@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public class Node : IComparable<Node>
+    public class WorldMapNode : IComparable<WorldMapNode>
     {
         public readonly Rect Bounds;
         public readonly int ID;
 
-        public Node(int id, Vector2 worldPosition, Vector2 size)
+        public WorldMapNode(int id, Vector2 worldPosition, Vector2 size)
         {
             ID = id;
             Bounds = new Rect(worldPosition, size);
@@ -18,7 +18,7 @@ namespace Tools.WorldMapCore.Runtime
         public Vector2 WorldPosition => Bounds.center;
         public Vector2 Size => Bounds.size;
 
-        public int CompareTo(Node other)
+        public int CompareTo(WorldMapNode other)
         {
             if (WorldPosition.x > other.WorldPosition.x)
             {

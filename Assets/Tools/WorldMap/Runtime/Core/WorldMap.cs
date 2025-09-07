@@ -16,8 +16,8 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         private readonly WorldMapStaticData Data;
-        private readonly Dictionary<EDeletionReason, List<Node>> Deletions;
-        public readonly List<Node> Nodes;
+        private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
+        public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
 
         public WorldMap(WorldMapStaticData data)
@@ -25,12 +25,12 @@ namespace Tools.WorldMapCore.Runtime
             Data = data;
             WorldMapHelper.ResetID();
             Random = new WorldMapRandom(Data);
-            Nodes = new List<Node>();
-            Deletions = new Dictionary<EDeletionReason, List<Node>>
+            Nodes = new List<WorldMapNode>();
+            Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
             {
-                { EDeletionReason.OutOfBounds, new List<Node>() },
-                { EDeletionReason.Overlap, new List<Node>() },
-                { EDeletionReason.Isolation, new List<Node>() },
+                { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
+                { EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { EDeletionReason.Isolation, new List<WorldMapNode>() },
             };
         }
 
@@ -55,7 +55,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 count++;
                 var worldPosition = Random.GenerateRandomPosition(Data);
-                var newNode = new Node(WorldMapHelper.GenerateID(), worldPosition, worldSize);
+                var newNode = new WorldMapNode(WorldMapHelper.GenerateID(), worldPosition, worldSize);
 
                 if (WorldMapHelper.CheckOverlap(newNode, Nodes))
                 {

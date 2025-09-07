@@ -8,8 +8,8 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGizmos
     {
-        public static void DrawGizmos(WorldMapStaticData data, List<Node> nodes,
-            Dictionary<WorldMap.EDeletionReason, List<Node>> deletions)
+        public static void DrawGizmos(WorldMapStaticData data, List<WorldMapNode> nodes,
+            Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
         {
             if (!data.DebugData.DrawGizmos)
             {

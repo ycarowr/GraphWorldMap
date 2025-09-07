@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  amount: 150
+  amount: 35
   isolationDistance: -1
   nodeWorldSize: {x: 2, y: 2}
-  totalWorldSize: {x: 70, y: 10}
+  totalWorldSize: {x: 60, y: 20}
   iterations: 65536
-  parallelIterations: 3000
+  parallelIterations: 300
   timeout: 60
   seed: 0
   hasRandomSeed: 1
