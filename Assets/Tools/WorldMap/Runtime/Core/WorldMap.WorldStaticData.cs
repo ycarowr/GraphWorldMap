@@ -14,6 +14,8 @@ namespace Tools.WorldMapCore.Runtime
         public readonly WorldMapParameters.DebugData DebugData;
         public readonly int Iterations;
         public readonly int ParallelIterations;
+        public readonly int Timeout;
+
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -22,6 +24,7 @@ namespace Tools.WorldMapCore.Runtime
             int seed,
             int iterations,
             int parallelIterations,
+            int timeout,
             bool hasRandomSeed,
             WorldMapParameters.DebugData debugData)
         {
@@ -34,6 +37,7 @@ namespace Tools.WorldMapCore.Runtime
             DebugData = debugData;
             Iterations = iterations;
             ParallelIterations = parallelIterations;
+            Timeout = timeout;
         }
 
         public bool ValidateTotalArea()
