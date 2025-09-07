@@ -4,25 +4,29 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
+    // Base non-generic class for the map controller
     public abstract class BaseWorldMapController : MonoBehaviour
     {
         public abstract void Create();
     }
 
-    public abstract class BaseWorldMapController<TNode, TParameter> : BaseWorldMapController
+    // Base generalized class for the map controller
+    public abstract class BaseWorldMapController<TNode, TParameter>
+        : BaseWorldMapController
         where TNode : BaseWorldMapNode
         where TParameter : WorldMapParameters
     {
         [SerializeField] protected TNode WorldMapNodePrefab;
         [SerializeField] protected TParameter WorldMapParameters;
-        protected WorldMap WorldMap;
-        protected GameObject WorldMapRoot;
 
+        // Current instance of the world map.
+        protected WorldMap WorldMap { get; private set; }
 
-        protected virtual void Awake()
-        {
-            Create();
-        }
+        // Root transform which the nodes are instantiated.
+        protected GameObject WorldMapRoot { get; private set; }
+
+        private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
+
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
@@ -33,21 +37,32 @@ namespace Tools.WorldMapCore.Runtime
         [Button]
         public override void Create()
         {
-            DestroyImmediate(WorldMapRoot);
+            Clean();
+            SetupRoot();
+
+            var data = WorldMapParameters.CreateData();
+            GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
+            GenerateWorldMapTask.Dispatch();
+        }
+
+        private void SetupRoot()
+        {
             WorldMapRoot = new GameObject("WorldMap");
             WorldMapRoot.transform.SetParent(transform);
+        }
+
+        private void Clean()
+        {
             WorldMap = null;
-            WorldMapParameters.GenerateWorldMap(RefreshAsync);
+            if (WorldMapRoot)
+            {
+                DestroyImmediate(WorldMapRoot);
+            }
         }
 
         private void RefreshAsync()
         {
-            WorldMap = WorldMapParameters.GetWorldMap();
-            if (WorldMap == null)
-            {
-                return;
-            }
-
+            WorldMap = GenerateWorldMapTask.GetWorldMap();
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {

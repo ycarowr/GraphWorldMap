@@ -1,5 +1,4 @@
 ﻿using System;
-using Tools.Async;
 using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
 using UnityEngine;
@@ -10,6 +9,7 @@ namespace Tools.WorldMapCore.Database
     public class WorldMapParameters : ScriptableObject
     {
         private const float FRACTION_THRESHOLD = 0.0001f;
+
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
 
@@ -36,25 +36,10 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
-        [SerializeField] private DebugData DebugValues;
-        private bool IsProcessing;
-        private int NearIdealValue = int.MaxValue;
-        private WorldMap NearIdealWorldMap;
+        [SerializeField] [Tooltip("Runtime debug data.")]
+        private DebugData DebugValues;
 
-        private TaskGroup ParallelTaskGroup;
-        private WorldMap PerfectWorldMap;
-
-        private void OnEnable()
-        {
-            IsProcessing = false;
-        }
-
-        public WorldMap GetWorldMap()
-        {
-            return PerfectWorldMap ?? NearIdealWorldMap;
-        }
-        
-        private WorldMapStaticData CreateData()
+        public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
             var bounds = new Rect(center, totalWorldSize + new Vector2(FRACTION_THRESHOLD, FRACTION_THRESHOLD));
@@ -66,88 +51,9 @@ namespace Tools.WorldMapCore.Database
                 bounds,
                 seed,
                 iterations,
+                parallelIterations,
                 hasRandomSeed,
                 DebugValues);
-        }
-
-        public void GenerateWorldMap(Action OnComplete)
-        {
-            if (IsProcessing)
-            {
-                return;
-            }
-
-            IsProcessing = true;
-            ResetData();
-
-            if (ValidateTotalArea())
-            {
-                Debug.LogError("The requested amount of nodes is too large to fit in the area.");
-                return;
-            }
-
-            ParallelTaskGroup?.Clear();
-            ParallelTaskGroup = new TaskGroup(null, OnFinish);
-            for (var i = 0; i < parallelIterations; i++)
-            {
-                var index = i;
-                ParallelTaskGroup.AddTask(() => GenerateWorldMap(index));
-            }
-
-            ParallelTaskGroup.ExecuteAll();
-            return;
-
-            void OnFinish()
-            {
-                IsProcessing = false;
-                OnComplete?.Invoke();
-            }
-        }
-
-        private bool ValidateTotalArea()
-        {
-            var totalArea = totalWorldSize.x * totalWorldSize.y;
-            var nodeArea = nodeWorldSize.x * nodeWorldSize.y;
-            var totalNodeArea = nodeArea * amount;
-            return totalNodeArea > totalArea;
-        }
-
-        private void ResetData()
-        {
-            PerfectWorldMap = null;
-            NearIdealWorldMap = null;
-            NearIdealValue = int.MaxValue;
-        }
-
-        private void GenerateWorldMap(int index)
-        {
-            if (PerfectWorldMap != null)
-            {
-                //Debug.Log($"Skipped {index}");
-                return;
-            }
-
-            var worldData = CreateData();
-            var worldMapInstance = new WorldMap(worldData);
-            worldMapInstance.GenerateNodes();
-
-            // if this is the ideal number we return it
-            var currentAmount = worldMapInstance.Nodes.Count;
-            if (currentAmount == amount)
-            {
-                Debug.Log($"Executed Parallel: {index} seed:{worldMapInstance.Random.Seed}");
-                PerfectWorldMap = worldMapInstance;
-                return;
-            }
-
-            // if not, we compare to with near ideal and perhaps keep it
-            var delta = Mathf.Abs(amount - currentAmount);
-            if (delta < NearIdealValue)
-            {
-                NearIdealValue = delta;
-                NearIdealWorldMap = worldMapInstance;
-                Debug.Log($"Near: Parallel: {index} seed:{NearIdealWorldMap.Random.Seed} delta: {delta}");
-            }
         }
 
 #if UNITY_EDITOR

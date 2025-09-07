@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace Tools.Async
 {
-    public sealed class TaskGroup
+    public class TaskGroup
     {
-        private readonly Action OnComplete;
-        private readonly Action OnStart;
+        protected readonly Action OnStart;
         private readonly List<Task> Tasks;
+        protected Action OnComplete;
 
         public TaskGroup(Action onStart = null, Action onComplete = null)
         {

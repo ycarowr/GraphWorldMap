@@ -10,7 +10,7 @@ namespace Tools.WorldMapCore.Runtime
             var nodeBounds = node.Bounds;
             return CheckRectContains(worldBounds, nodeBounds);
         }
-        
+
         private static bool CheckRectContains(Rect rectA, Rect rectB)
         {
             var point0 = new Vector3(rectB.xMin, rectB.yMin, 0);

@@ -7,15 +7,12 @@ namespace Tools.WorldMapCore.Runtime
     {
         [SerializeField] private GameObject content;
 
-        [SerializeField] private SpriteRenderer spriteRenderer;
-
         [SerializeField] private TMP_Text titleText;
 
         public void SetNode(Node node)
         {
             titleText.text = node.ID.ToString();
             transform.localPosition = node.WorldPosition;
-            spriteRenderer.transform.localScale = node.Size;
         }
     }
 }

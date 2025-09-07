@@ -13,6 +13,7 @@ namespace Tools.WorldMapCore.Runtime
         public readonly Rect WorldBounds;
         public readonly WorldMapParameters.DebugData DebugData;
         public readonly int Iterations;
+        public readonly int ParallelIterations;
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -20,6 +21,7 @@ namespace Tools.WorldMapCore.Runtime
             Rect worldBounds,
             int seed,
             int iterations,
+            int parallelIterations,
             bool hasRandomSeed,
             WorldMapParameters.DebugData debugData)
         {
@@ -31,6 +33,15 @@ namespace Tools.WorldMapCore.Runtime
             HasRandomSeed = hasRandomSeed;
             DebugData = debugData;
             Iterations = iterations;
+            ParallelIterations = parallelIterations;
+        }
+
+        public bool ValidateTotalArea()
+        {
+            var totalArea = WorldBounds.size.x * WorldBounds.size.y;
+            var nodeArea = NodeWorldSize.x * NodeWorldSize.y;
+            var totalNodeArea = nodeArea * Amount;
+            return totalNodeArea > totalArea;
         }
     }
 }
