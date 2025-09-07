@@ -51,6 +51,32 @@ namespace Tools.WorldMapCore.Runtime
 #endif
 
         [Button]
+        public void Cancel()
+        {
+            GenerateWorldMapTask.Cancel();
+        }
+
+        [Button]
+        public void RefreshMap()
+        {
+            if (WorldMap == null)
+            {
+                return;
+            }
+
+            var count = WorldMap.Nodes.Count;
+            for (var index = 0; index < count; ++index)
+            {
+                var node = WorldMap.Nodes[index];
+                var worldMapNode = Instantiate(WorldMapNodePrefab, WorldMapRoot.transform);
+                worldMapNode.name = "Node_" + index;
+                worldMapNode.SetNode(node);
+            }
+
+            Debug.Log("Refresh Map");
+        }
+
+        [Button]
         public override void Create()
         {
             Clean();
@@ -88,26 +114,6 @@ namespace Tools.WorldMapCore.Runtime
             WorldMap = GenerateWorldMapTask.GetWorldMap();
             HasRefreshed = true;
             Debug.Log($"Refresh Async: {WorldMap.Random.Seed}");
-        }
-
-        [Button]
-        private void RefreshMap()
-        {
-            if (WorldMap == null)
-            {
-                return;
-            }
-
-            var count = WorldMap.Nodes.Count;
-            for (var index = 0; index < count; ++index)
-            {
-                var node = WorldMap.Nodes[index];
-                var worldMapNode = Instantiate(WorldMapNodePrefab, WorldMapRoot.transform);
-                worldMapNode.name = "Node_" + index;
-                worldMapNode.SetNode(node);
-            }
-
-            Debug.Log("Refresh Map");
         }
     }
 }

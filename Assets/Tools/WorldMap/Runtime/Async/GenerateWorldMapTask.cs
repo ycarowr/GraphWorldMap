@@ -6,7 +6,7 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class GenerateWorldMapTask : TaskGroup
     {
-        public GenerateWorldMapTask(WorldMapStaticData data, Action onComplete) : base(null, onComplete)
+        public GenerateWorldMapTask(WorldMapStaticData data, Action onComplete) : base(null, onComplete, data.Timeout)
         {
             Data = data;
             OnStart += () => { Debug.Log("Parallel Iteration Started!"); };

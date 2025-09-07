@@ -30,6 +30,9 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
         private int parallelIterations = 100;
 
+        [SerializeField] [Tooltip("Timeout for parallel iterations in Seconds.")]
+        private int timeout = 60;
+
         [SerializeField] [Tooltip("Seed value used for generation of the map.")]
         private int seed;
 
@@ -51,6 +54,7 @@ namespace Tools.WorldMapCore.Database
                 seed,
                 iterations,
                 parallelIterations,
+                timeout,
                 hasRandomSeed,
                 DebugValues);
         }
