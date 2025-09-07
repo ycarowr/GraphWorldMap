@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
   amount: 4
-  isolationDistance: 2.1
+  isolationDistance: -1
   nodeWorldSize: {x: 2, y: 2}
   totalWorldSize: {x: 10, y: 10}
   iterations: 65536
-  parallelIterations: 30000
+  parallelIterations: 300
   seed: 0
   hasRandomSeed: 1
   DebugValues:

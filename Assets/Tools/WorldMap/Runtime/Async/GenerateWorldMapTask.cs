@@ -9,7 +9,17 @@ namespace Tools.WorldMapCore.Runtime
         public GenerateWorldMapTask(WorldMapStaticData data, Action onComplete) : base(null, onComplete)
         {
             Data = data;
-            OnComplete += () => HasCompleted = true;
+
+            OnStart += () =>
+            {
+                Debug.Log($"Parallel Iteration Started!");
+            };
+                
+            OnComplete += () =>
+            {
+                HasCompleted = true;
+                Debug.Log($"Parallel Iteration Completed!");
+            };
         }
 
         public bool HasStarted { get; set; }
@@ -24,7 +34,7 @@ namespace Tools.WorldMapCore.Runtime
 
         private WorldMapStaticData Data { get; }
 
-        private void GenerateWorldMapStep(int index)
+        private void GenerateWorldMapIteration(int index)
         {
             if (PerfectWorldMap != null)
             {
@@ -40,7 +50,7 @@ namespace Tools.WorldMapCore.Runtime
             var currentAmount = worldMapInstance.Nodes.Count;
             if (currentAmount == amount)
             {
-                Debug.Log($"Executed Parallel: {index} seed:{worldMapInstance.Random.Seed}");
+                Debug.Log($"Parallel Iteration index:{index} Seed:{worldMapInstance.Random.Seed} Perfect!");
                 PerfectWorldMap = worldMapInstance;
                 return;
             }
@@ -51,7 +61,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 NearIdealValue = delta;
                 NearIdealWorldMap = worldMapInstance;
-                Debug.Log($"Near: Parallel: {index} seed:{NearIdealWorldMap.Random.Seed} delta: {delta}");
+                Debug.Log($"Parallel Iteration index:{index} Seed:{NearIdealWorldMap.Random.Seed} Delta: {delta}");
             }
         }
 
@@ -61,7 +71,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
-
+            Debug.Log($"Dispatching {Data.ParallelIterations} Iterations ...");
             HasStarted = true;
             ResetData();
 
@@ -74,7 +84,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var i = 0; i < Data.ParallelIterations; i++)
             {
                 var index = i;
-                AddTask(() => GenerateWorldMapStep(index));
+                AddTask(() => GenerateWorldMapIteration(index));
             }
 
             ExecuteAll();

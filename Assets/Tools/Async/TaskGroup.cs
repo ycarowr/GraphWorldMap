@@ -6,9 +6,9 @@ namespace Tools.Async
 {
     public class TaskGroup
     {
-        protected readonly Action OnStart;
         private readonly List<Task> Tasks;
         protected Action OnComplete;
+        protected Action OnStart;
 
         public TaskGroup(Action onStart = null, Action onComplete = null)
         {
@@ -28,11 +28,14 @@ namespace Tools.Async
             Tasks.Add(task);
         }
 
-        public void ExecuteAll()
+        protected async void ExecuteAll()
         {
             OnStart?.Invoke();
-            Task.WaitAll(Tasks.ToArray());
-            OnComplete?.Invoke();
+            await Task.Run(() =>
+            {
+                Task.WaitAll(Tasks.ToArray());
+                OnComplete?.Invoke();
+            });
         }
 
         public void Clear()

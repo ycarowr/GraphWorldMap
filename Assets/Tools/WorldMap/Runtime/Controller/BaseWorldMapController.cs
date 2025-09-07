@@ -10,6 +10,7 @@ namespace Tools.WorldMapCore.Runtime
         public abstract void Create();
     }
 
+    [ExecuteInEditMode]
     // Base generalized class for the map controller
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
@@ -27,6 +28,8 @@ namespace Tools.WorldMapCore.Runtime
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
 
+        private bool HasRefreshed { get; set; } = false;
+
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
@@ -39,7 +42,7 @@ namespace Tools.WorldMapCore.Runtime
         {
             Clean();
             SetupRoot();
-
+            
             var data = WorldMapParameters.CreateData();
             GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
             GenerateWorldMapTask.Dispatch();
@@ -63,6 +66,17 @@ namespace Tools.WorldMapCore.Runtime
         private void RefreshAsync()
         {
             WorldMap = GenerateWorldMapTask.GetWorldMap();
+            HasRefreshed = true;
+        }
+
+        [Button]
+        private void RefreshMap()
+        {
+            if (WorldMap == null)
+            {
+                return;
+            }
+            
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
@@ -73,6 +87,18 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             Debug.Log($"RefreshAsync: {WorldMap.Random.Seed} {WorldMapRoot.transform.childCount}");
+        }
+
+        
+        private void Update()
+        {
+            if (HasRefreshed)
+            {
+                HasRefreshed = false;
+                // Executing refresh on update due 
+                // to main thread operations
+                RefreshMap();
+            }
         }
     }
 }
