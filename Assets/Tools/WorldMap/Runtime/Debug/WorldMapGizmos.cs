@@ -9,7 +9,10 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGizmos
     {
-        public static void DrawGizmos(WorldMapStaticData data, List<WorldMapNode> nodes,
+        public static void DrawGizmos(WorldMapStaticData data, 
+            List<WorldMapNode> nodes,
+            List<WorldMapNode> start,
+            List<WorldMapNode> end, 
             Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
         {
             if (!data.DebugData.DrawGizmos)
@@ -52,6 +55,40 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < nodes.Count; i++)
                 {
                     var node = nodes[i];
+                    ReadOnlySpan<Vector3> points = new[]
+                    {
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
+                    };
+                    Gizmos.DrawLineStrip(points, true);
+                }
+            }
+            
+            {
+                // Start
+                Gizmos.color = new Color(60f/255f, 179f/255f, 113/255f);
+                for (var i = 0; i < start.Count; i++)
+                {
+                    var node = start[i];
+                    ReadOnlySpan<Vector3> points = new[]
+                    {
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
+                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
+                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
+                    };
+                    Gizmos.DrawLineStrip(points, true);
+                }
+            }
+            
+            { 
+                // End
+                Gizmos.color = new Color(106f/255f, 90f/255f, 205/255f);
+                for (var i = 0; i < end.Count; i++)
+                {
+                    var node = end[i];
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),

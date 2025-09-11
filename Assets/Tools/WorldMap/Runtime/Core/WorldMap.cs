@@ -18,10 +18,10 @@ namespace Tools.WorldMapCore.Runtime
 
         private readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
-        public readonly List<WorldMapNode> End;
         public readonly List<WorldMapNode> Nodes;
-        public readonly WorldMapRandom Random;
         public readonly List<WorldMapNode> Start;
+        public readonly List<WorldMapNode> End;
+        public readonly WorldMapRandom Random;
 
         public WorldMap(WorldMapStaticData data)
         {
@@ -64,7 +64,10 @@ namespace Tools.WorldMapCore.Runtime
                     if (generated != null)
                     {
                         Start.Add(generated);
-                        Nodes.Add(generated);
+                        if (Data.IsStartPartOfMainPath)
+                        {
+                            Nodes.Add(generated);
+                        }
                     }
                 }
             }
@@ -95,10 +98,18 @@ namespace Tools.WorldMapCore.Runtime
                     if (generated != null)
                     {
                         End.Add(generated);
-                        Nodes.Add(generated);
+                        if (Data.IsEndPartOfMainPath)
+                        {
+                            Nodes.Add(generated);
+                        }
                     }
                 }
             }
+        }
+
+        public WorldMap(List<WorldMapNode> start)
+        {
+            Start = start;
         }
 
 
@@ -163,7 +174,7 @@ namespace Tools.WorldMapCore.Runtime
 #if UNITY_EDITOR
         public void OnDrawGizmos()
         {
-            WorldMapGizmos.DrawGizmos(Data, Nodes, Deletions);
+            WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
         }
 #endif
     }

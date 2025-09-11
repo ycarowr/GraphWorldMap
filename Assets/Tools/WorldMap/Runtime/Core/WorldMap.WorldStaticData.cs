@@ -18,6 +18,8 @@ namespace Tools.WorldMapCore.Runtime
         public readonly WorldMapParameters.Orientation Orientation;
         public readonly int AmountStart;
         public readonly int AmountEnd;
+        public readonly bool IsStartPartOfMainPath;
+        public readonly bool IsEndPartOfMainPath;
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -31,7 +33,9 @@ namespace Tools.WorldMapCore.Runtime
             WorldMapParameters.DebugData debugData,
             WorldMapParameters.Orientation orientation,
             int amountStart,
-            int amountEnd)
+            int amountEnd,
+            bool isStartPartOfMainPath,
+            bool isEndPartOfMainPath)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -46,6 +50,8 @@ namespace Tools.WorldMapCore.Runtime
             Orientation = orientation;
             AmountEnd = amountEnd;
             AmountStart = amountStart;
+            IsStartPartOfMainPath = isStartPartOfMainPath;
+            IsEndPartOfMainPath = isEndPartOfMainPath;
         }
 
         public bool ValidateTotalArea()
