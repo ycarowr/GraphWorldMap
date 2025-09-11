@@ -8,7 +8,14 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        private const float FRACTION_THRESHOLD = 0.0001f;
+        public enum Orientation
+        {
+            None = 0,
+            Horizontal = 1,
+            Vertical = 2,
+        }
+
+        public const float SMALL_NUMBER = 0.0001f;
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
@@ -39,12 +46,20 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
+        [SerializeField] private Orientation orientation = Orientation.Horizontal;
+
+        [SerializeField] [Tooltip("Amount of starting nodes.")]
+        private int amountStart = 1;
+
+        [SerializeField] [Tooltip("Amount of ending nodes.")]
+        private int amountEnd = 1;
+
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize + new Vector2(FRACTION_THRESHOLD, FRACTION_THRESHOLD));
+            var bounds = new Rect(center, totalWorldSize + new Vector2(SMALL_NUMBER, SMALL_NUMBER));
             bounds.center = center;
             return new WorldMapStaticData(
                 amount,
@@ -56,7 +71,10 @@ namespace Tools.WorldMapCore.Database
                 parallelIterations,
                 timeout,
                 hasRandomSeed,
-                DebugValues);
+                DebugValues,
+                orientation,
+                amountStart,
+                amountEnd);
         }
 
 #if UNITY_EDITOR

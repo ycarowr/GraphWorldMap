@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public struct WorldMapStaticData
+    public readonly struct WorldMapStaticData
     {
         public readonly int Amount;
         public readonly int Seed;
@@ -15,7 +15,9 @@ namespace Tools.WorldMapCore.Runtime
         public readonly int Iterations;
         public readonly int ParallelIterations;
         public readonly int Timeout;
-
+        public readonly WorldMapParameters.Orientation Orientation;
+        public readonly int AmountStart;
+        public readonly int AmountEnd;
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -26,7 +28,10 @@ namespace Tools.WorldMapCore.Runtime
             int parallelIterations,
             int timeout,
             bool hasRandomSeed,
-            WorldMapParameters.DebugData debugData)
+            WorldMapParameters.DebugData debugData,
+            WorldMapParameters.Orientation orientation,
+            int amountStart,
+            int amountEnd)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -38,6 +43,9 @@ namespace Tools.WorldMapCore.Runtime
             Iterations = iterations;
             ParallelIterations = parallelIterations;
             Timeout = timeout;
+            Orientation = orientation;
+            AmountEnd = amountEnd;
+            AmountStart = amountStart;
         }
 
         public bool ValidateTotalArea()
