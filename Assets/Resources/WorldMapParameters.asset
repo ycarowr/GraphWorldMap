@@ -22,8 +22,8 @@ MonoBehaviour:
   seed: 0
   hasRandomSeed: 1
   orientation: 1
-  amountStart: 3
-  amountEnd: 2
+  amountStart: 2
+  amountEnd: 4
   isStartPartOfMainPath: 0
   isEndPartOfMainPath: 0
   DebugValues:

@@ -14,8 +14,28 @@ namespace Game
     {
         [SerializeField] private float maxDistance;
         [SerializeField] private float maxConnections;
-        private Graph<GameGraphWorldMapNode> MapGraph;
+        private List<Graph<GameGraphWorldMapNode>> MapGraphs = new List<Graph<GameGraphWorldMapNode>>();
+        private Dictionary<Graph<GameGraphWorldMapNode>, Color> Colors = new Dictionary<Graph<GameGraphWorldMapNode>, Color>();
+        private Graph<GameGraphWorldMapNode> CurrentGraph;
 
+        [Button]
+        public void Next()
+        {
+            if (CurrentGraph == null)
+            {
+                CurrentGraph = MapGraphs[0];
+            }
+            else
+            {
+                var index = MapGraphs.IndexOf(CurrentGraph) + 1;
+                if (index >= MapGraphs.Count)
+                {
+                    index = 0;
+                }   
+                CurrentGraph = MapGraphs[index];
+            }
+        }
+        
         [Button]
         public void Graph()
         {
@@ -23,32 +43,50 @@ namespace Game
             {
                 return;
             }
-            
-            MapGraph = new Graph<GameGraphWorldMapNode>();
-
-            foreach (var node in WorldMap.Nodes)
+            MapGraphs.Clear();
+            Colors.Clear();
+            foreach (var start in WorldMap.Start)
             {
-                var nodeGraph = new GameGraphWorldMapNode(node);
-                MapGraph.Register(nodeGraph);
+                foreach (var end in WorldMap.End)
+                {
+                    var mapGraph = new Graph<GameGraphWorldMapNode>();
+                    var nodeGraphStart = new GameGraphWorldMapNode(start);
+                    var nodeGraphEnd = new GameGraphWorldMapNode(end);
+                    mapGraph.Register(nodeGraphStart);
+                    mapGraph.Register(nodeGraphEnd);
+                    
+                    foreach (var node in WorldMap.Nodes)
+                    {
+                        var nodeGraph = new GameGraphWorldMapNode(node);
+                        mapGraph.Register(nodeGraph);
+                    }
+                    MapGraphs.Add(mapGraph);
+                    Colors.Add(mapGraph, new Color(
+                        UnityEngine.Random.Range(0f, 1f),
+                        UnityEngine.Random.Range(0f, 1f),
+                        UnityEngine.Random.Range(0f, 1f)));
+                }
             }
 
-            foreach (var nodeB in MapGraph.Nodes)
+            foreach (var mapGraph in MapGraphs)
             {
-                foreach (var nodeA in MapGraph.Nodes)
+                foreach (var nodeB in mapGraph.Nodes)
                 {
-                    if (nodeA == nodeB)
+                    foreach (var nodeA in mapGraph.Nodes)
                     {
-                        // won't do for itself
-                        continue;
-                    }
-                    var worldPositionA = nodeA.Data.WorldPosition;
-                    var worldPositionB = nodeB.Data.WorldPosition;
-                    
-                    var distance = Vector2.Distance(worldPositionA, worldPositionB);
-                    var amount = MapGraph.FindAmountOfConnections(nodeA);
-                    if (distance < maxDistance && amount < maxConnections)
-                    {
-                        MapGraph.Connect(nodeA, nodeB, distance);
+                        if (nodeA == nodeB)
+                        {
+                            // won't do for itself
+                            continue;
+                        }
+
+                        var worldPositionA = nodeA.Data.WorldPosition;
+                        var worldPositionB = nodeB.Data.WorldPosition;
+
+                        var distance = Vector2.Distance(worldPositionA, worldPositionB);
+                        var amount = mapGraph.FindAmountOfConnections(nodeA);
+
+                        mapGraph.Connect(nodeA, nodeB, distance);
                     }
                 }
             }
@@ -59,14 +97,19 @@ namespace Game
         protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-            if (MapGraph == null)
+            if (CurrentGraph == null)
             {
                 return;
             }
 
-            Gizmos.color = Color.white;
+            if (!Colors.ContainsKey(CurrentGraph))
+            {
+                return;
+            }
+            
+            Gizmos.color = Colors[CurrentGraph];
             lines.Clear();
-            foreach (var connection in MapGraph.Connections)
+            foreach (var connection in CurrentGraph.Connections)
             {
                 var nodeA = connection.Key;
                 var targets = connection.Value;
@@ -77,9 +120,10 @@ namespace Game
                     var midpointX = (nodeB.Key.Data.WorldPosition.x + nodeA.Data.WorldPosition.x) / 2;
                     var midpointY = (nodeB.Key.Data.WorldPosition.y + nodeA.Data.WorldPosition.y) / 2;
                     var cost = nodeB.Value.ToString(CultureInfo.InvariantCulture)[..3];
-                    UnityEditor.Handles.Label( new Vector3(midpointX, midpointY, 0), cost);
+                    UnityEditor.Handles.Label(new Vector3(midpointX, midpointY, 0), cost);
                 }
             }
+
             Gizmos.DrawLineList(lines.ToArray());
         }
 #endif
