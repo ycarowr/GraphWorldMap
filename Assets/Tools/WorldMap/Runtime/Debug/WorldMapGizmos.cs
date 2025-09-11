@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -14,6 +15,17 @@ namespace Tools.WorldMapCore.Runtime
             if (!data.DebugData.DrawGizmos)
             {
                 return;
+            }
+
+            {
+                var bottomLeft = data.WorldBounds.min.ToString();
+                var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
+                var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
+                var topRight = data.WorldBounds.max.ToString();
+                Handles.Label(data.WorldBounds.min, bottomLeft);
+                Handles.Label(bottomRight, bottomRight.ToString());
+                Handles.Label(topLeft, topLeft.ToString());
+                Handles.Label(data.WorldBounds.max, topRight);
             }
 
             {
