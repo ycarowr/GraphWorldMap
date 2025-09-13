@@ -20,6 +20,7 @@ namespace Tools.WorldMapCore.Runtime
         public readonly int AmountEnd;
         public readonly bool IsStartPartOfMainPath;
         public readonly bool IsEndPartOfMainPath;
+        public readonly bool IsPerfectSegmentLane;
         public readonly Vector2 LaneSize;
 
         public WorldMapStaticData(int amount,
@@ -36,7 +37,8 @@ namespace Tools.WorldMapCore.Runtime
             int amountStart,
             int amountEnd,
             bool isStartPartOfMainPath,
-            bool isEndPartOfMainPath)
+            bool isEndPartOfMainPath,
+            bool isPerfectSegmentLane)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -53,6 +55,7 @@ namespace Tools.WorldMapCore.Runtime
             AmountStart = amountStart;
             IsStartPartOfMainPath = isStartPartOfMainPath;
             IsEndPartOfMainPath = isEndPartOfMainPath;
+            IsPerfectSegmentLane = isPerfectSegmentLane;
             LaneSize = orientation
                        == WorldMapParameters.Orientation.LeftRight
                 ? new Vector2(worldBounds.size.x / AmountStart, worldBounds.size.y)

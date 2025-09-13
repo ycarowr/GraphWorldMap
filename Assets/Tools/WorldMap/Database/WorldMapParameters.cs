@@ -54,11 +54,14 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private int amountEnd = 1;
 
-        [SerializeField] [Tooltip("Amount of ending nodes.")]
+        [SerializeField]
         private bool isStartPartOfMainPath;
 
-        [SerializeField] [Tooltip("Amount of ending nodes.")]
+        [SerializeField]
         private bool isEndPartOfMainPath;
+        
+        [SerializeField]
+        private bool isPerfectSegmentLane;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
@@ -82,7 +85,8 @@ namespace Tools.WorldMapCore.Database
                 amountStart,
                 amountEnd,
                 isStartPartOfMainPath,
-                isEndPartOfMainPath);
+                isEndPartOfMainPath,
+                isPerfectSegmentLane);
         }
 
 #if UNITY_EDITOR

@@ -44,16 +44,32 @@ namespace Tools.WorldMapCore.Runtime
                 var worldPosition = Vector2.zero;
                 if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
                 {
-                    var segment = Data.WorldBounds.size.y / (Data.AmountStart + 1);
+                    if (!Data.IsPerfectSegmentLane)
+                    {
+                        var segment = Data.WorldBounds.size.y / (Data.AmountStart + 1);
+                        worldPosition.y = segment * (index + 1);
+                    }
+                    else
+                    {
+                        var segment = Data.WorldBounds.size.y / Data.AmountStart;
+                        worldPosition.y = segment / 2 + segment * index;
+                    }
                     worldPosition.x = Data.WorldBounds.min.x - Data.NodeWorldSize.x / 2 -
                                       WorldMapParameters.SMALL_NUMBER;
-                    worldPosition.y = segment * (index + 1);
                 }
 
                 if (Data.Orientation == WorldMapParameters.Orientation.BottomTop)
                 {
-                    var segment = Data.WorldBounds.size.x / (Data.AmountStart + 1);
-                    worldPosition.x = segment * (index + 1);
+                    if (!Data.IsPerfectSegmentLane)
+                    {
+                        var segment = Data.WorldBounds.size.x / (Data.AmountStart + 1);
+                        worldPosition.x = segment * (index + 1);
+                    }
+                    else
+                    {
+                        var segment = Data.WorldBounds.size.x / Data.AmountStart;
+                        worldPosition.x = segment / 2 + segment * index;
+                    }
                     worldPosition.y = Data.WorldBounds.min.y - Data.NodeWorldSize.y / 2 -
                                       WorldMapParameters.SMALL_NUMBER;
                 }
