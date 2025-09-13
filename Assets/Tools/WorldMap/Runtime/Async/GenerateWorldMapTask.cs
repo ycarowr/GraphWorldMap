@@ -46,6 +46,7 @@ namespace Tools.WorldMapCore.Runtime
             var currentAmount = worldMapInstance.Nodes.Count;
             if (currentAmount == amount)
             {
+                Cancel();
                 Debug.Log($"Parallel Iteration index:{index} Seed:{worldMapInstance.Random.Seed} Perfect!");
                 PerfectWorldMap = worldMapInstance;
                 return;
