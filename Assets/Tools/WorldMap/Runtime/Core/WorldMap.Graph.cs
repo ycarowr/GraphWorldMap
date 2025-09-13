@@ -105,6 +105,11 @@ namespace Tools.WorldMapCore.Runtime
 
         public void OnDrawGizmos()
         {
+            if (Data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All && Data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Graph)
+            {
+                return;
+            }
+            
             {
                 // Draw Graph
                 if (CurrentGraph == null)

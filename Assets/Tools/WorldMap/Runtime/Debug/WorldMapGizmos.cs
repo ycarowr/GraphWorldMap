@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Tools.WorldMapCore.Database;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> end,
             Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
         {
-            if (!data.DebugData.DrawGizmos)
+            if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All && data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
             {
                 return;
             }

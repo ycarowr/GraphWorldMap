@@ -95,8 +95,15 @@ namespace Tools.WorldMapCore.Database
         [Serializable]
         public class DebugData
         {
+            public enum DrawMode
+            {
+                None = 0,
+                Nodes = 1,
+                Graph = 2,
+                All = int.MaxValue,
+            }
             public bool SelectOwnerOnCreate;
-            public bool DrawGizmos = true;
+            public DrawMode Mode = DrawMode.All;
             public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }
     }
