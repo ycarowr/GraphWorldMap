@@ -20,6 +20,7 @@ namespace Tools.WorldMapCore.Runtime
         public readonly int AmountEnd;
         public readonly bool IsStartPartOfMainPath;
         public readonly bool IsEndPartOfMainPath;
+        public readonly Vector2 LaneSize;
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -52,6 +53,10 @@ namespace Tools.WorldMapCore.Runtime
             AmountStart = amountStart;
             IsStartPartOfMainPath = isStartPartOfMainPath;
             IsEndPartOfMainPath = isEndPartOfMainPath;
+            LaneSize = orientation
+                       == WorldMapParameters.Orientation.LeftRight
+                ? new Vector2(worldBounds.size.x / AmountStart, worldBounds.size.y)
+                : new Vector2(worldBounds.size.x, worldBounds.size.y / AmountStart);
         }
 
         public bool ValidateTotalArea()

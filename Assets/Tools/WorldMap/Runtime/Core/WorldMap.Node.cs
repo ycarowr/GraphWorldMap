@@ -1,9 +1,10 @@
 ﻿using System;
+using Tools.Graphs;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public class WorldMapNode : IComparable<WorldMapNode>
+    public class WorldMapNode : BaseGraphNode, IComparable<WorldMapNode>
     {
         public readonly Rect Bounds;
         public readonly int ID;

@@ -44,6 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddcb962e18aa5b479416380c5c2f848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WorldMapRoot: {fileID: 0}
   WorldMapNodePrefab: {fileID: 6484865640850939378, guid: 7d451c1c20f374942b53b81cfd433b52, type: 3}
   WorldMapParameters: {fileID: 11400000, guid: 3cf7a73d4f174744895bf8bb7d1068c7, type: 2}

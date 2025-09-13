@@ -9,10 +9,10 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGizmos
     {
-        public static void DrawGizmos(WorldMapStaticData data, 
+        public static void DrawGizmos(WorldMapStaticData data,
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
-            List<WorldMapNode> end, 
+            List<WorldMapNode> end,
             Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
         {
             if (!data.DebugData.DrawGizmos)
@@ -21,6 +21,15 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
+                // Draw lanes
+                Gizmos.color = Color.red;
+
+                var center = new Vector2(data.WorldBounds.center.x, data.LaneSize.y);
+                Gizmos.DrawWireCube(center, Vector2.one);
+            }
+
+            {
+                // Draw bounders
                 var bottomLeft = data.WorldBounds.min.ToString();
                 var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
                 var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
@@ -65,10 +74,10 @@ namespace Tools.WorldMapCore.Runtime
                     Gizmos.DrawLineStrip(points, true);
                 }
             }
-            
+
             {
                 // Start
-                Gizmos.color = new Color(60f/255f, 179f/255f, 113/255f);
+                Gizmos.color = new Color(60f / 255f, 179f / 255f, 113 / 255f);
                 for (var i = 0; i < start.Count; i++)
                 {
                     var node = start[i];
@@ -82,10 +91,10 @@ namespace Tools.WorldMapCore.Runtime
                     Gizmos.DrawLineStrip(points, true);
                 }
             }
-            
-            { 
+
+            {
                 // End
-                Gizmos.color = new Color(106f/255f, 90f/255f, 205/255f);
+                Gizmos.color = new Color(106f / 255f, 90f / 255f, 205 / 255f);
                 for (var i = 0; i < end.Count; i++)
                 {
                     var node = end[i];

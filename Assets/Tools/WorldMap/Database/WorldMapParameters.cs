@@ -11,8 +11,8 @@ namespace Tools.WorldMapCore.Database
         public enum Orientation
         {
             None = 0,
-            Horizontal = 1,
-            Vertical = 2,
+            LeftRight = 1,
+            BottomTop = 2,
         }
 
         public const float SMALL_NUMBER = 0.0001f;
@@ -46,17 +46,17 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
-        [SerializeField] private Orientation orientation = Orientation.Horizontal;
+        [SerializeField] private Orientation orientation = Orientation.LeftRight;
 
         [SerializeField] [Tooltip("Amount of starting nodes.")]
         private int amountStart = 1;
 
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private int amountEnd = 1;
-        
+
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private bool isStartPartOfMainPath;
-        
+
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private bool isEndPartOfMainPath;
 

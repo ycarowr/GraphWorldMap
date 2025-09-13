@@ -18,10 +18,10 @@ namespace Tools.WorldMapCore.Runtime
 
         private readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
-        public readonly List<WorldMapNode> Nodes;
-        public readonly List<WorldMapNode> Start;
         public readonly List<WorldMapNode> End;
+        public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
+        public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
         {
@@ -42,7 +42,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < Data.AmountStart; index++)
             {
                 var worldPosition = Vector2.zero;
-                if (Data.Orientation == WorldMapParameters.Orientation.Horizontal)
+                if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
                 {
                     var segment = Data.WorldBounds.size.y / (Data.AmountStart + 1);
                     worldPosition.x = Data.WorldBounds.min.x - Data.NodeWorldSize.x / 2 -
@@ -50,7 +50,7 @@ namespace Tools.WorldMapCore.Runtime
                     worldPosition.y = segment * (index + 1);
                 }
 
-                if (Data.Orientation == WorldMapParameters.Orientation.Vertical)
+                if (Data.Orientation == WorldMapParameters.Orientation.BottomTop)
                 {
                     var segment = Data.WorldBounds.size.x / (Data.AmountStart + 1);
                     worldPosition.x = segment * (index + 1);
@@ -76,7 +76,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < Data.AmountEnd; index++)
             {
                 var worldPosition = Vector2.zero;
-                if (Data.Orientation == WorldMapParameters.Orientation.Horizontal)
+                if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
                 {
                     var segment = Data.WorldBounds.size.y / (Data.AmountEnd + 1);
                     worldPosition.x = Data.WorldBounds.max.x + Data.NodeWorldSize.x / 2 +
@@ -84,7 +84,7 @@ namespace Tools.WorldMapCore.Runtime
                     worldPosition.y = segment * (index + 1);
                 }
 
-                if (Data.Orientation == WorldMapParameters.Orientation.Vertical)
+                if (Data.Orientation == WorldMapParameters.Orientation.BottomTop)
                 {
                     var segment = Data.WorldBounds.size.x / (Data.AmountEnd + 1);
                     worldPosition.x = segment * (index + 1);

@@ -22,12 +22,14 @@ namespace Tools.WorldMapCore.Runtime
         [SerializeField] protected TParameter WorldMapParameters;
 
         // Current instance of the world map.
-        protected WorldMap WorldMap { get; private set; }
+        public WorldMap WorldMap { get; private set; }
 
         // Root transform which the nodes are instantiated.
         protected GameObject WorldMapRoot { get; private set; }
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
+
+        private WorldMapGraph Graph { get; set; }
 
         private bool HasRefreshed { get; set; }
 
@@ -47,6 +49,7 @@ namespace Tools.WorldMapCore.Runtime
         protected virtual void OnDrawGizmos()
         {
             WorldMap?.OnDrawGizmos();
+            Graph?.OnDrawGizmos();
         }
 #endif
 
@@ -67,7 +70,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 #endif
         }
-        
+
         [Button]
         public void Cancel()
         {
@@ -112,6 +115,8 @@ namespace Tools.WorldMapCore.Runtime
         private void RefreshAsync()
         {
             WorldMap = GenerateWorldMapTask.GetWorldMap();
+            Graph = new WorldMapGraph(WorldMap, WorldMapParameters);
+            Graph.Create();
             HasRefreshed = true;
             Debug.Log($"Refresh Async: {WorldMap.Random.Seed}");
         }
