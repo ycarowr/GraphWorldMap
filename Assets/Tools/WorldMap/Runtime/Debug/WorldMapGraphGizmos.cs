@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEditor;
@@ -11,7 +12,9 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGraphGizmos
     {
-        public static void DrawGizmos(List<Graph<WorldMapNode>> mapGraphs, WorldMapStaticData data)
+        private static readonly List<Color> colors = new();
+
+        public static void DrawGizmos(Dictionary<WorldMapNode, Graph<WorldMapNode>> graphs, WorldMapStaticData data)
         {
             if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
                 data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Graph)
@@ -19,25 +22,29 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
-            if (mapGraphs == null || mapGraphs.Count == 0)
+            if (graphs == null || graphs.Count == 0)
             {
                 return;
             }
 
-            Dictionary<Graph<WorldMapNode>, Color> Colors = new();
-            var CurrentGraph = mapGraphs[0];
-            List<Vector3> lines = new();
-
+            // Draw Graph
+            if (colors.Count != graphs.Count)
             {
-                // Draw Graph
-                if (CurrentGraph == null)
+                colors.Clear();
+                foreach (var graph in graphs)
                 {
-                    return;
+                    colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
                 }
+            }
 
-                Gizmos.color = Color.cyan;
+            List<Vector3> lines = new();
+            var mapGraphs = graphs.Values.ToList();
+            for (var index = 0; index < mapGraphs.Count; index++)
+            {
+                var currentGraph = mapGraphs[index];
+                Gizmos.color = colors[index];
                 lines.Clear();
-                foreach (var connection in CurrentGraph.Connections)
+                foreach (var connection in currentGraph.Connections)
                 {
                     var nodeA = connection.Key;
                     var targets = connection.Value;

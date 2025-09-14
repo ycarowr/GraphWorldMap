@@ -5,7 +5,7 @@ namespace Tools.Graphs
     public class Graph<TNode> where TNode : BaseGraphNode
     {
         public readonly Dictionary<TNode, Dictionary<TNode, float>> Connections;
-        
+
         public readonly List<TNode> Nodes;
 
         public Graph()
@@ -13,6 +13,8 @@ namespace Tools.Graphs
             Nodes = new List<TNode>();
             Connections = new Dictionary<TNode, Dictionary<TNode, float>>();
         }
+
+        public int Count => Nodes.Count;
 
         public void Register(TNode graphNode)
         {
@@ -98,7 +100,7 @@ namespace Tools.Graphs
             {
                 return 0;
             }
-            
+
             return Connections[graphNode].Count;
         }
 
@@ -108,7 +110,7 @@ namespace Tools.Graphs
             {
                 return float.MaxValue;
             }
-            
+
             return Connections[graphNodeA][nodeB];
         }
     }
