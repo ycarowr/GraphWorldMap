@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -38,86 +37,32 @@ namespace Tools.WorldMapCore.Runtime
                 { EDeletionReason.Isolation, new List<WorldMapNode>() },
             };
 
-            // Generate Starting
-            for (var index = 0; index < Data.AmountStart; index++)
+            // Starting
+            var starting = Data.Start;
+            foreach (var worldPosition in starting)
             {
-                var worldPosition = Vector2.zero;
-                if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
+                var generated = GenerateNodeAt(worldPosition, true);
+                if (generated != null)
                 {
-                    if (!Data.IsPerfectSegmentLane)
+                    Start.Add(generated);
+                    if (Data.IsStartPartOfMainPath)
                     {
-                        var segment = Data.WorldBounds.size.y / (Data.AmountStart + 1);
-                        worldPosition.y = segment * (index + 1);
-                    }
-                    else
-                    {
-                        var segment = Data.WorldBounds.size.y / Data.AmountStart;
-                        worldPosition.y = segment / 2 + segment * index;
-                    }
-                    worldPosition.x = Data.WorldBounds.min.x - Data.NodeWorldSize.x / 2 -
-                                      WorldMapParameters.SMALL_NUMBER;
-                }
-
-                if (Data.Orientation == WorldMapParameters.Orientation.BottomTop)
-                {
-                    if (!Data.IsPerfectSegmentLane)
-                    {
-                        var segment = Data.WorldBounds.size.x / (Data.AmountStart + 1);
-                        worldPosition.x = segment * (index + 1);
-                    }
-                    else
-                    {
-                        var segment = Data.WorldBounds.size.x / Data.AmountStart;
-                        worldPosition.x = segment / 2 + segment * index;
-                    }
-                    worldPosition.y = Data.WorldBounds.min.y - Data.NodeWorldSize.y / 2 -
-                                      WorldMapParameters.SMALL_NUMBER;
-                }
-
-                if (worldPosition != Vector2.zero)
-                {
-                    var generated = GenerateNodeAt(worldPosition, true);
-                    if (generated != null)
-                    {
-                        Start.Add(generated);
-                        if (Data.IsStartPartOfMainPath)
-                        {
-                            Nodes.Add(generated);
-                        }
+                        Nodes.Add(generated);
                     }
                 }
             }
 
-            // Generate Ending
-            for (var index = 0; index < Data.AmountEnd; index++)
+            // Ending
+            var ending = Data.End;
+            foreach (var worldPosition in ending)
             {
-                var worldPosition = Vector2.zero;
-                if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
+                var generated = GenerateNodeAt(worldPosition, true);
+                if (generated != null)
                 {
-                    var segment = Data.WorldBounds.size.y / (Data.AmountEnd + 1);
-                    worldPosition.x = Data.WorldBounds.max.x + Data.NodeWorldSize.x / 2 +
-                                      WorldMapParameters.SMALL_NUMBER;
-                    worldPosition.y = segment * (index + 1);
-                }
-
-                if (Data.Orientation == WorldMapParameters.Orientation.BottomTop)
-                {
-                    var segment = Data.WorldBounds.size.x / (Data.AmountEnd + 1);
-                    worldPosition.x = segment * (index + 1);
-                    worldPosition.y = Data.WorldBounds.max.y + Data.NodeWorldSize.y / 2 +
-                                      WorldMapParameters.SMALL_NUMBER;
-                }
-
-                if (worldPosition != Vector2.zero)
-                {
-                    var generated = GenerateNodeAt(worldPosition, true);
-                    if (generated != null)
+                    End.Add(generated);
+                    if (Data.IsEndPartOfMainPath)
                     {
-                        End.Add(generated);
-                        if (Data.IsEndPartOfMainPath)
-                        {
-                            Nodes.Add(generated);
-                        }
+                        Nodes.Add(generated);
                     }
                 }
             }
