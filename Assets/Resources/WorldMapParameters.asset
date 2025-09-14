@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  amount: 25
+  amount: 50
   isolationDistance: -1
   nodeWorldSize: {x: 2, y: 2}
-  totalWorldSize: {x: 50, y: 30}
+  totalWorldSize: {x: 30, y: 50}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
@@ -30,4 +30,4 @@ MonoBehaviour:
   DebugValues:
     SelectOwnerOnCreate: 0
     Mode: 1
-    DeletionReason: 2147483647
+    DeletionReason: 0

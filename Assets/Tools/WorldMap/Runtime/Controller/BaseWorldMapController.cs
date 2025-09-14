@@ -29,8 +29,6 @@ namespace Tools.WorldMapCore.Runtime
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
 
-        private WorldMapGraph Graph { get; set; }
-
         private bool HasRefreshed { get; set; }
 
 
@@ -49,7 +47,6 @@ namespace Tools.WorldMapCore.Runtime
         protected virtual void OnDrawGizmos()
         {
             WorldMap?.OnDrawGizmos();
-            Graph?.OnDrawGizmos();
         }
 #endif
 
@@ -115,8 +112,6 @@ namespace Tools.WorldMapCore.Runtime
         private void RefreshAsync()
         {
             WorldMap = GenerateWorldMapTask.GetWorldMap();
-            Graph = new WorldMapGraph(WorldMap, WorldMapParameters);
-            Graph.Create();
             HasRefreshed = true;
             Debug.Log($"Refresh Async: {WorldMap.Random.Seed}");
         }
