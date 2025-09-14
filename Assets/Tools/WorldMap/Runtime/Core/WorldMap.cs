@@ -68,22 +68,6 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        public WorldMap(List<WorldMapNode> start)
-        {
-            Start = start;
-        }
-
-
-        public bool IsValid()
-        {
-            return Nodes != null && Nodes.Count != 0;
-        }
-
-        public bool IsPerfect()
-        {
-            return Nodes.Count == Data.Amount;
-        }
-
         public void GenerateNodes()
         {
             var amountToCreate = Data.Amount;
