@@ -5,7 +5,7 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static bool CheckOverlap(Node node, List<Node> nodes)
+        public static bool CheckOverlap(WorldMapNode node, List<WorldMapNode> nodes)
         {
             var count = nodes.Count;
             for (var index = 0; index < count; index++)

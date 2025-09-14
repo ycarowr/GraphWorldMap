@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Tools.Graphs;
+using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -16,73 +18,123 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         private readonly WorldMapStaticData Data;
-        private readonly Dictionary<EDeletionReason, List<Node>> Deletions;
-        public readonly List<Node> Nodes;
+        private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
+        public readonly List<WorldMapNode> End;
+        public readonly Dictionary<WorldMapNode, Graph<WorldMapNode>> Graphs;
+        public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
+        public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
         {
             Data = data;
             WorldMapHelper.ResetID();
             Random = new WorldMapRandom(Data);
-            Nodes = new List<Node>();
-            Deletions = new Dictionary<EDeletionReason, List<Node>>
+            Nodes = new List<WorldMapNode>();
+            Start = new List<WorldMapNode>();
+            End = new List<WorldMapNode>();
+            Graphs = new Dictionary<WorldMapNode, Graph<WorldMapNode>>();
+            Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
             {
-                { EDeletionReason.OutOfBounds, new List<Node>() },
-                { EDeletionReason.Overlap, new List<Node>() },
-                { EDeletionReason.Isolation, new List<Node>() },
+                { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
+                { EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { EDeletionReason.Isolation, new List<WorldMapNode>() },
             };
-        }
 
+            // Starting
+            var starting = Data.Start;
+            foreach (var worldPosition in starting)
+            {
+                var generated = GenerateNodeAt(worldPosition, true);
+                if (generated != null)
+                {
+                    Start.Add(generated);
+                    if (Data.IsStartPartOfMainPath)
+                    {
+                        Nodes.Add(generated);
+                    }
+                }
+            }
 
-        public bool IsValid()
-        {
-            return Nodes != null && Nodes.Count != 0;
-        }
-
-        public bool IsPerfect()
-        {
-            return Nodes.Count == Data.Amount;
+            // Ending
+            var ending = Data.End;
+            foreach (var worldPosition in ending)
+            {
+                var generated = GenerateNodeAt(worldPosition, true);
+                if (generated != null)
+                {
+                    End.Add(generated);
+                    if (Data.IsEndPartOfMainPath)
+                    {
+                        Nodes.Add(generated);
+                    }
+                }
+            }
         }
 
         public void GenerateNodes()
         {
             var amountToCreate = Data.Amount;
-            var worldSize = Data.NodeWorldSize;
             var count = 0;
             var maxCount = Mathf.Max(Data.Iterations, amountToCreate);
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
                 count++;
                 var worldPosition = Random.GenerateRandomPosition(Data);
-                var newNode = new Node(WorldMapHelper.GenerateID(), worldPosition, worldSize);
-
-                if (WorldMapHelper.CheckOverlap(newNode, Nodes))
+                var generated = GenerateNodeAt(worldPosition);
+                if (generated != null)
                 {
-                    if (WorldMapHelper.CheckBounds(newNode, Data))
-                    {
-                        Nodes.Add(newNode);
-                    }
-                    else
-                    {
-                        Deletions[EDeletionReason.OutOfBounds].Add(newNode);
-                    }
-                }
-                else
-                {
-                    Deletions[EDeletionReason.Overlap].Add(newNode);
+                    Nodes.Add(generated);
                 }
             }
 
-            Nodes.Sort();
+            if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
+            {
+                Nodes.Sort(new WorldMapNodeCompareLeftRight());
+            }
+            else
+            {
+                Nodes.Sort(new WorldMapNodeCompareBottomTop());
+            }
+
             var isolationNodes = Deletions[EDeletionReason.Isolation];
             WorldMapHelper.CheckIsolationDistance(Nodes, Data, ref isolationNodes);
+            WorldMapHelper.CreateGraph(Graphs, Data, Nodes, Start, End);
+        }
+
+        private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
+        {
+            var worldSize = Data.NodeWorldSize;
+            var nodeID = WorldMapHelper.GenerateID();
+            var newNode = new WorldMapNode(nodeID, worldPosition, worldSize);
+
+            if (skipChecks)
+            {
+                return newNode;
+            }
+
+            if (WorldMapHelper.CheckOverlap(newNode, Nodes))
+            {
+                if (WorldMapHelper.CheckBounds(newNode, Data))
+                {
+                    return newNode;
+                }
+
+                Deletions[EDeletionReason.OutOfBounds].Add(newNode);
+            }
+            else
+            {
+                Deletions[EDeletionReason.Overlap].Add(newNode);
+            }
+
+            return null;
         }
 
 #if UNITY_EDITOR
         public void OnDrawGizmos()
         {
-            WorldMapGizmos.DrawGizmos(Data, Nodes, Deletions);
+            WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
+            WorldMapGraphGizmos.DrawGizmos(Graphs, Data);
         }
 #endif
     }

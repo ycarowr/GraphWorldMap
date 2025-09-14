@@ -5,8 +5,8 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static void CheckIsolationDistance(List<Node> nodes, WorldMapStaticData data,
-            ref List<Node> isolationNodes)
+        public static void CheckIsolationDistance(List<WorldMapNode> nodes, WorldMapStaticData data,
+            ref List<WorldMapNode> isolationNodes)
         {
             if (data.IsolationDistance <= 0)
             {

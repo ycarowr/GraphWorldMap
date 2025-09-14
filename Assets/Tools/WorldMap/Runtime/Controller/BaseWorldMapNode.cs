@@ -9,7 +9,7 @@ namespace Tools.WorldMapCore.Runtime
 
         [SerializeField] private TMP_Text titleText;
 
-        public void SetNode(Node node)
+        public void SetNode(WorldMapNode node)
         {
             titleText.text = node.ID.ToString();
             transform.localPosition = node.WorldPosition;

@@ -4,7 +4,7 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static bool CheckBounds(Node node, WorldMapStaticData data)
+        public static bool CheckBounds(WorldMapNode node, WorldMapStaticData data)
         {
             var worldBounds = data.WorldBounds;
             var nodeBounds = node.Bounds;

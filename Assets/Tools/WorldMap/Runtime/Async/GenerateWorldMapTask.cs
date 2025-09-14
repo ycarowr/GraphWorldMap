@@ -48,6 +48,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 Debug.Log($"Parallel Iteration index:{index} Seed:{worldMapInstance.Random.Seed} Perfect!");
                 PerfectWorldMap = worldMapInstance;
+                Cancel();
                 return;
             }
 
@@ -97,7 +98,12 @@ namespace Tools.WorldMapCore.Runtime
 
         public WorldMap GetWorldMap()
         {
-            return PerfectWorldMap ?? NearIdealWorldMap;
+            if (PerfectWorldMap != null)
+            {
+                return PerfectWorldMap;
+            }
+            
+            return NearIdealWorldMap;
         }
     }
 }
