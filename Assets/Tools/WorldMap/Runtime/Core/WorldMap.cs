@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Tools.Graphs;
+using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -87,7 +88,15 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            Nodes.Sort();
+            if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
+            {
+                Nodes.Sort(new WorldMapNodeCompareLeftRight());
+            }
+            else
+            {
+                Nodes.Sort(new WorldMapNodeCompareBottomTop());
+            }
+
             var isolationNodes = Deletions[EDeletionReason.Isolation];
             WorldMapHelper.CheckIsolationDistance(Nodes, Data, ref isolationNodes);
             WorldMapHelper.CreateGraph(Graphs, Data, Nodes, Start, End);

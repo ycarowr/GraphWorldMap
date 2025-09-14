@@ -1,10 +1,9 @@
-﻿using System;
-using Tools.Graphs;
+﻿using Tools.Graphs;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public class WorldMapNode : BaseGraphNode, IComparable<WorldMapNode>
+    public class WorldMapNode : BaseGraphNode
     {
         public readonly Rect Bounds;
         public readonly int ID;
@@ -18,30 +17,5 @@ namespace Tools.WorldMapCore.Runtime
 
         public Vector2 WorldPosition => Bounds.center;
         public Vector2 Size => Bounds.size;
-
-        public int CompareTo(WorldMapNode other)
-        {
-            if (WorldPosition.x > other.WorldPosition.x)
-            {
-                return 1;
-            }
-
-            if (WorldPosition.x < other.WorldPosition.x)
-            {
-                return -1;
-            }
-
-            if (WorldPosition.y < other.WorldPosition.y)
-            {
-                return 1;
-            }
-
-            if (WorldPosition.y < other.WorldPosition.y)
-            {
-                return -1;
-            }
-
-            return 0;
-        }
     }
 }
