@@ -53,7 +53,8 @@ namespace Tools.Async
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                Debug.Log(e.Message);
+                Debug.Log(e.StackTrace);
             }
         }
 
