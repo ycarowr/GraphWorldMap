@@ -22,7 +22,7 @@ namespace Tools.WorldMapCore.Runtime
         public readonly bool IsStartPartOfMainPath;
         public readonly bool IsEndPartOfMainPath;
         public readonly bool IsPerfectSegmentLane;
-        public readonly Vector2 LaneSize;
+        public readonly List<Rect> Lanes;
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
 
@@ -60,10 +60,20 @@ namespace Tools.WorldMapCore.Runtime
             IsEndPartOfMainPath = isEndPartOfMainPath;
             IsPerfectSegmentLane = isPerfectSegmentLane;
 
-            LaneSize = orientation
-                       == WorldMapParameters.Orientation.LeftRight
-                ? new Vector2(worldBounds.size.x / AmountStart, worldBounds.size.y)
-                : new Vector2(worldBounds.size.x, worldBounds.size.y / AmountStart);
+            // Generate Lanes
+            Lanes = new List<Rect>();
+            var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / AmountStart);
+            var worldMinX = WorldBounds.xMin;
+            var worldMaxY = WorldBounds.yMax / AmountStart;
+            for (var index = 0; index < AmountStart; index++)
+            {
+                var lane = new Rect
+                {
+                    position = new Vector2(worldMinX, worldMaxY * index),
+                    size = new Vector2(laneSize.x, laneSize.y),
+                };
+                Lanes.Add(lane);
+            }
 
             // Generate Starting
             Start = new List<Vector3>();

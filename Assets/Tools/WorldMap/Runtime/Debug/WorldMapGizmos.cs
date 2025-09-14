@@ -10,23 +10,27 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGizmos
     {
+        private const float SMALL_NUMBER_DRAW = 0.075f;
+
         public static void DrawGizmos(WorldMapStaticData data,
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
             List<WorldMapNode> end,
             Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
         {
-            if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All && data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
+            if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
+                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
             {
                 return;
             }
 
             {
                 // Draw lanes
-                Gizmos.color = Color.red;
-
-                var center = new Vector2(data.WorldBounds.center.x, data.LaneSize.y);
-                Gizmos.DrawWireCube(center, Vector2.one);
+                Gizmos.color = Color.yellow;
+                foreach (var lane in data.Lanes)
+                {
+                    Gizmos.DrawWireCube(lane.center, lane.size);
+                }
             }
 
             {
@@ -48,16 +52,16 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                // Draw borders
-                Gizmos.color = Color.magenta;
-                ReadOnlySpan<Vector3> points = new[]
-                {
-                    new Vector3(data.WorldBounds.xMin, data.WorldBounds.yMin, 0),
-                    new Vector3(data.WorldBounds.xMin, data.WorldBounds.yMax, 0),
-                    new Vector3(data.WorldBounds.xMax, data.WorldBounds.yMax, 0),
-                    new Vector3(data.WorldBounds.xMax, data.WorldBounds.yMin, 0),
-                };
-                Gizmos.DrawLineStrip(points, true);
+                // Draw borders isn't necessary because the lanes are just enough
+                // Gizmos.color = Color.magenta;
+                // ReadOnlySpan<Vector3> points = new[]
+                // {
+                //     new Vector3(data.WorldBounds.xMin - SMALL_NUMBER_DRAW, data.WorldBounds.yMin - SMALL_NUMBER_DRAW, 0),
+                //     new Vector3(data.WorldBounds.xMin - SMALL_NUMBER_DRAW, data.WorldBounds.yMax + SMALL_NUMBER_DRAW, 0),
+                //     new Vector3(data.WorldBounds.xMax + SMALL_NUMBER_DRAW, data.WorldBounds.yMax + SMALL_NUMBER_DRAW, 0),
+                //     new Vector3(data.WorldBounds.xMax + SMALL_NUMBER_DRAW, data.WorldBounds.yMin - SMALL_NUMBER_DRAW, 0),
+                // };
+                // Gizmos.DrawLineStrip(points, true);
             }
 
             {
