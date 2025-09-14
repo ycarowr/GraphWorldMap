@@ -62,17 +62,35 @@ namespace Tools.WorldMapCore.Runtime
 
             // Generate Lanes
             Lanes = new List<Rect>();
-            var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / AmountStart);
-            var worldMinX = WorldBounds.xMin;
-            var worldMaxY = WorldBounds.yMax / AmountStart;
-            for (var index = 0; index < AmountStart; index++)
+            if (orientation == WorldMapParameters.Orientation.LeftRight)
             {
-                var lane = new Rect
+                var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / AmountStart);
+                var worldMinX = WorldBounds.xMin;
+                var worldMaxY = WorldBounds.yMax / AmountStart;
+                for (var index = 0; index < AmountStart; index++)
                 {
-                    position = new Vector2(worldMinX, worldMaxY * index),
-                    size = new Vector2(laneSize.x, laneSize.y),
-                };
-                Lanes.Add(lane);
+                    var lane = new Rect
+                    {
+                        position = new Vector2(worldMinX, worldMaxY * index),
+                        size = new Vector2(laneSize.x, laneSize.y),
+                    };
+                    Lanes.Add(lane);
+                }
+            }
+            else
+            {
+                var laneSize = new Vector2(worldBounds.size.x / AmountStart, worldBounds.size.y);
+                var worldMinY = WorldBounds.yMin;
+                var worldMaxX = WorldBounds.xMax / AmountStart;
+                for (var index = 0; index < AmountStart; index++)
+                {
+                    var lane = new Rect
+                    {
+                        position = new Vector2(worldMaxX * index, worldMinY),
+                        size = new Vector2(laneSize.x, laneSize.y),
+                    };
+                    Lanes.Add(lane);
+                }
             }
 
             // Generate Starting
