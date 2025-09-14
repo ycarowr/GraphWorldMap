@@ -9,6 +9,7 @@ namespace Tools.WorldMapCore.Runtime
         public static void CreateGraph(Dictionary<WorldMapNode, Graph<WorldMapNode>> graphs, WorldMapStaticData data,
             List<WorldMapNode> nodes, List<WorldMapNode> starting, List<WorldMapNode> ending)
         {
+            // Register Start Nodes
             foreach (var start in starting)
             {
                 var graph = new Graph<WorldMapNode>();
@@ -16,6 +17,7 @@ namespace Tools.WorldMapCore.Runtime
                 graph.Register(start);
             }
 
+            // Register middle Nodes
             foreach (var node in nodes)
             {
                 if (starting.Contains(node) || ending.Contains(node))
@@ -23,10 +25,25 @@ namespace Tools.WorldMapCore.Runtime
                     continue;
                 }
 
-                var start = FindLaneStart(node.Bounds, starting, data);
-                if (start != null)
+                var startIndex = FindNodeLaneIndex(node.Bounds, data);
+                if (startIndex == -1)
                 {
-                    graphs[start].Register(node);
+                    continue;
+                }
+
+                var startNode = starting[startIndex];
+                graphs[startNode].Register(node);
+            }
+
+            // Register End nodes
+            foreach (var pair in graphs)
+            {
+                var graphNodes = pair.Value;
+                var endIndex = FindNearestEndIndex(graphNodes, ending);
+                if (endIndex != -1)
+                {
+                    var end = ending[endIndex];
+                    pair.Value.Register(end);
                 }
             }
 
@@ -38,49 +55,47 @@ namespace Tools.WorldMapCore.Runtime
                     var nextIndex = index + 1;
                     var node = graph.Nodes[index];
                     var nodeNext = graph.Nodes[nextIndex];
-                    var distance = Vector3.Distance(node.WorldPosition, nodeNext.WorldPosition);
+                    var distance = Vector3.Distance(node.Bounds.center, nodeNext.Bounds.center);
                     graph.Connect(node, nodeNext, distance);
                 }
             }
         }
 
-        private static WorldMapNode FindLaneStart(Rect nodeBounds, List<WorldMapNode> starting, WorldMapStaticData data)
+        private static int FindNearestEndIndex(Graph<WorldMapNode> graphNodes, List<WorldMapNode> ending)
         {
-            var lanes = data.Lanes;
-            var laneIndex = -1;
-            for (var index = 0; index < lanes.Count; index++)
+            var nearest = float.MaxValue;
+            var nearestIndex = -1;
+            for (var index = 0; index < ending.Count; index++)
             {
-                var lane = lanes[index];
-                if (CheckRectContains(lane, nodeBounds))
+                var node = ending[index];
+                var distance = Vector3.Distance(node.Bounds.center, graphNodes.Nodes[^1].Bounds.center);
+                if (distance < nearest)
                 {
-                    laneIndex = index;
-                    break;
+                    nearest = distance;
+                    nearestIndex = index;
                 }
             }
 
-            if (laneIndex == -1)
-            {
-                return null;
-            }
-
-            return starting[laneIndex];
+            return nearestIndex;
         }
 
-        // private static WorldMapNode FindLaneStart(Rect nodeBounds, List<WorldMapNode> starting)
-        // {
-        //     var nearest = float.MaxValue;
-        //     WorldMapNode nearestNode = null;
-        //     foreach (var node in starting)
-        //     {
-        //         var distance = Vector3.Distance(node.WorldPosition, nodeBounds.position);
-        //         if (distance < nearest)
-        //         {
-        //             nearest = distance;
-        //             nearestNode = node;
-        //         }
-        //     }
-        //     
-        //     return nearestNode;
-        // }
+        private static int FindNodeLaneIndex(Rect nodeBounds, WorldMapStaticData data)
+        {
+            var lanes = data.Lanes;
+            var nearest = float.MaxValue;
+            var nearestIndex = -1;
+            for (var index = 0; index < lanes.Count; index++)
+            {
+                var lane = lanes[index];
+                var distance = Vector3.Distance(lane.center, nodeBounds.center);
+                if (distance < nearest)
+                {
+                    nearest = distance;
+                    nearestIndex = index;
+                }
+            }
+
+            return nearestIndex;
+        }
     }
 }
