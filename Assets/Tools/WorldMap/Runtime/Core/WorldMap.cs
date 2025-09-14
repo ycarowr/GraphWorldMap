@@ -133,7 +133,8 @@ namespace Tools.WorldMapCore.Runtime
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
         {
             var worldSize = Data.NodeWorldSize;
-            var newNode = new WorldMapNode(WorldMapHelper.GenerateID(), worldPosition, worldSize);
+            var nodeID = WorldMapHelper.GenerateID();
+            var newNode = new WorldMapNode(nodeID, worldPosition, worldSize);
 
             if (skipChecks)
             {
