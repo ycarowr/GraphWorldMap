@@ -49,10 +49,7 @@ namespace Tools.WorldMapCore.Runtime
                 if (generated != null)
                 {
                     Start.Add(generated);
-                    if (Data.IsStartPartOfMainPath)
-                    {
-                        Nodes.Add(generated);
-                    }
+                    Nodes.Add(generated);
                 }
             }
 
@@ -64,10 +61,7 @@ namespace Tools.WorldMapCore.Runtime
                 if (generated != null)
                 {
                     End.Add(generated);
-                    if (Data.IsEndPartOfMainPath)
-                    {
-                        Nodes.Add(generated);
-                    }
+                    Nodes.Add(generated);
                 }
             }
         }
