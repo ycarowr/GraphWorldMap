@@ -40,13 +40,17 @@ namespace Tools.WorldMapCore.Runtime
             {
                 var graphNodes = pair.Value;
                 var endIndex = FindNearestEndIndex(graphNodes, ending);
-                if (endIndex != -1)
+                if (endIndex == -1)
                 {
-                    var end = ending[endIndex];
-                    pair.Value.Register(end);
+                    continue;
                 }
+
+                var end = ending[endIndex];
+                pair.Value.Register(end);
             }
 
+            
+            // Connect everything
             foreach (var pair in graphs)
             {
                 var graph = pair.Value;
