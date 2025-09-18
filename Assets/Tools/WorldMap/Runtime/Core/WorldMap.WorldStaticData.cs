@@ -126,17 +126,5 @@ namespace Tools.WorldMapCore.Runtime
             var totalNodeArea = nodeArea * Parameters.Amount;
             return totalNodeArea > totalArea;
         }
-        
-        public bool ValidateIsolation()
-        {
-            if (Parameters.IsolationDistance < 0)
-            {
-                // it should be ignored
-                return false;
-            }
-            
-            var isolationArea = Parameters.IsolationDistance * Parameters.IsolationDistance;
-            return isolationArea < Parameters.NodeWorldSize.x * Parameters.NodeWorldSize.y;
-        }
     }
 }

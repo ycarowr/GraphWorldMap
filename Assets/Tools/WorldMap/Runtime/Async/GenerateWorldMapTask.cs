@@ -79,12 +79,6 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
             
-            if (Data.ValidateIsolation())
-            {
-                Debug.LogError("The requested isolation is too small for the size of the node.");
-                return;
-            }
-
             var iterations = Data.Parameters.HasRandomSeed ? Data.Parameters.ParallelIterations : 1;
             Debug.Log($"Dispatching Iterations. n = {iterations}");
 

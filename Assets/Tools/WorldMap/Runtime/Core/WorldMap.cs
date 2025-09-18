@@ -11,7 +11,6 @@ namespace Tools.WorldMapCore.Runtime
             None = 0,
             Overlap = 1,
             OutOfBounds = 2,
-            Isolation = 3,
 
             All = int.MaxValue,
         }
@@ -37,7 +36,6 @@ namespace Tools.WorldMapCore.Runtime
             {
                 { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
                 { EDeletionReason.Overlap, new List<WorldMapNode>() },
-                { EDeletionReason.Isolation, new List<WorldMapNode>() },
             };
 
             // Starting
@@ -81,8 +79,6 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            var isolationNodes = Deletions[EDeletionReason.Isolation];
-            WorldMapHelper.CheckIsolationDistance(Nodes, Data, ref isolationNodes);
             WorldMapHelper.CreateGraph(GraphsRegistry, Data, Nodes, Start, End);
         }
 

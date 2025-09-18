@@ -137,27 +137,6 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.Isolation)
-                {
-                    // Draw isolation
-                    Gizmos.color = Color.white;
-                    var deleted = deletions[WorldMap.EDeletionReason.Isolation];
-                    for (var i = 0; i < deleted.Count; i++)
-                    {
-                        var node = deleted[i];
-                        ReadOnlySpan<Vector3> points = new[]
-                        {
-                            new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
-                            new Vector3(node.Bounds.xMin, node.Bounds.yMax, 0),
-                            new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
-                            new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
-                        };
-                        Gizmos.DrawLineStrip(points, true);
-                    }
-                }
-            }
-
-            {
                 if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
                 {
                     // Draw Bounds

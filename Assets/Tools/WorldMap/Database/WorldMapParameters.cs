@@ -19,12 +19,7 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
-
-        [SerializeField]
-        [Tooltip(
-            "Minimum distance necessary between two nodes in order to keep them alive. Use a negative value to ignore.")]
-        private float isolationDistance = 10;
-
+        
         [SerializeField] [Tooltip("Node size in world units from each node.")]
         private Vector2 nodeWorldSize = Vector2.one;
 
@@ -67,8 +62,6 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] private bool useDistanceInsteadAxisForDirection;
 
         public int Amount => amount;
-
-        public float IsolationDistance => isolationDistance;
 
         public Vector2 NodeWorldSize => nodeWorldSize;
 
