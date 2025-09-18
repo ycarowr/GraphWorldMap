@@ -69,7 +69,6 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
-            Debug.Log($"Dispatching {Data.ParallelIterations} Iterations ...");
             HasStarted = true;
             ResetData();
 
@@ -79,12 +78,25 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
-            for (var i = 0; i < Data.ParallelIterations; i++)
+            var iterations = Data.HasRandomSeed ? Data.ParallelIterations : 1;
+            Debug.Log($"Dispatching Iterations. n = {iterations}");
+            
+            if (!Data.UseAsync)
+            {
+                for (var index = 0; index < iterations; index++)
+                {
+                    GenerateWorldMapIteration(index);
+                }
+                OnComplete.Invoke();
+                return;
+            }
+            
+            for (var i = 0; i < iterations; i++)
             {
                 var index = i;
                 AddTask(() => GenerateWorldMapIteration(index));
             }
-
+            
             ExecuteAll();
         }
 

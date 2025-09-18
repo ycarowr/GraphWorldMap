@@ -20,7 +20,7 @@ namespace Tools.WorldMapCore.Runtime
         private readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
         public readonly List<WorldMapNode> End;
-        public readonly Dictionary<WorldMapNode, Graph<WorldMapNode>> Graphs;
+        public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
         public readonly List<WorldMapNode> Start;
@@ -33,7 +33,7 @@ namespace Tools.WorldMapCore.Runtime
             Nodes = new List<WorldMapNode>();
             Start = new List<WorldMapNode>();
             End = new List<WorldMapNode>();
-            Graphs = new Dictionary<WorldMapNode, Graph<WorldMapNode>>();
+            GraphsRegistry = new List<Graph<WorldMapNode>>();
             Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
             {
                 { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
@@ -49,10 +49,7 @@ namespace Tools.WorldMapCore.Runtime
                 if (generated != null)
                 {
                     Start.Add(generated);
-                    if (Data.IsStartPartOfMainPath)
-                    {
-                        Nodes.Add(generated);
-                    }
+                    Nodes.Add(generated);
                 }
             }
 
@@ -64,10 +61,7 @@ namespace Tools.WorldMapCore.Runtime
                 if (generated != null)
                 {
                     End.Add(generated);
-                    if (Data.IsEndPartOfMainPath)
-                    {
-                        Nodes.Add(generated);
-                    }
+                    Nodes.Add(generated);
                 }
             }
         }
@@ -99,7 +93,7 @@ namespace Tools.WorldMapCore.Runtime
 
             var isolationNodes = Deletions[EDeletionReason.Isolation];
             WorldMapHelper.CheckIsolationDistance(Nodes, Data, ref isolationNodes);
-            WorldMapHelper.CreateGraph(Graphs, Data, Nodes, Start, End);
+            WorldMapHelper.CreateGraph(GraphsRegistry, Data, Nodes, Start, End);
         }
 
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
@@ -134,7 +128,7 @@ namespace Tools.WorldMapCore.Runtime
         public void OnDrawGizmos()
         {
             WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
-            WorldMapGraphGizmos.DrawGizmos(Graphs, Data);
+            WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, Data);
         }
 #endif
     }

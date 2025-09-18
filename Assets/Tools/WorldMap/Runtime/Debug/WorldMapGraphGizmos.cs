@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEditor;
@@ -12,12 +11,13 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGraphGizmos
     {
-        private static readonly List<Color> colors = new();
+        public static readonly List<Color> colors = new();
 
-        public static void DrawGizmos(Dictionary<WorldMapNode, Graph<WorldMapNode>> graphs, WorldMapStaticData data)
+        public static void DrawGizmos(List<Graph<WorldMapNode>> graphs, WorldMapStaticData data)
         {
             if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Graph)
+                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Graph &&
+                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
             {
                 return;
             }
@@ -38,10 +38,9 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             List<Vector3> lines = new();
-            var mapGraphs = graphs.Values.ToList();
-            for (var index = 0; index < mapGraphs.Count; index++)
+            for (var index = 0; index < graphs.Count; index++)
             {
-                var currentGraph = mapGraphs[index];
+                var currentGraph = graphs[index];
                 Gizmos.color = colors[index];
                 lines.Clear();
                 foreach (var connection in currentGraph.Connections)
@@ -52,10 +51,25 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         lines.Add(nodeA.WorldPosition);
                         lines.Add(nodeB.Key.WorldPosition);
+                        if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
+                            data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
+                        {
+                            continue;
+                        }
+
                         var midpointX = (nodeB.Key.WorldPosition.x + nodeA.WorldPosition.x) / 2;
                         var midpointY = (nodeB.Key.WorldPosition.y + nodeA.WorldPosition.y) / 2;
-                        var distance = nodeB.Value.ToString(CultureInfo.InvariantCulture)[..4];
-                        Handles.Label(new Vector3(midpointX, midpointY, 0), distance);
+                        var text = nodeB.Value.ToString(CultureInfo.InvariantCulture);
+                        if (text.Length < 4)
+                        {
+                            text = text[..1];
+                        }
+                        else
+                        {
+                            text = text[..4];
+                        }
+
+                        Handles.Label(new Vector3(midpointX, midpointY, 0), text);
                     }
                 }
 

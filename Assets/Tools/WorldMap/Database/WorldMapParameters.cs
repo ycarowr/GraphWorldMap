@@ -54,14 +54,11 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private int amountEnd = 1;
 
-        [SerializeField]
-        private bool isStartPartOfMainPath;
+        [SerializeField] private bool isPerfectSegmentLane;
 
-        [SerializeField]
-        private bool isEndPartOfMainPath;
-        
-        [SerializeField]
-        private bool isPerfectSegmentLane;
+        [SerializeField] private bool useAsync = true;
+
+        [SerializeField] private int amountOfLaneConnections = 1;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
@@ -84,18 +81,11 @@ namespace Tools.WorldMapCore.Database
                 orientation,
                 amountStart,
                 amountEnd,
-                isStartPartOfMainPath,
-                isEndPartOfMainPath,
-                isPerfectSegmentLane);
+                isPerfectSegmentLane,
+                amountOfLaneConnections,
+                useAsync);
         }
 
-#if UNITY_EDITOR
-        [Button]
-        private void Refresh()
-        {
-            FindFirstObjectByType<BaseWorldMapController>().Create();
-        }
-#endif
         [Serializable]
         public class DebugData
         {
@@ -104,11 +94,27 @@ namespace Tools.WorldMapCore.Database
                 None = 0,
                 Nodes = 1,
                 Graph = 2,
+                Distances = 3,
                 All = int.MaxValue,
             }
+
             public bool SelectOwnerOnCreate;
             public DrawMode Mode = DrawMode.All;
             public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }
+
+#if UNITY_EDITOR
+        [Button]
+        private void Refresh()
+        {
+            FindFirstObjectByType<BaseWorldMapController>().Create();
+        }
+
+        [Button]
+        private void RefreshColors()
+        {
+            WorldMapGraphGizmos.colors.Clear();
+        }
+#endif
     }
 }

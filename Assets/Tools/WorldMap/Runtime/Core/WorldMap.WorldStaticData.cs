@@ -19,12 +19,12 @@ namespace Tools.WorldMapCore.Runtime
         public readonly WorldMapParameters.Orientation Orientation;
         public readonly int AmountStart;
         public readonly int AmountEnd;
-        public readonly bool IsStartPartOfMainPath;
-        public readonly bool IsEndPartOfMainPath;
         public readonly bool IsPerfectSegmentLane;
         public readonly List<Rect> Lanes;
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
+        public readonly int AmountOfLaneConnections;
+        public readonly bool UseAsync;
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -39,9 +39,9 @@ namespace Tools.WorldMapCore.Runtime
             WorldMapParameters.Orientation orientation,
             int amountStart,
             int amountEnd,
-            bool isStartPartOfMainPath,
-            bool isEndPartOfMainPath,
-            bool isPerfectSegmentLane)
+            bool isPerfectSegmentLane,
+            int amountOfLaneConnections, 
+            bool useAsync)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -56,9 +56,9 @@ namespace Tools.WorldMapCore.Runtime
             Orientation = orientation;
             AmountEnd = amountEnd;
             AmountStart = amountStart;
-            IsStartPartOfMainPath = isStartPartOfMainPath;
-            IsEndPartOfMainPath = isEndPartOfMainPath;
             IsPerfectSegmentLane = isPerfectSegmentLane;
+            AmountOfLaneConnections = amountOfLaneConnections;
+            UseAsync = useAsync;
 
             // Generate Lanes
             Lanes = new List<Rect>();
