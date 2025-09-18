@@ -57,7 +57,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 var end = graphRegistry[index].Nodes.Last();
                 var graph = graphRegistry[index];
-                if (data.Parameters.test)
+                if (data.Parameters.UseDistanceInsteadAxisForDirection)
                 {
                     graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bounds.center));
                 }
@@ -67,72 +67,76 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            // Create connections
-            var connections = new List<Graph<WorldMapNode>>();
-
-            for (var index = 0; index < graphRegistry.Count - 1; index++)
             {
-                var connection = new Graph<WorldMapNode>();
-                var indexNext = index + 1;
-
-                var graph = graphRegistry[index];
-                var graphNext = graphRegistry[indexNext];
-
-                List<WorldMapNode> sort;
-                List<WorldMapNode> sortNext;
-                if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
+                if (data.Parameters.HasConnections)
                 {
-                    sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
-                    sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
-                }
-                else
-                {
-                    sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
-                    sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
-                }
-
-                foreach (var node in starting)
-                {
-                    sort.Remove(node);
-                }
-
-                foreach (var node in ending)
-                {
-                    sort.Remove(node);
-                }
-
-                foreach (var node in starting)
-                {
-                    sortNext.Remove(node);
-                }
-
-                foreach (var node in ending)
-                {
-                    sortNext.Remove(node);
-                }
-
-                for (var connectionCount = 0;
-                     connectionCount < data.Parameters.AmountOfLaneConnections;
-                     connectionCount++)
-                {
-                    var rightMost = sort.Last();
-                    sort.Remove(rightMost);
-                    var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
-                    if (nearest != null)
+                    // Create connections
+                    var connections = new List<Graph<WorldMapNode>>();
+                    for (var index = 0; index < graphRegistry.Count - 1; index++)
                     {
-                        connection.Register(rightMost);
-                        connection.Register(nearest);
-                        var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
-                        connection.Connect(rightMost, nearest, distance);
+                        var connection = new Graph<WorldMapNode>();
+                        var indexNext = index + 1;
+
+                        var graph = graphRegistry[index];
+                        var graphNext = graphRegistry[indexNext];
+
+                        List<WorldMapNode> sort;
+                        List<WorldMapNode> sortNext;
+                        if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
+                        {
+                            sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
+                            sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
+                        }
+                        else
+                        {
+                            sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
+                            sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
+                        }
+
+                        foreach (var node in starting)
+                        {
+                            sort.Remove(node);
+                        }
+
+                        foreach (var node in ending)
+                        {
+                            sort.Remove(node);
+                        }
+
+                        foreach (var node in starting)
+                        {
+                            sortNext.Remove(node);
+                        }
+
+                        foreach (var node in ending)
+                        {
+                            sortNext.Remove(node);
+                        }
+
+                        for (var connectionCount = 0;
+                             connectionCount < data.Parameters.AmountOfLaneConnections;
+                             connectionCount++)
+                        {
+                            var rightMost = sort.Last();
+                            sort.Remove(rightMost);
+                            var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
+                            if (nearest != null)
+                            {
+                                connection.Register(rightMost);
+                                connection.Register(nearest);
+                                var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
+                                connection.Connect(rightMost, nearest, distance);
+                            }
+                        }
+
+                        connections.Add(connection);
+                    }
+
+                    foreach (var connection in connections)
+                    {
+                        graphRegistry.Add(connection);
                     }
                 }
-
-                connections.Add(connection);
-            }
-
-            foreach (var connection in connections)
-            {
-                graphRegistry.Add(connection);
             }
 
             // Connect everything

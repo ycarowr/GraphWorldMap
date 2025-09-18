@@ -78,6 +78,12 @@ namespace Tools.WorldMapCore.Runtime
                 Debug.LogError("The requested amount of nodes is too large to fit in the area.");
                 return;
             }
+            
+            if (Data.ValidateIsolation())
+            {
+                Debug.LogError("The requested isolation is too small for the size of the node.");
+                return;
+            }
 
             var iterations = Data.Parameters.HasRandomSeed ? Data.Parameters.ParallelIterations : 1;
             Debug.Log($"Dispatching Iterations. n = {iterations}");

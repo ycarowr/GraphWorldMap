@@ -59,10 +59,12 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] private bool useAsync = true;
 
         [SerializeField] private int amountOfLaneConnections = 1;
+        
+        [SerializeField] private bool hasConnections = true;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
-        public bool test;
+        [SerializeField] private bool useDistanceInsteadAxisForDirection;
 
         public int Amount => amount;
 
@@ -94,7 +96,9 @@ namespace Tools.WorldMapCore.Database
 
         public int AmountOfLaneConnections => amountOfLaneConnections;
 
-        public bool test1 => test;
+        public bool UseDistanceInsteadAxisForDirection => useDistanceInsteadAxisForDirection;
+        
+        public bool HasConnections => hasConnections;
 
         public WorldMapStaticData CreateData()
         {
