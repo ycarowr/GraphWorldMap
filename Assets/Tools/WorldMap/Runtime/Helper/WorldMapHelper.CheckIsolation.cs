@@ -8,7 +8,7 @@ namespace Tools.WorldMapCore.Runtime
         public static void CheckIsolationDistance(List<WorldMapNode> nodes, WorldMapStaticData data,
             ref List<WorldMapNode> isolationNodes)
         {
-            if (data.IsolationDistance <= 0)
+            if (data.Parameters.IsolationDistance <= 0)
             {
                 return;
             }
@@ -33,7 +33,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                if (isolationDistance > data.IsolationDistance)
+                if (isolationDistance > data.Parameters.IsolationDistance)
                 {
                     isolationNodes.Add(nodeA);
                 }

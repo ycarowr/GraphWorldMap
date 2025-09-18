@@ -6,7 +6,8 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class GenerateWorldMapTask : TaskGroup
     {
-        public GenerateWorldMapTask(WorldMapStaticData data, Action onComplete) : base(null, onComplete, data.Timeout)
+        public GenerateWorldMapTask(WorldMapStaticData data, Action onComplete) : base(null, onComplete,
+            data.Parameters.Timeout)
         {
             Data = data;
             OnStart += () => { Debug.Log("Parallel Iteration Started!"); };
@@ -39,7 +40,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             var worldMapInstance = new WorldMap(Data);
-            var amount = Data.Amount;
+            var amount = Data.Parameters.Amount;
             worldMapInstance.GenerateNodes();
 
             // if this is the ideal number we return it
@@ -78,25 +79,26 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
-            var iterations = Data.HasRandomSeed ? Data.ParallelIterations : 1;
+            var iterations = Data.Parameters.HasRandomSeed ? Data.Parameters.ParallelIterations : 1;
             Debug.Log($"Dispatching Iterations. n = {iterations}");
-            
-            if (!Data.UseAsync)
+
+            if (!Data.Parameters.UseAsync)
             {
                 for (var index = 0; index < iterations; index++)
                 {
                     GenerateWorldMapIteration(index);
                 }
+
                 OnComplete.Invoke();
                 return;
             }
-            
+
             for (var i = 0; i < iterations; i++)
             {
                 var index = i;
                 AddTask(() => GenerateWorldMapIteration(index));
             }
-            
+
             ExecuteAll();
         }
 
@@ -114,7 +116,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return PerfectWorldMap;
             }
-            
+
             return NearIdealWorldMap;
         }
     }

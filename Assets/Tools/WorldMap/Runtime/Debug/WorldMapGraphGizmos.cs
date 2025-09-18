@@ -15,9 +15,9 @@ namespace Tools.WorldMapCore.Runtime
 
         public static void DrawGizmos(List<Graph<WorldMapNode>> graphs, WorldMapStaticData data)
         {
-            if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Graph &&
-                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
+            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Graph &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
             {
                 return;
             }
@@ -51,8 +51,8 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         lines.Add(nodeA.WorldPosition);
                         lines.Add(nodeB.Key.WorldPosition);
-                        if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                            data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
+                        if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
+                            data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
                         {
                             continue;
                         }

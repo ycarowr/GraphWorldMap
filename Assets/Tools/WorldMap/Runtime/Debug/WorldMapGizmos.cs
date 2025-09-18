@@ -18,8 +18,8 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> end,
             Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
         {
-            if (data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.DebugData.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
+            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
             {
                 return;
             }
@@ -114,9 +114,9 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            var isAll = data.DebugData.DeletionReason == WorldMap.EDeletionReason.All;
+            var isAll = data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.All;
             {
-                if (isAll || data.DebugData.DeletionReason == WorldMap.EDeletionReason.Overlap)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.Overlap)
                 {
                     // Draw Overlap
                     Gizmos.color = Color.red;
@@ -137,7 +137,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                if (isAll || data.DebugData.DeletionReason == WorldMap.EDeletionReason.Isolation)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.Isolation)
                 {
                     // Draw isolation
                     Gizmos.color = Color.white;
@@ -158,7 +158,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                if (isAll || data.DebugData.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
                 {
                     // Draw Bounds
                     Gizmos.color = Color.yellow;

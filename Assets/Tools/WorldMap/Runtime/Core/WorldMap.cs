@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Tools.Graphs;
-using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -68,9 +67,9 @@ namespace Tools.WorldMapCore.Runtime
 
         public void GenerateNodes()
         {
-            var amountToCreate = Data.Amount;
+            var amountToCreate = Data.Parameters.Amount;
             var count = 0;
-            var maxCount = Mathf.Max(Data.Iterations, amountToCreate);
+            var maxCount = Mathf.Max(Data.Parameters.Iterations, amountToCreate);
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
                 count++;
@@ -82,15 +81,6 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
-            {
-                Nodes.Sort(new WorldMapNodeCompareLeftRight());
-            }
-            else
-            {
-                Nodes.Sort(new WorldMapNodeCompareBottomTop());
-            }
-
             var isolationNodes = Deletions[EDeletionReason.Isolation];
             WorldMapHelper.CheckIsolationDistance(Nodes, Data, ref isolationNodes);
             WorldMapHelper.CreateGraph(GraphsRegistry, Data, Nodes, Start, End);
@@ -98,7 +88,7 @@ namespace Tools.WorldMapCore.Runtime
 
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
         {
-            var worldSize = Data.NodeWorldSize;
+            var worldSize = Data.Parameters.NodeWorldSize;
             var nodeID = WorldMapHelper.GenerateID();
             var newNode = new WorldMapNode(nodeID, worldPosition, worldSize);
 

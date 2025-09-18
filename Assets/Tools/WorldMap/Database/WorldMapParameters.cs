@@ -8,7 +8,7 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        public enum Orientation
+        public enum OrientationGraph
         {
             None = 0,
             LeftRight = 1,
@@ -46,7 +46,7 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
-        [SerializeField] private Orientation orientation = Orientation.LeftRight;
+        [SerializeField] private OrientationGraph orientation = OrientationGraph.LeftRight;
 
         [SerializeField] [Tooltip("Amount of starting nodes.")]
         private int amountStart = 1;
@@ -62,28 +62,46 @@ namespace Tools.WorldMapCore.Database
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
+        public bool test;
+
+        public int Amount => amount;
+
+        public float IsolationDistance => isolationDistance;
+
+        public Vector2 NodeWorldSize => nodeWorldSize;
+
+        public Vector2 TotalWorldSize => totalWorldSize;
+
+        public int Iterations => iterations;
+
+        public int ParallelIterations => parallelIterations;
+
+        public int Timeout => timeout;
+
+        public int Seed => seed;
+
+        public bool HasRandomSeed => hasRandomSeed;
+
+        public OrientationGraph Orientation => orientation;
+
+        public int AmountStart => amountStart;
+
+        public int AmountEnd => amountEnd;
+
+        public bool IsPerfectSegmentLane => isPerfectSegmentLane;
+
+        public bool UseAsync => useAsync;
+
+        public int AmountOfLaneConnections => amountOfLaneConnections;
+
+        public bool test1 => test;
+
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
             var bounds = new Rect(center, totalWorldSize + new Vector2(SMALL_NUMBER, SMALL_NUMBER));
             bounds.center = center;
-            return new WorldMapStaticData(
-                amount,
-                nodeWorldSize,
-                isolationDistance,
-                bounds,
-                seed,
-                iterations,
-                parallelIterations,
-                timeout,
-                hasRandomSeed,
-                DebugValues,
-                orientation,
-                amountStart,
-                amountEnd,
-                isPerfectSegmentLane,
-                amountOfLaneConnections,
-                useAsync);
+            return new WorldMapStaticData(this, bounds);
         }
 
         [Serializable]

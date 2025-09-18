@@ -20,6 +20,7 @@ namespace Tools.WorldMapCore.Runtime
                 graph.Register(start);
             }
 
+
             // Register middle Nodes
             for (var index = 0; index < nodes.Count; index++)
             {
@@ -52,6 +53,20 @@ namespace Tools.WorldMapCore.Runtime
             }
 
 
+            for (var index = 0; index < graphRegistry.Count; index++)
+            {
+                var end = graphRegistry[index].Nodes.Last();
+                var graph = graphRegistry[index];
+                if (data.Parameters.test)
+                {
+                    graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bounds.center));
+                }
+                else
+                {
+                    graph.Nodes.Sort(new WorldMapNodeCompareBottomTop());
+                }
+            }
+
             // Create connections
             var connections = new List<Graph<WorldMapNode>>();
 
@@ -65,7 +80,7 @@ namespace Tools.WorldMapCore.Runtime
 
                 List<WorldMapNode> sort;
                 List<WorldMapNode> sortNext;
-                if (data.Orientation == WorldMapParameters.Orientation.BottomTop)
+                if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
                 {
                     sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
                     sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
@@ -80,23 +95,25 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     sort.Remove(node);
                 }
-                
+
                 foreach (var node in ending)
                 {
                     sort.Remove(node);
                 }
-                
+
                 foreach (var node in starting)
                 {
                     sortNext.Remove(node);
                 }
-                
+
                 foreach (var node in ending)
                 {
                     sortNext.Remove(node);
                 }
 
-                for (var connectionCount = 0; connectionCount < data.AmountOfLaneConnections; connectionCount++)
+                for (var connectionCount = 0;
+                     connectionCount < data.Parameters.AmountOfLaneConnections;
+                     connectionCount++)
                 {
                     var rightMost = sort.Last();
                     sort.Remove(rightMost);
@@ -119,7 +136,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             // Connect everything
-            for (var startingIndex = 0; startingIndex < data.AmountStart; startingIndex++)
+            for (var startingIndex = 0; startingIndex < data.Parameters.AmountStart; startingIndex++)
             {
                 var graph = graphRegistry[startingIndex];
                 for (var index = 0; index < graph.Nodes.Count - 1; index++)
