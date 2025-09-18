@@ -21,7 +21,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
 
-            // Register middle Nodes
+            // Register nodes according to their lanes
             for (var index = 0; index < nodes.Count; index++)
             {
                 var node = nodes[index];
@@ -53,6 +53,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
 
+            // Sort nodes according to the parameters, so we can have a proper direction to go to
             for (var index = 0; index < graphRegistry.Count; index++)
             {
                 var end = graphRegistry[index].Nodes.Last();
@@ -68,9 +69,9 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
+                // Create lanes connections
                 if (data.Parameters.HasConnections)
                 {
-                    // Create connections
                     var connections = new List<Graph<WorldMapNode>>();
                     for (var index = 0; index < graphRegistry.Count - 1; index++)
                     {
@@ -132,6 +133,7 @@ namespace Tools.WorldMapCore.Runtime
                         connections.Add(connection);
                     }
 
+                    // Lane connections are separated graphs
                     foreach (var connection in connections)
                     {
                         graphRegistry.Add(connection);
@@ -139,7 +141,7 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            // Connect everything
+            // Connect all registered nodes from each graph sequentially
             for (var startingIndex = 0; startingIndex < data.Parameters.AmountStart; startingIndex++)
             {
                 var graph = graphRegistry[startingIndex];
@@ -150,6 +152,14 @@ namespace Tools.WorldMapCore.Runtime
                     var nodeNext = graph.Nodes[nextIndex];
                     var distance = Vector3.Distance(node.Bounds.center, nodeNext.Bounds.center);
                     graph.Connect(node, nodeNext, distance);
+                }
+            }
+            
+            // Connect end leftovers
+            foreach (var end in ending)
+            {
+                foreach (var graph in graphRegistry)
+                {
                 }
             }
         }

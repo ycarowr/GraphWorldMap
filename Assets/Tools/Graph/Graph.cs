@@ -16,102 +16,107 @@ namespace Tools.Graphs
 
         public int Count => Nodes.Count;
 
-        public void Register(TNode graphNode)
+        public void Register(TNode node)
         {
-            if (!IsRegistered(graphNode))
+            if (!IsRegistered(node))
             {
-                Nodes.Add(graphNode);
+                Nodes.Add(node);
             }
         }
 
-        public void Unregister(TNode graphNode)
+        public void Unregister(TNode node)
         {
-            if (IsRegistered(graphNode))
+            if (IsRegistered(node))
             {
-                Nodes.Remove(graphNode);
+                Nodes.Remove(node);
             }
         }
 
-        public bool IsRegistered(TNode graphNode)
+        public bool IsRegistered(TNode node)
         {
-            return Nodes.Contains(graphNode);
+            return Nodes.Contains(node);
         }
 
-        public bool AreConnected(TNode graphNodeA, TNode nodeB)
+        public bool AreConnected(TNode parametersA, TNode parametersB)
         {
-            if (!Connections.ContainsKey(graphNodeA))
+            if (!Connections.ContainsKey(parametersA))
             {
                 return false;
             }
 
-            return Connections[graphNodeA].ContainsKey(nodeB);
+            return Connections[parametersA].ContainsKey(parametersB);
         }
 
-        public void Connect(TNode graphNodeA, TNode nodeB, float cost = 0, bool isTwoWay = true)
+        public bool HasConnection(TNode parameters)
         {
-            if (!IsRegistered(graphNodeA) || !IsRegistered(nodeB))
+            return Connections.ContainsKey(parameters);
+        }
+
+        public void Connect(TNode nodeA, TNode parametersB, float cost = 0, bool isTwoWay = true)
+        {
+            if (!IsRegistered(nodeA) || !IsRegistered(parametersB))
             {
                 return;
             }
 
-            if (!AreConnected(graphNodeA, nodeB))
+            if (!AreConnected(nodeA, parametersB))
             {
-                if (!Connections.ContainsKey(graphNodeA))
+                if (!Connections.ContainsKey(nodeA))
                 {
-                    Connections.Add(graphNodeA, new Dictionary<TNode, float>
+                    Connections.Add(nodeA, new Dictionary<TNode, float>
                     {
-                        { nodeB, cost },
+                        { parametersB, cost },
                     });
                 }
                 else
                 {
-                    Connections[graphNodeA].Add(nodeB, cost);
+                    Connections[nodeA].Add(parametersB, cost);
                 }
             }
 
             // reverse connection
             if (isTwoWay)
             {
-                if (!AreConnected(nodeB, graphNodeA))
+                if (!AreConnected(parametersB, nodeA))
                 {
-                    if (!Connections.ContainsKey(nodeB))
+                    if (!Connections.ContainsKey(parametersB))
                     {
-                        Connections.Add(nodeB, new Dictionary<TNode, float>
+                        Connections.Add(parametersB, new Dictionary<TNode, float>
                         {
-                            { graphNodeA, cost },
+                            { nodeA, cost },
                         });
                     }
                     else
                     {
-                        Connections[nodeB].Add(graphNodeA, cost);
+                        Connections[parametersB].Add(nodeA, cost);
                     }
                 }
             }
         }
 
-        public int FindAmountOfConnections(TNode graphNode)
+        public int FindAmountOfConnections(TNode node)
         {
-            if (!IsRegistered(graphNode))
+            if (!IsRegistered(node))
             {
                 return 0;
             }
 
-            if (!Connections.ContainsKey(graphNode))
+            if (!Connections.ContainsKey(node))
             {
                 return 0;
             }
 
-            return Connections[graphNode].Count;
+            return Connections[node].Count;
         }
 
-        public float FindConnectionCost(TNode graphNodeA, TNode nodeB)
+        public float FindConnectionCost(TNode nodeA, TNode parametersB)
         {
-            if (!AreConnected(graphNodeA, nodeB))
+            if (!AreConnected(nodeA, parametersB))
             {
                 return float.MaxValue;
             }
 
-            return Connections[graphNodeA][nodeB];
+            return Connections[nodeA][parametersB];
         }
     }
 }

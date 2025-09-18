@@ -13,17 +13,16 @@ MonoBehaviour:
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
   amount: 100
-  isolationDistance: -1
   nodeWorldSize: {x: 64, y: 64}
   totalWorldSize: {x: 768, y: 1024}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 1644147860
+  seed: 108244055
   hasRandomSeed: 0
   orientation: 2
   amountStart: 4
-  amountEnd: 2
+  amountEnd: 3
   isPerfectSegmentLane: 1
   useAsync: 0
   amountOfLaneConnections: 11
@@ -31,5 +30,5 @@ MonoBehaviour:
   DebugValues:
     SelectOwnerOnCreate: 0
     Mode: 2
-    DeletionReason: 3
+    DeletionReason: 0
   useDistanceInsteadAxisForDirection: 1
