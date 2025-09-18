@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tools.Graphs;
+using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -62,8 +63,38 @@ namespace Tools.WorldMapCore.Runtime
                 var graph = graphRegistry[index];
                 var graphNext = graphRegistry[indexNext];
 
-                var sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
-                var sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
+                List<WorldMapNode> sort;
+                List<WorldMapNode> sortNext;
+                if (data.Orientation == WorldMapParameters.Orientation.BottomTop)
+                {
+                    sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
+                    sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
+                }
+                else
+                {
+                    sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
+                    sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
+                }
+
+                foreach (var node in starting)
+                {
+                    sort.Remove(node);
+                }
+                
+                foreach (var node in ending)
+                {
+                    sort.Remove(node);
+                }
+                
+                foreach (var node in starting)
+                {
+                    sortNext.Remove(node);
+                }
+                
+                foreach (var node in ending)
+                {
+                    sortNext.Remove(node);
+                }
 
                 for (var connectionCount = 0; connectionCount < data.AmountOfLaneConnections; connectionCount++)
                 {
