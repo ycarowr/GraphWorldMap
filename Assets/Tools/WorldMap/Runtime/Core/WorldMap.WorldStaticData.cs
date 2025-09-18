@@ -24,6 +24,7 @@ namespace Tools.WorldMapCore.Runtime
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
         public readonly int AmountOfLaneConnections;
+        public readonly bool UseAsync;
 
         public WorldMapStaticData(int amount,
             Vector2 nodeWorldSize,
@@ -39,7 +40,8 @@ namespace Tools.WorldMapCore.Runtime
             int amountStart,
             int amountEnd,
             bool isPerfectSegmentLane,
-            int amountOfLaneConnections)
+            int amountOfLaneConnections, 
+            bool useAsync)
         {
             Amount = amount;
             NodeWorldSize = nodeWorldSize;
@@ -56,6 +58,7 @@ namespace Tools.WorldMapCore.Runtime
             AmountStart = amountStart;
             IsPerfectSegmentLane = isPerfectSegmentLane;
             AmountOfLaneConnections = amountOfLaneConnections;
+            UseAsync = useAsync;
 
             // Generate Lanes
             Lanes = new List<Rect>();

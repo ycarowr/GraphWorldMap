@@ -58,6 +58,9 @@ namespace Tools.WorldMapCore.Database
         private bool isPerfectSegmentLane;
         
         [SerializeField]
+        private bool useAsync = true;
+        
+        [SerializeField]
         private int amountOfLaneConnections = 1;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
@@ -82,7 +85,8 @@ namespace Tools.WorldMapCore.Database
                 amountStart,
                 amountEnd,
                 isPerfectSegmentLane,
-                amountOfLaneConnections);
+                amountOfLaneConnections,
+                useAsync);
         }
 
 #if UNITY_EDITOR
