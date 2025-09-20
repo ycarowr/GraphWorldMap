@@ -6,7 +6,7 @@ namespace Tools.WorldMapCore.Runtime
 {
     public partial class WorldMap
     {
-        private readonly WorldMapStaticData Data;
+        public readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly WorldMapRandom Random;

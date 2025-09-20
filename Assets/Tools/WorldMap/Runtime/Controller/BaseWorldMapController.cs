@@ -29,6 +29,11 @@ namespace Tools.WorldMapCore.Runtime
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
 
+        protected void Start()
+        {
+            Create();
+        }
+
         protected virtual void OnEnable()
         {
             OnCreate += RefreshMap;
@@ -71,7 +76,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
-
+            
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
@@ -93,10 +98,13 @@ namespace Tools.WorldMapCore.Runtime
         private void Clean()
         {
             WorldMap = null;
-            if (WorldMapRoot)
+            
+            for (var i = 0; i < transform.childCount; i++)
             {
-                DestroyImmediate(WorldMapRoot);
+                DestroyImmediate(transform.GetChild(i).gameObject);
             }
+
+            DestroyImmediate(WorldMapRoot);
         }
 
         private void RefreshAsync()

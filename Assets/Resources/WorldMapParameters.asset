@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
   amount: 100
-  nodeWorldSize: {x: 64, y: 64}
-  totalWorldSize: {x: 768, y: 1024}
+  nodeWorldSize: {x: 6, y: 6}
+  totalWorldSize: {x: 200, y: 100}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
   seed: 1985396227
-  hasRandomSeed: 0
+  hasRandomSeed: 1
   orientation: 1
   amountStart: 4
   amountEnd: 3
@@ -28,7 +28,6 @@ MonoBehaviour:
   amountOfLaneConnections: 3
   hasConnections: 1
   DebugValues:
-    SelectOwnerOnCreate: 0
     Mode: 2147483647
     DeletionReason: 0
   sortMethod: 1
