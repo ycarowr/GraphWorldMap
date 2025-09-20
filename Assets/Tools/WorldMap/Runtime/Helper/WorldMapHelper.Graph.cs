@@ -161,7 +161,7 @@ namespace Tools.WorldMapCore.Runtime
                     graph.Connect(node, nodeNext, distance);
                 }
             }
-            
+
             // Connect end leftovers
             foreach (var end in ending)
             {

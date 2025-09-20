@@ -26,7 +26,7 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
-        
+
         [SerializeField] [Tooltip("Node size in world units from each node.")]
         private Vector2 nodeWorldSize = Vector2.one;
 
@@ -61,7 +61,7 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] private bool useAsync = true;
 
         [SerializeField] private int amountOfLaneConnections = 1;
-        
+
         [SerializeField] private bool hasConnections = true;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
@@ -97,7 +97,7 @@ namespace Tools.WorldMapCore.Database
         public int AmountOfLaneConnections => amountOfLaneConnections;
 
         public SortMethod SortingMethod => sortMethod;
-        
+
         public bool HasConnections => hasConnections;
 
         public WorldMapStaticData CreateData()
