@@ -119,8 +119,7 @@ namespace Tools.WorldMapCore.Database
                 Distances = 3,
                 All = int.MaxValue,
             }
-
-            public bool SelectOwnerOnCreate;
+            
             public DrawMode Mode = DrawMode.All;
             public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }

@@ -11,8 +11,8 @@ namespace Tools.WorldMapCore.Runtime
         public abstract void Create();
     }
 
-    [ExecuteAlways]
     // Base generalized class for the map controller
+    [ExecuteAlways]
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
         where TNode : BaseWorldMapNode
@@ -59,13 +59,6 @@ namespace Tools.WorldMapCore.Runtime
             var data = WorldMapParameters.CreateData();
             GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
             GenerateWorldMapTask.Dispatch();
-#if UNITY_EDITOR
-            if (WorldMapParameters.DebugValues.SelectOwnerOnCreate)
-            {
-                // keeping selection int this object for update while in the editor
-                Selection.objects = new Object[] { gameObject };
-            }
-#endif
         }
 
         [Button]
