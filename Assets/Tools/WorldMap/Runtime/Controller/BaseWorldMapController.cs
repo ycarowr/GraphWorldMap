@@ -29,12 +29,12 @@ namespace Tools.WorldMapCore.Runtime
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             OnCreate += RefreshMap;
         }
 
-        protected void OnDestroy()
+        protected void OnDisable()
         {
             OnCreate -= RefreshMap;
         }
