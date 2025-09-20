@@ -2,10 +2,19 @@ using System.Collections.Generic;
 
 namespace Tools.Graphs
 {
+    /*
+     * Base class that wraps a single Graph instance.
+     */
     public class Graph<TNode> where TNode : BaseGraphNode
     {
+        /*
+         * All connections of the graph.
+         */
         public readonly Dictionary<TNode, Dictionary<TNode, float>> Connections;
 
+        /*
+         * All nodes that belong to this graph.
+         */
         public readonly List<TNode> Nodes;
 
         public Graph()

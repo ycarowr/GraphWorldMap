@@ -12,7 +12,7 @@ namespace Tools.WorldMapCore.Runtime
         public void SetNode(WorldMapNode node)
         {
             titleText.text = node.ID.ToString();
-            transform.localPosition = node.WorldPosition;
+            transform.localPosition = node.Center;
         }
     }
 }

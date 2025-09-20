@@ -4,24 +4,15 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public class WorldMap
+    public partial class WorldMap
     {
-        public enum EDeletionReason
-        {
-            None = 0,
-            Overlap = 1,
-            OutOfBounds = 2,
-
-            All = int.MaxValue,
-        }
-
         private readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
-        public readonly List<WorldMapNode> End;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
-        public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
+        public readonly List<WorldMapNode> Nodes;
         public readonly List<WorldMapNode> Start;
+        public readonly List<WorldMapNode> End;
 
         public WorldMap(WorldMapStaticData data)
         {

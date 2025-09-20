@@ -49,16 +49,16 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.WorldPosition);
-                        lines.Add(nodeB.Key.WorldPosition);
+                        lines.Add(nodeA.Center);
+                        lines.Add(nodeB.Key.Center);
                         if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
                             data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
                         {
                             continue;
                         }
 
-                        var midpointX = (nodeB.Key.WorldPosition.x + nodeA.WorldPosition.x) / 2;
-                        var midpointY = (nodeB.Key.WorldPosition.y + nodeA.WorldPosition.y) / 2;
+                        var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
+                        var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
                         var text = nodeB.Value.ToString(CultureInfo.InvariantCulture);
                         if (text.Length < 4)
                         {

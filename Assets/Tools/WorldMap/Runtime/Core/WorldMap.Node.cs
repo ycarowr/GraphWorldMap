@@ -14,8 +14,8 @@ namespace Tools.WorldMapCore.Runtime
             Bounds = new Rect(worldPosition, size);
             Bounds.center = worldPosition;
         }
-
-        public Vector2 WorldPosition => Bounds.center;
+        
+        public Vector2 Center => Bounds.center;
         public Vector2 Size => Bounds.size;
     }
 }

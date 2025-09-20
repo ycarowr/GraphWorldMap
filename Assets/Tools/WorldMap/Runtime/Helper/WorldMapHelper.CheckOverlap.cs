@@ -11,8 +11,8 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < count; index++)
             {
                 var nodeOverlap = nodes[index];
-                var rectA = new Rect(node.WorldPosition, node.Size);
-                var rectB = new Rect(nodeOverlap.WorldPosition, nodeOverlap.Size);
+                var rectA = new Rect(node.Center, node.Size);
+                var rectB = new Rect(nodeOverlap.Center, nodeOverlap.Size);
                 if (!CheckRectOverlap(rectA, rectB))
                 {
                     return false;
