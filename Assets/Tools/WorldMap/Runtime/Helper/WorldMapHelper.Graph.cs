@@ -58,13 +58,20 @@ namespace Tools.WorldMapCore.Runtime
             {
                 var end = graphRegistry[index].Nodes.Last();
                 var graph = graphRegistry[index];
-                if (data.Parameters.UseDistanceInsteadAxisForDirection)
+                if (data.Parameters.SortingMethod == WorldMapParameters.SortMethod.Distance)
                 {
                     graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bounds.center));
                 }
                 else
                 {
-                    graph.Nodes.Sort(new WorldMapNodeCompareBottomTop());
+                    if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
+                    {
+                        graph.Nodes.Sort(new WorldMapNodeCompareLeftRight());
+                    }
+                    else
+                    {
+                        graph.Nodes.Sort(new WorldMapNodeCompareBottomTop());
+                    }
                 }
             }
 

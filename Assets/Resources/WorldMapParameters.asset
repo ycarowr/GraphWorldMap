@@ -18,17 +18,17 @@ MonoBehaviour:
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 108244055
+  seed: 1985396227
   hasRandomSeed: 0
-  orientation: 2
+  orientation: 1
   amountStart: 4
   amountEnd: 3
   isPerfectSegmentLane: 1
   useAsync: 0
-  amountOfLaneConnections: 11
-  hasConnections: 0
+  amountOfLaneConnections: 3
+  hasConnections: 1
   DebugValues:
     SelectOwnerOnCreate: 0
-    Mode: 2
+    Mode: 2147483647
     DeletionReason: 0
-  useDistanceInsteadAxisForDirection: 1
+  sortMethod: 1

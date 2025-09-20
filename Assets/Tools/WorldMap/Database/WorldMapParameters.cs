@@ -15,6 +15,13 @@ namespace Tools.WorldMapCore.Database
             BottomTop = 2,
         }
 
+        public enum SortMethod
+        {
+            None = 0,
+            Axis = 1,
+            Distance = 2,
+        }
+
         public const float SMALL_NUMBER = 0.0001f;
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
@@ -59,7 +66,7 @@ namespace Tools.WorldMapCore.Database
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
-        [SerializeField] private bool useDistanceInsteadAxisForDirection;
+        [SerializeField] private SortMethod sortMethod = SortMethod.Distance;
 
         public int Amount => amount;
 
@@ -89,7 +96,7 @@ namespace Tools.WorldMapCore.Database
 
         public int AmountOfLaneConnections => amountOfLaneConnections;
 
-        public bool UseDistanceInsteadAxisForDirection => useDistanceInsteadAxisForDirection;
+        public SortMethod SortingMethod => sortMethod;
         
         public bool HasConnections => hasConnections;
 
