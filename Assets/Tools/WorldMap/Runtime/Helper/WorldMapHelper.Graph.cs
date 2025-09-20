@@ -165,21 +165,33 @@ namespace Tools.WorldMapCore.Runtime
             // Connect end leftovers
             foreach (var end in ending)
             {
+                var hasConnection = false;
                 foreach (var graph in graphRegistry)
                 {
+                    hasConnection |= graph.HasConnection(end);
+                }
+
+                if (!hasConnection)
+                {
+                    var graph = new Graph<WorldMapNode>();
+                    graphRegistry.Add(graph);
+                    var nearest = FindNearest(nodes, end, ending);
+                    graph.Register(nearest);
+                    graph.Register(end);
+                    graph.Connect(nearest, end, Vector3.Distance(nearest.Bounds.center, end.Bounds.center));
                 }
             }
         }
 
         private static WorldMapNode FindNearest(List<WorldMapNode> nodes, WorldMapNode node,
-            List<WorldMapNode> exceptions)
+            List<WorldMapNode> exceptions = null)
         {
             var nearest = float.MaxValue;
             var nearestIndex = -1;
             for (var index = 0; index < nodes.Count; index++)
             {
                 var worldMapNode = nodes[index];
-                if (exceptions.Contains(worldMapNode))
+                if (exceptions != null && exceptions.Contains(worldMapNode))
                 {
                     continue;
                 }
