@@ -1,6 +1,6 @@
+using System;
 using Tools.Attributes;
 using Tools.WorldMapCore.Database;
-using UnityEditor;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -29,18 +29,14 @@ namespace Tools.WorldMapCore.Runtime
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
 
-        private bool HasRefreshed { get; set; }
-
-
-        private void Update()
+        protected virtual void Awake()
         {
-            if (HasRefreshed)
-            {
-                HasRefreshed = false;
-                // Executing refresh on update due 
-                // to main thread operations
-                RefreshMap();
-            }
+            OnCreate += RefreshMap;
+        }
+
+        protected void OnDestroy()
+        {
+            OnCreate -= RefreshMap;
         }
 
 #if UNITY_EDITOR
@@ -49,6 +45,7 @@ namespace Tools.WorldMapCore.Runtime
             WorldMap?.OnDrawGizmos();
         }
 #endif
+        public event Action OnCreate = () => { };
 
         [Button]
         public override void Create()
@@ -105,7 +102,7 @@ namespace Tools.WorldMapCore.Runtime
         private void RefreshAsync()
         {
             WorldMap = GenerateWorldMapTask.GetWorldMap();
-            HasRefreshed = true;
+            OnCreate.Invoke();
             Debug.Log($"Refresh Async: {WorldMap.Random.Seed}");
         }
     }
