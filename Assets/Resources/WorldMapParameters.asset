@@ -28,6 +28,6 @@ MonoBehaviour:
   amountOfLaneConnections: 3
   hasConnections: 1
   DebugValues:
-    Mode: 2147483647
+    Mode: 2
     DeletionReason: 0
   sortMethod: 1
