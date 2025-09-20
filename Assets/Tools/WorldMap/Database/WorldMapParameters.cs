@@ -1,4 +1,5 @@
 ﻿using System;
+using Game;
 using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
 using UnityEngine;
@@ -129,6 +130,7 @@ namespace Tools.WorldMapCore.Database
         private void Refresh()
         {
             FindFirstObjectByType<BaseWorldMapController>().Create();
+            FindFirstObjectByType<MainCamera>().OnCreateWorldMap();
         }
 
         [Button]
