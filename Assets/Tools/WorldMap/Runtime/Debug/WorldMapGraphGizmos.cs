@@ -1,10 +1,7 @@
-﻿#if UNITY_EDITOR
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
-using UnityEditor;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -78,8 +75,9 @@ namespace Tools.WorldMapCore.Runtime
                         {
                             text = text[..4];
                         }
-
-                        Handles.Label(new Vector3(midpointX, midpointY, 0), text);
+#if UNITY_EDITOR
+                        UnityEditor.Handles.Label(new Vector3(midpointX, midpointY, 0), text);
+#endif
                     }
                 }
 
@@ -88,5 +86,3 @@ namespace Tools.WorldMapCore.Runtime
         }
     }
 }
-
-#endif

@@ -1,9 +1,6 @@
-﻿#if UNITY_EDITOR
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Tools.WorldMapCore.Database;
-using UnityEditor;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -37,29 +34,18 @@ namespace Tools.WorldMapCore.Runtime
                 var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
                 var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
                 var topRight = data.WorldBounds.max.ToString();
-                Handles.Label(data.WorldBounds.min, bottomLeft);
-                Handles.Label(bottomRight, bottomRight.ToString());
-                Handles.Label(topLeft, topLeft.ToString());
-                Handles.Label(data.WorldBounds.max, topRight);
+#if UNITY_EDITOR
+                UnityEditor.Handles.Label(data.WorldBounds.min, bottomLeft);
+                UnityEditor.Handles.Label(bottomRight, bottomRight.ToString());
+                UnityEditor.Handles.Label(topLeft, topLeft.ToString());
+                UnityEditor.Handles.Label(data.WorldBounds.max, topRight);
+#endif
             }
 
             {
                 // Draw center 
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawWireSphere(data.WorldBounds.center, 0.2f);
-            }
-
-            {
-                // Draw borders isn't necessary because the lanes are just enough
-                // Gizmos.color = Color.magenta;
-                // ReadOnlySpan<Vector3> points = new[]
-                // {
-                //     new Vector3(data.WorldBounds.xMin - SMALL_NUMBER_DRAW, data.WorldBounds.yMin - SMALL_NUMBER_DRAW, 0),
-                //     new Vector3(data.WorldBounds.xMin - SMALL_NUMBER_DRAW, data.WorldBounds.yMax + SMALL_NUMBER_DRAW, 0),
-                //     new Vector3(data.WorldBounds.xMax + SMALL_NUMBER_DRAW, data.WorldBounds.yMax + SMALL_NUMBER_DRAW, 0),
-                //     new Vector3(data.WorldBounds.xMax + SMALL_NUMBER_DRAW, data.WorldBounds.yMin - SMALL_NUMBER_DRAW, 0),
-                // };
-                // Gizmos.DrawLineStrip(points, true);
             }
 
             {
@@ -157,4 +143,3 @@ namespace Tools.WorldMapCore.Runtime
         }
     }
 }
-#endif

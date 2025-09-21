@@ -100,13 +100,11 @@ namespace Tools.WorldMapCore.Runtime
 
             return null;
         }
-
-#if UNITY_EDITOR
+        
         public void OnDrawGizmos()
         {
             WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
             WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, Data);
         }
-#endif
     }
 }
