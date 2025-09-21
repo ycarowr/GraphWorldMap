@@ -23,6 +23,10 @@ namespace Game
         [Button]
         public void OnCreateWorldMap()
         {
+            if (!IsValid())
+            {
+                return;
+            }
             CentralizePosition();
             SetOrthographicSize();
         }
@@ -81,6 +85,11 @@ namespace Game
         {
             Vector3 position = gameWorldMap.WorldMap.Data.WorldBounds.center;
             transform.position = position + offset;
+        }
+
+        private bool IsValid()
+        {
+            return gameWorldMap.WorldMap != null;
         }
     }
 }
