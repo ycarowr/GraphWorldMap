@@ -10,8 +10,6 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGizmos
     {
-        private const float SMALL_NUMBER_DRAW = 0.075f;
-
         public static void DrawGizmos(WorldMapStaticData data,
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
