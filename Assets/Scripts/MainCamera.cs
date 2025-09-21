@@ -25,14 +25,15 @@ namespace Game
             var cameraComponent = GetComponent<Camera>();
             Vector3 position = gameWorldMap.WorldMap.Data.WorldBounds.center;
             transform.position = position + offset;
-
-            if (gameWorldMap.WorldMap.Data.WorldBounds.width > gameWorldMap.WorldMap.Data.WorldBounds.height)
+            var worldAspect = gameWorldMap.WorldMap.Data.WorldBounds.width / gameWorldMap.WorldMap.Data.WorldBounds.height; 
+            Debug.Log(cameraComponent.aspect + " " + worldAspect);
+            if (worldAspect > cameraComponent.aspect)
             {
-                cameraComponent.orthographicSize = gameWorldMap.WorldMap.Data.WorldBounds.width / 3;
+                cameraComponent.orthographicSize = gameWorldMap.WorldMap.Data.WorldBounds.width / (cameraComponent.aspect * 2) ;
             }
             else
             {
-                cameraComponent.orthographicSize = gameWorldMap.WorldMap.Data.WorldBounds.height / 2;   
+                cameraComponent.orthographicSize = gameWorldMap.WorldMap.Data.WorldBounds.height / 2f;   
             }
         }
     }
