@@ -35,12 +35,12 @@ namespace Tools.WorldMapCore.Runtime
 
         protected virtual void OnEnable()
         {
-            OnCreate += RefreshMap;
+            OnCreate += OnRefreshMap;
         }
 
         protected void OnDisable()
         {
-            OnCreate -= RefreshMap;
+            OnCreate -= OnRefreshMap;
         }
         
         protected virtual void OnDrawGizmos()
@@ -68,7 +68,7 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         [Button]
-        public void RefreshMap()
+        protected virtual void OnRefreshMap()
         {
             if (WorldMap == null)
             {
