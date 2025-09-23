@@ -12,6 +12,7 @@ namespace Tools.WorldMapCore.Runtime
     }
 
     // Base generalized class for the map controller
+    [ExecuteInEditMode]
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
         where TNode : BaseWorldMapNode
@@ -42,12 +43,12 @@ namespace Tools.WorldMapCore.Runtime
         {
             OnCreate -= OnRefreshMap;
         }
-        
-        protected virtual void OnDrawGizmos()
-        {
-            WorldMap?.OnDrawGizmos();
-        }
 
+        protected virtual void Update()
+        {
+            WorldMap?.OnDrawGizmos();   
+        }
+        
         public event Action OnCreate = () => { };
 
         [Button]

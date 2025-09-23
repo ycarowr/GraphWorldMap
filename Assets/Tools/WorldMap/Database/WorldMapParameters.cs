@@ -125,9 +125,9 @@ namespace Tools.WorldMapCore.Database
             public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }
 
-#if UNITY_EDITOR
+
         [Button]
-        private void Refresh()
+        public void Refresh()
         {
             FindFirstObjectByType<BaseWorldMapController>().Create();
             FindFirstObjectByType<MainCamera>().OnCreateWorldMap();
@@ -138,6 +138,5 @@ namespace Tools.WorldMapCore.Database
         {
             WorldMapGraphGizmos.colors.Clear();
         }
-#endif
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Tools.WorldMapCore.Database;
+using UGizmo;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -21,35 +22,32 @@ namespace Tools.WorldMapCore.Runtime
 
             {
                 // Draw lanes
-                Gizmos.color = Color.yellow;
                 foreach (var lane in data.Lanes)
                 {
-                    Gizmos.DrawWireCube(lane.center, lane.size);
+                    UGizmos.DrawWireCube(lane.center, Quaternion.identity, lane.size, Color.yellow);
                 }
             }
 
-            {
-                // Draw bounders
-                var bottomLeft = data.WorldBounds.min.ToString();
-                var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
-                var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
-                var topRight = data.WorldBounds.max.ToString();
-#if UNITY_EDITOR
-                UnityEditor.Handles.Label(data.WorldBounds.min, bottomLeft);
-                UnityEditor.Handles.Label(bottomRight, bottomRight.ToString());
-                UnityEditor.Handles.Label(topLeft, topLeft.ToString());
-                UnityEditor.Handles.Label(data.WorldBounds.max, topRight);
-#endif
-            }
+// #if UNITY_EDITOR
+//             {
+//                 // Draw bounders
+//                 var bottomLeft = data.WorldBounds.min.ToString();
+//                 var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
+//                 var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
+//                 var topRight = data.WorldBounds.max.ToString();
+//                 UnityEditor.Handles.Label(data.WorldBounds.min, bottomLeft);
+//                 UnityEditor.Handles.Label(bottomRight, bottomRight.ToString());
+//                 UnityEditor.Handles.Label(topLeft, topLeft.ToString());
+//                 UnityEditor.Handles.Label(data.WorldBounds.max, topRight);
+//             }
+// #endif
 
             {
                 // Draw center 
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(data.WorldBounds.center, 0.2f);
+                UGizmos.DrawWireSphere(data.WorldBounds.center, 0.2f, Color.magenta);
             }
 
             {
-                Gizmos.color = Color.green;
                 for (var i = 0; i < nodes.Count; i++)
                 {
                     var node = nodes[i];
@@ -60,13 +58,12 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    Gizmos.DrawLineStrip(points, true);
+                    UGizmos.DrawLineList(points, Color.green);
                 }
             }
 
             {
                 // Start
-                Gizmos.color = new Color(60f / 255f, 179f / 255f, 113 / 255f);
                 for (var i = 0; i < start.Count; i++)
                 {
                     var node = start[i];
@@ -77,13 +74,12 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    Gizmos.DrawLineStrip(points, true);
+                    UGizmos.DrawLineList(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
                 }
             }
 
             {
                 // End
-                Gizmos.color = new Color(106f / 255f, 90f / 255f, 205 / 255f);
                 for (var i = 0; i < end.Count; i++)
                 {
                     var node = end[i];
@@ -94,7 +90,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    Gizmos.DrawLineStrip(points, true);
+                    UGizmos.DrawLineList(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
                 }
             }
 
@@ -103,7 +99,6 @@ namespace Tools.WorldMapCore.Runtime
                 if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.Overlap)
                 {
                     // Draw Overlap
-                    Gizmos.color = Color.red;
                     var deleted = deletions[WorldMap.EDeletionReason.Overlap];
                     for (var i = 0; i < deleted.Count; i++)
                     {
@@ -115,7 +110,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        Gizmos.DrawLineStrip(points, true);
+                        UGizmos.DrawLineList(points, Color.red);
                     }
                 }
             }
@@ -124,7 +119,6 @@ namespace Tools.WorldMapCore.Runtime
                 if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
                 {
                     // Draw Bounds
-                    Gizmos.color = Color.yellow;
                     var deleted = deletions[WorldMap.EDeletionReason.OutOfBounds];
                     for (var i = 0; i < deleted.Count; i++)
                     {
@@ -136,7 +130,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        Gizmos.DrawLineStrip(points, true);
+                        UGizmos.DrawLineList(points, Color.yellow);
                     }
                 }
             }

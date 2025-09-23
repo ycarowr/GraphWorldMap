@@ -2,6 +2,7 @@
 using System.Globalization;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
+using UGizmo;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -48,7 +49,6 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < graphs.Count; index++)
             {
                 var currentGraph = graphs[index];
-                Gizmos.color = colors[index];
                 lines.Clear();
                 foreach (var connection in currentGraph.Connections)
                 {
@@ -58,30 +58,29 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         lines.Add(nodeA.Center);
                         lines.Add(nodeB.Key.Center);
-                        if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                            data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
-                        {
-                            continue;
-                        }
-
-                        var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
-                        var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
-                        var text = nodeB.Value.ToString(CultureInfo.InvariantCulture);
-                        if (text.Length < 4)
-                        {
-                            text = text[..1];
-                        }
-                        else
-                        {
-                            text = text[..4];
-                        }
-#if UNITY_EDITOR
-                        UnityEditor.Handles.Label(new Vector3(midpointX, midpointY, 0), text);
-#endif
+// #if UNITY_EDITOR
+//                         if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
+//                             data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
+//                         {
+//                             continue;
+//                         }
+//
+//                         var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
+//                         var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
+//                         var text = nodeB.Value.ToString(CultureInfo.InvariantCulture);
+//                         if (text.Length < 4)
+//                         {
+//                             text = text[..1];
+//                         }
+//                         else
+//                         {
+//                             text = text[..4];
+//                         }
+//                         UnityEditor.Handles.Label(new Vector3(midpointX, midpointY, 0), text);
+// #endif
                     }
                 }
-
-                Gizmos.DrawLineList(lines.ToArray());
+                UGizmos.DrawLineList(lines.ToArray(), colors[index]);
             }
         }
     }

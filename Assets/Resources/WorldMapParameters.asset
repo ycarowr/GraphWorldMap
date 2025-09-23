@@ -14,20 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amount: 100
   nodeWorldSize: {x: 6, y: 6}
-  totalWorldSize: {x: 200, y: 100}
+  totalWorldSize: {x: 100, y: 100}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 1985396227
+  seed: 15645625
   hasRandomSeed: 1
-  orientation: 1
+  orientation: 2
   amountStart: 4
-  amountEnd: 3
+  amountEnd: 4
   isPerfectSegmentLane: 1
   useAsync: 1
-  amountOfLaneConnections: 3
+  amountOfLaneConnections: 2
   hasConnections: 1
   DebugValues:
     Mode: 2
-    DeletionReason: 0
-  sortMethod: 1
+    DeletionReason: 2147483647
+  sortMethod: 2
