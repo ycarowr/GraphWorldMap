@@ -58,7 +58,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineList(points, Color.green);
+                    UGizmos.DrawLineStrip(points, true, Color.green);
                 }
             }
 
@@ -74,7 +74,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineList(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
+                    UGizmos.DrawLineStrip(points, true, new Color(60f / 255f, 179f / 255f, 113 / 255f));
                 }
             }
 
@@ -90,7 +90,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineList(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
+                    UGizmos.DrawLineStrip(points, true, new Color(106f / 255f, 90f / 255f, 205 / 255f));
                 }
             }
 
@@ -110,7 +110,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        UGizmos.DrawLineList(points, Color.red);
+                        UGizmos.DrawLineStrip(points, true, Color.red);
                     }
                 }
             }
@@ -130,7 +130,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        UGizmos.DrawLineList(points, Color.yellow);
+                        UGizmos.DrawLineStrip(points, true, Color.yellow);
                     }
                 }
             }
