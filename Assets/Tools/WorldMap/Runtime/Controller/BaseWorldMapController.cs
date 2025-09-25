@@ -34,6 +34,11 @@ namespace Tools.WorldMapCore.Runtime
             Create();
         }
 
+        protected virtual void Update()
+        {
+            WorldMap?.OnDrawGizmos();
+        }
+
         protected virtual void OnEnable()
         {
             OnCreate += OnRefreshMap;
@@ -44,11 +49,6 @@ namespace Tools.WorldMapCore.Runtime
             OnCreate -= OnRefreshMap;
         }
 
-        protected virtual void Update()
-        {
-            WorldMap?.OnDrawGizmos();   
-        }
-        
         public event Action OnCreate = () => { };
 
         [Button]
@@ -75,7 +75,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
-            
+
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
@@ -85,6 +85,7 @@ namespace Tools.WorldMapCore.Runtime
                 worldMapNode.SetNode(node);
             }
 
+            WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);
             Debug.Log("Refresh Map");
         }
 
@@ -97,7 +98,7 @@ namespace Tools.WorldMapCore.Runtime
         private void Clean()
         {
             WorldMap = null;
-            
+
             for (var i = 0; i < transform.childCount; i++)
             {
                 DestroyImmediate(transform.GetChild(i).gameObject);

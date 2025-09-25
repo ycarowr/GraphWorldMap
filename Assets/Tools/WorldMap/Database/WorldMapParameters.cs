@@ -1,5 +1,6 @@
 ﻿using System;
 using Game;
+using TMPro;
 using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
 using UnityEngine;
@@ -69,7 +70,13 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private SortMethod sortMethod = SortMethod.Distance;
 
-        public int Amount => amount;
+        [SerializeField] private TMP_Text debugDistanceText;
+
+        public int Amount
+        {
+            get => amount;
+            set => amount = value;
+        }
 
         public Vector2 NodeWorldSize => nodeWorldSize;
 
@@ -81,7 +88,11 @@ namespace Tools.WorldMapCore.Database
 
         public int Timeout => timeout;
 
-        public int Seed => seed;
+        public int Seed
+        {
+            get => seed;
+            set => seed = value;
+        }
 
         public bool HasRandomSeed => hasRandomSeed;
 
@@ -101,28 +112,14 @@ namespace Tools.WorldMapCore.Database
 
         public bool HasConnections => hasConnections;
 
+        public TMP_Text DebugDistanceText => debugDistanceText;
+
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
             var bounds = new Rect(center, totalWorldSize + new Vector2(SMALL_NUMBER, SMALL_NUMBER));
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
-        }
-
-        [Serializable]
-        public class DebugData
-        {
-            public enum DrawMode
-            {
-                None = 0,
-                Nodes = 1,
-                Graph = 2,
-                Distances = 3,
-                All = int.MaxValue,
-            }
-            
-            public DrawMode Mode = DrawMode.All;
-            public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }
 
 
@@ -137,6 +134,22 @@ namespace Tools.WorldMapCore.Database
         private void RefreshColors()
         {
             WorldMapGraphGizmos.colors.Clear();
+        }
+
+        [Serializable]
+        public class DebugData
+        {
+            public enum DrawMode
+            {
+                None = 0,
+                Nodes = 1,
+                Graph = 2,
+                Distances = 3,
+                All = int.MaxValue,
+            }
+
+            public DrawMode Mode = DrawMode.All;
+            public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }
     }
 }
