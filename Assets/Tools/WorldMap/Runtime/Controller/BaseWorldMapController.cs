@@ -1,6 +1,6 @@
+using System;
 using Tools.Attributes;
 using Tools.WorldMapCore.Database;
-using UnityEditor;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -11,8 +11,8 @@ namespace Tools.WorldMapCore.Runtime
         public abstract void Create();
     }
 
-    [ExecuteAlways]
     // Base generalized class for the map controller
+    [ExecuteInEditMode]
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
         where TNode : BaseWorldMapNode
@@ -29,26 +29,27 @@ namespace Tools.WorldMapCore.Runtime
 
         private GenerateWorldMapTask GenerateWorldMapTask { get; set; }
 
-        private bool HasRefreshed { get; set; }
-
-
-        private void Update()
+        protected void Start()
         {
-            if (HasRefreshed)
-            {
-                HasRefreshed = false;
-                // Executing refresh on update due 
-                // to main thread operations
-                RefreshMap();
-            }
+            Create();
         }
 
-#if UNITY_EDITOR
-        protected virtual void OnDrawGizmos()
+        protected virtual void Update()
         {
             WorldMap?.OnDrawGizmos();
         }
-#endif
+
+        protected virtual void OnEnable()
+        {
+            OnCreate += OnRefreshMap;
+        }
+
+        protected void OnDisable()
+        {
+            OnCreate -= OnRefreshMap;
+        }
+
+        public event Action OnCreate = () => { };
 
         [Button]
         public override void Create()
@@ -59,13 +60,6 @@ namespace Tools.WorldMapCore.Runtime
             var data = WorldMapParameters.CreateData();
             GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
             GenerateWorldMapTask.Dispatch();
-#if UNITY_EDITOR
-            if (WorldMapParameters.DebugValues.SelectOwnerOnCreate)
-            {
-                // keeping selection int this object for update while in the editor
-                Selection.objects = new Object[] { gameObject };
-            }
-#endif
         }
 
         [Button]
@@ -75,7 +69,7 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         [Button]
-        public void RefreshMap()
+        protected virtual void OnRefreshMap()
         {
             if (WorldMap == null)
             {
@@ -91,6 +85,7 @@ namespace Tools.WorldMapCore.Runtime
                 worldMapNode.SetNode(node);
             }
 
+            WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);
             Debug.Log("Refresh Map");
         }
 
@@ -103,16 +98,19 @@ namespace Tools.WorldMapCore.Runtime
         private void Clean()
         {
             WorldMap = null;
-            if (WorldMapRoot)
+
+            for (var i = 0; i < transform.childCount; i++)
             {
-                DestroyImmediate(WorldMapRoot);
+                DestroyImmediate(transform.GetChild(i).gameObject);
             }
+
+            DestroyImmediate(WorldMapRoot);
         }
 
         private void RefreshAsync()
         {
             WorldMap = GenerateWorldMapTask.GetWorldMap();
-            HasRefreshed = true;
+            OnCreate.Invoke();
             Debug.Log($"Refresh Async: {WorldMap.Random.Seed}");
         }
     }

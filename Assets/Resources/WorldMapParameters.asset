@@ -12,22 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  amount: 100
-  isolationDistance: -1
-  nodeWorldSize: {x: 2, y: 2}
-  totalWorldSize: {x: 30, y: 30}
+  amount: 140
+  nodeWorldSize: {x: 6, y: 6}
+  totalWorldSize: {x: 100, y: 100}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 1644147860
-  hasRandomSeed: 1
+  seed: 956885432
+  hasRandomSeed: 0
   orientation: 1
-  amountStart: 10
+  amountStart: 4
   amountEnd: 1
   isPerfectSegmentLane: 1
   useAsync: 0
   amountOfLaneConnections: 4
+  hasConnections: 0
   DebugValues:
-    SelectOwnerOnCreate: 0
-    Mode: 2147483647
-    DeletionReason: 0
+    Mode: 2
+    DeletionReason: 2147483647
+  sortMethod: 2
+  debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}

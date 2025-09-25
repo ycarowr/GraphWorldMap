@@ -1,29 +1,18 @@
 using System.Collections.Generic;
 using Tools.Graphs;
-using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public class WorldMap
+    public partial class WorldMap
     {
-        public enum EDeletionReason
-        {
-            None = 0,
-            Overlap = 1,
-            OutOfBounds = 2,
-            Isolation = 3,
-
-            All = int.MaxValue,
-        }
-
-        private readonly WorldMapStaticData Data;
+        public readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
-        public readonly List<WorldMapNode> End;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
-        public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
+        public readonly List<WorldMapNode> Nodes;
         public readonly List<WorldMapNode> Start;
+        public readonly List<WorldMapNode> End;
 
         public WorldMap(WorldMapStaticData data)
         {
@@ -38,7 +27,6 @@ namespace Tools.WorldMapCore.Runtime
             {
                 { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
                 { EDeletionReason.Overlap, new List<WorldMapNode>() },
-                { EDeletionReason.Isolation, new List<WorldMapNode>() },
             };
 
             // Starting
@@ -68,9 +56,9 @@ namespace Tools.WorldMapCore.Runtime
 
         public void GenerateNodes()
         {
-            var amountToCreate = Data.Amount;
+            var amountToCreate = Data.Parameters.Amount;
             var count = 0;
-            var maxCount = Mathf.Max(Data.Iterations, amountToCreate);
+            var maxCount = Mathf.Max(Data.Parameters.Iterations, amountToCreate);
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
                 count++;
@@ -82,23 +70,12 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            if (Data.Orientation == WorldMapParameters.Orientation.LeftRight)
-            {
-                Nodes.Sort(new WorldMapNodeCompareLeftRight());
-            }
-            else
-            {
-                Nodes.Sort(new WorldMapNodeCompareBottomTop());
-            }
-
-            var isolationNodes = Deletions[EDeletionReason.Isolation];
-            WorldMapHelper.CheckIsolationDistance(Nodes, Data, ref isolationNodes);
             WorldMapHelper.CreateGraph(GraphsRegistry, Data, Nodes, Start, End);
         }
 
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
         {
-            var worldSize = Data.NodeWorldSize;
+            var worldSize = Data.Parameters.NodeWorldSize;
             var nodeID = WorldMapHelper.GenerateID();
             var newNode = new WorldMapNode(nodeID, worldPosition, worldSize);
 
@@ -123,13 +100,11 @@ namespace Tools.WorldMapCore.Runtime
 
             return null;
         }
-
-#if UNITY_EDITOR
+        
         public void OnDrawGizmos()
         {
             WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
             WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, Data);
         }
-#endif
     }
 }

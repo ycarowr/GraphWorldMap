@@ -5,6 +5,6 @@ namespace Game
 {
     public class GameWorldMap : BaseWorldMapController<GameWorldMapNode, WorldMapParameters>
     {
-       
+
     }
 }

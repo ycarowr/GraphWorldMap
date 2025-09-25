@@ -6,68 +6,27 @@ namespace Tools.WorldMapCore.Runtime
 {
     public readonly struct WorldMapStaticData
     {
-        public readonly int Amount;
-        public readonly int Seed;
-        public readonly bool HasRandomSeed;
-        public readonly float IsolationDistance;
-        public readonly Vector2 NodeWorldSize;
+        public readonly WorldMapParameters Parameters;
         public readonly Rect WorldBounds;
-        public readonly WorldMapParameters.DebugData DebugData;
-        public readonly int Iterations;
-        public readonly int ParallelIterations;
-        public readonly int Timeout;
-        public readonly WorldMapParameters.Orientation Orientation;
-        public readonly int AmountStart;
-        public readonly int AmountEnd;
-        public readonly bool IsPerfectSegmentLane;
         public readonly List<Rect> Lanes;
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
-        public readonly int AmountOfLaneConnections;
-        public readonly bool UseAsync;
 
-        public WorldMapStaticData(int amount,
-            Vector2 nodeWorldSize,
-            float isolationDistance,
-            Rect worldBounds,
-            int seed,
-            int iterations,
-            int parallelIterations,
-            int timeout,
-            bool hasRandomSeed,
-            WorldMapParameters.DebugData debugData,
-            WorldMapParameters.Orientation orientation,
-            int amountStart,
-            int amountEnd,
-            bool isPerfectSegmentLane,
-            int amountOfLaneConnections, 
-            bool useAsync)
+        public WorldMapStaticData(WorldMapParameters parameters, Rect worldBounds)
         {
-            Amount = amount;
-            NodeWorldSize = nodeWorldSize;
-            IsolationDistance = isolationDistance;
+            Parameters = parameters;
             WorldBounds = worldBounds;
-            Seed = seed;
-            HasRandomSeed = hasRandomSeed;
-            DebugData = debugData;
-            Iterations = iterations;
-            ParallelIterations = parallelIterations;
-            Timeout = timeout;
-            Orientation = orientation;
-            AmountEnd = amountEnd;
-            AmountStart = amountStart;
-            IsPerfectSegmentLane = isPerfectSegmentLane;
-            AmountOfLaneConnections = amountOfLaneConnections;
-            UseAsync = useAsync;
 
             // Generate Lanes
             Lanes = new List<Rect>();
-            if (orientation == WorldMapParameters.Orientation.LeftRight)
+            var amountStart = parameters.AmountStart;
+            var amountEnd = parameters.AmountEnd;
+            if (Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
             {
-                var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / AmountStart);
+                var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
                 var worldMinX = WorldBounds.xMin;
-                var worldMaxY = WorldBounds.yMax / AmountStart;
-                for (var index = 0; index < AmountStart; index++)
+                var worldMaxY = WorldBounds.yMax / amountStart;
+                for (var index = 0; index < amountStart; index++)
                 {
                     var lane = new Rect
                     {
@@ -79,10 +38,10 @@ namespace Tools.WorldMapCore.Runtime
             }
             else
             {
-                var laneSize = new Vector2(worldBounds.size.x / AmountStart, worldBounds.size.y);
+                var laneSize = new Vector2(worldBounds.size.x / amountStart, worldBounds.size.y);
                 var worldMinY = WorldBounds.yMin;
-                var worldMaxX = WorldBounds.xMax / AmountStart;
-                for (var index = 0; index < AmountStart; index++)
+                var worldMaxX = WorldBounds.xMax / amountStart;
+                for (var index = 0; index < amountStart; index++)
                 {
                     var lane = new Rect
                     {
@@ -95,40 +54,40 @@ namespace Tools.WorldMapCore.Runtime
 
             // Generate Starting
             Start = new List<Vector3>();
-            for (var index = 0; index < AmountStart; index++)
+            for (var index = 0; index < amountStart; index++)
             {
                 var worldPosition = Vector2.zero;
-                if (Orientation == WorldMapParameters.Orientation.LeftRight)
+                if (parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
                 {
-                    if (!IsPerfectSegmentLane)
+                    if (!parameters.IsPerfectSegmentLane)
                     {
-                        var segment = WorldBounds.size.y / (AmountStart + 1);
+                        var segment = WorldBounds.size.y / (amountStart + 1);
                         worldPosition.y = segment * (index + 1);
                     }
                     else
                     {
-                        var segment = WorldBounds.size.y / AmountStart;
+                        var segment = WorldBounds.size.y / amountStart;
                         worldPosition.y = segment / 2 + segment * index;
                     }
 
-                    worldPosition.x = WorldBounds.min.x - NodeWorldSize.x / 2 -
+                    worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2 -
                                       WorldMapParameters.SMALL_NUMBER;
                 }
 
-                if (Orientation == WorldMapParameters.Orientation.BottomTop)
+                if (parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
                 {
-                    if (!IsPerfectSegmentLane)
+                    if (!parameters.IsPerfectSegmentLane)
                     {
-                        var segment = WorldBounds.size.x / (AmountStart + 1);
+                        var segment = WorldBounds.size.x / (amountStart + 1);
                         worldPosition.x = segment * (index + 1);
                     }
                     else
                     {
-                        var segment = WorldBounds.size.x / AmountStart;
+                        var segment = WorldBounds.size.x / amountStart;
                         worldPosition.x = segment / 2 + segment * index;
                     }
 
-                    worldPosition.y = WorldBounds.min.y - NodeWorldSize.y / 2 -
+                    worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2 -
                                       WorldMapParameters.SMALL_NUMBER;
                 }
 
@@ -137,22 +96,22 @@ namespace Tools.WorldMapCore.Runtime
 
             // Generate Ending
             End = new List<Vector3>();
-            for (var index = 0; index < AmountEnd; index++)
+            for (var index = 0; index < amountEnd; index++)
             {
                 var worldPosition = Vector2.zero;
-                if (Orientation == WorldMapParameters.Orientation.LeftRight)
+                if (parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
                 {
-                    var segment = WorldBounds.size.y / (AmountEnd + 1);
-                    worldPosition.x = WorldBounds.max.x + NodeWorldSize.x / 2 +
+                    var segment = WorldBounds.size.y / (amountEnd + 1);
+                    worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2 +
                                       WorldMapParameters.SMALL_NUMBER;
                     worldPosition.y = segment * (index + 1);
                 }
 
-                if (Orientation == WorldMapParameters.Orientation.BottomTop)
+                if (parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
                 {
-                    var segment = WorldBounds.size.x / (AmountEnd + 1);
+                    var segment = WorldBounds.size.x / (amountEnd + 1);
                     worldPosition.x = segment * (index + 1);
-                    worldPosition.y = WorldBounds.max.y + NodeWorldSize.y / 2 +
+                    worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2 +
                                       WorldMapParameters.SMALL_NUMBER;
                 }
 
@@ -163,8 +122,8 @@ namespace Tools.WorldMapCore.Runtime
         public bool ValidateTotalArea()
         {
             var totalArea = WorldBounds.size.x * WorldBounds.size.y;
-            var nodeArea = NodeWorldSize.x * NodeWorldSize.y;
-            var totalNodeArea = nodeArea * Amount;
+            var nodeArea = Parameters.NodeWorldSize.x * Parameters.NodeWorldSize.y;
+            var totalNodeArea = nodeArea * Parameters.Amount;
             return totalNodeArea > totalArea;
         }
     }

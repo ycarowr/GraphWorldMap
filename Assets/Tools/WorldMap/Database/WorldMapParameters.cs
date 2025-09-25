@@ -1,4 +1,6 @@
 ﻿using System;
+using Game;
+using TMPro;
 using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
 using UnityEngine;
@@ -8,22 +10,24 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        public enum Orientation
+        public enum OrientationGraph
         {
             None = 0,
             LeftRight = 1,
             BottomTop = 2,
         }
 
+        public enum SortMethod
+        {
+            None = 0,
+            Axis = 1,
+            Distance = 2,
+        }
+
         public const float SMALL_NUMBER = 0.0001f;
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
-
-        [SerializeField]
-        [Tooltip(
-            "Minimum distance necessary between two nodes in order to keep them alive. Use a negative value to ignore.")]
-        private float isolationDistance = 10;
 
         [SerializeField] [Tooltip("Node size in world units from each node.")]
         private Vector2 nodeWorldSize = Vector2.one;
@@ -46,7 +50,7 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool hasRandomSeed = true;
 
-        [SerializeField] private Orientation orientation = Orientation.LeftRight;
+        [SerializeField] private OrientationGraph orientation = OrientationGraph.LeftRight;
 
         [SerializeField] [Tooltip("Amount of starting nodes.")]
         private int amountStart = 1;
@@ -60,30 +64,76 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private int amountOfLaneConnections = 1;
 
+        [SerializeField] private bool hasConnections = true;
+
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
+
+        [SerializeField] private SortMethod sortMethod = SortMethod.Distance;
+
+        [SerializeField] private TMP_Text debugDistanceText;
+
+        public int Amount
+        {
+            get => amount;
+            set => amount = value;
+        }
+
+        public Vector2 NodeWorldSize => nodeWorldSize;
+
+        public Vector2 TotalWorldSize => totalWorldSize;
+
+        public int Iterations => iterations;
+
+        public int ParallelIterations => parallelIterations;
+
+        public int Timeout => timeout;
+
+        public int Seed
+        {
+            get => seed;
+            set => seed = value;
+        }
+
+        public bool HasRandomSeed => hasRandomSeed;
+
+        public OrientationGraph Orientation => orientation;
+
+        public int AmountStart => amountStart;
+
+        public int AmountEnd => amountEnd;
+
+        public bool IsPerfectSegmentLane => isPerfectSegmentLane;
+
+        public bool UseAsync => useAsync;
+
+        public int AmountOfLaneConnections => amountOfLaneConnections;
+
+        public SortMethod SortingMethod => sortMethod;
+
+        public bool HasConnections => hasConnections;
+
+        public TMP_Text DebugDistanceText => debugDistanceText;
 
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
             var bounds = new Rect(center, totalWorldSize + new Vector2(SMALL_NUMBER, SMALL_NUMBER));
             bounds.center = center;
-            return new WorldMapStaticData(
-                amount,
-                nodeWorldSize,
-                isolationDistance,
-                bounds,
-                seed,
-                iterations,
-                parallelIterations,
-                timeout,
-                hasRandomSeed,
-                DebugValues,
-                orientation,
-                amountStart,
-                amountEnd,
-                isPerfectSegmentLane,
-                amountOfLaneConnections,
-                useAsync);
+            return new WorldMapStaticData(this, bounds);
+        }
+
+
+        [Button]
+        public void Refresh()
+        {
+            FindFirstObjectByType<BaseWorldMapController>().Create();
+            FindFirstObjectByType<MainCamera>().OnCreateWorldMap();
+        }
+
+        [Button]
+        private void RefreshColors()
+        {
+            WorldMapGraphGizmos.colors.Clear();
         }
 
         [Serializable]
@@ -98,23 +148,8 @@ namespace Tools.WorldMapCore.Database
                 All = int.MaxValue,
             }
 
-            public bool SelectOwnerOnCreate;
             public DrawMode Mode = DrawMode.All;
             public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
         }
-
-#if UNITY_EDITOR
-        [Button]
-        private void Refresh()
-        {
-            FindFirstObjectByType<BaseWorldMapController>().Create();
-        }
-
-        [Button]
-        private void RefreshColors()
-        {
-            WorldMapGraphGizmos.colors.Clear();
-        }
-#endif
     }
 }
