@@ -5,6 +5,23 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
+        //https://wrfranklin.org/Research/Short_Notes/pnpoly.html
+        public static bool IsPointOverlapPolygon(Vector3[] vert, Vector3 test)
+        {
+            var nvert = vert.Length;
+            var isHit = false;
+            int i, j;
+            for (i = 0, j = nvert-1; i < nvert; j = i++) {
+                if (((vert[i].y > test.y) != (vert[j].y > test.y)) && 
+                    (test.x <(vert[j].x - vert[i].x) * (test.y - vert[i].y) 
+                        / (vert[j].y - vert[i].y) + vert[i].x))
+                {
+                    isHit = !isHit;
+                }
+            }
+            return isHit;
+        }
+        
         public static bool CheckOverlap(WorldMapNode node, List<WorldMapNode> nodes)
         {
             var count = nodes.Count;
