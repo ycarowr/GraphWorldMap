@@ -10,21 +10,30 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
+        // Orientation is used to sort and display the graph.
         public enum OrientationGraph
         {
             None = 0,
-            LeftRight = 1,
-            BottomTop = 2,
+            LeftRight = 1, // the direction is Left to Right
+            BottomTop = 2, // the direction is Bottom to Top
         }
 
+        // Sorting method is used to order the nodes in the graph.
         public enum SortMethod
         {
             None = 0,
-            Axis = 1,
-            Distance = 2,
+            Axis = 1, // the order of the nodes is created based on the X or Y position.
+            Distance = 2, // the order of the nodes is created based on the distance to the end point.
         }
-
-        public const float SMALL_NUMBER = 0.0001f;
+        
+        [Serializable]
+        public class Region
+        {
+            public Rect Bounds;
+        }
+        
+        [SerializeField]
+        private Region[] RegionParameters;
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
@@ -60,18 +69,20 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private bool isPerfectSegmentLane;
 
-        [SerializeField] private bool useAsync = true;
+        [SerializeField] [Tooltip("Whether is using parallelism to generate the nodes.")] private bool useAsync = true;
 
-        [SerializeField] private int amountOfLaneConnections = 1;
+        [SerializeField] [Tooltip("Whether the regions are connected or not.")] private bool hasConnections = true;
 
-        [SerializeField] private bool hasConnections = true;
+        [SerializeField] [Tooltip("The number of connections.")] private int amountOfLaneConnections = 1;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
-        [SerializeField] private SortMethod sortMethod = SortMethod.Distance;
+        [SerializeField] [Tooltip("The direction in which the path is created.")] private SortMethod sortMethod = SortMethod.Distance;
 
         [SerializeField] private TMP_Text debugDistanceText;
 
+        public Region[] Regions => RegionParameters;
+        
         public int Amount
         {
             get => amount;
@@ -117,7 +128,7 @@ namespace Tools.WorldMapCore.Database
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize + new Vector2(SMALL_NUMBER, SMALL_NUMBER));
+            var bounds = new Rect(center, totalWorldSize + WorldMapStaticData.SMALL_VECTOR);
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
         }
