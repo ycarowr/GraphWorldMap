@@ -6,7 +6,7 @@ namespace Tools.WorldMapCore.Runtime
     public static partial class WorldMapHelper
     {
         //https://wrfranklin.org/Research/Short_Notes/pnpoly.html
-        public static bool IsPointOverlapPolygon(Vector3[] vert, Vector3 test)
+        public static bool CheckPointOverlapPolygon(Vector3[] vert, Vector3 test)
         {
             var nvert = vert.Length;
             var isHit = false;
