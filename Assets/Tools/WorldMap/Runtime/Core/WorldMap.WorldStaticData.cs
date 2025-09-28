@@ -6,9 +6,10 @@ namespace Tools.WorldMapCore.Runtime
 {
     public readonly struct WorldMapStaticData
     {
+        public static readonly Vector2 SMALL_VECTOR = new(SMALL_NUMBER, SMALL_NUMBER);
+        public const float SMALL_NUMBER = 0.0001f;
         public readonly WorldMapParameters Parameters;
         public readonly Rect WorldBounds;
-        public readonly List<Rect> Lanes;
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
 
@@ -16,40 +17,51 @@ namespace Tools.WorldMapCore.Runtime
         {
             Parameters = parameters;
             WorldBounds = worldBounds;
-
-            // Generate Lanes
-            Lanes = new List<Rect>();
             var amountStart = parameters.AmountStart;
             var amountEnd = parameters.AmountEnd;
-            if (Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
+
+            // Generate Lanes
+            if (parameters.IsAutoRegion)
             {
-                var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
-                var worldMinX = WorldBounds.xMin;
-                var worldMaxY = WorldBounds.yMax / amountStart;
-                for (var index = 0; index < amountStart; index++)
+                var regions = new List<WorldMapParameters.Region>();
+                if (Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
                 {
-                    var lane = new Rect
+                    var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
+                    var worldMinX = WorldBounds.xMin;
+                    var worldMaxY = WorldBounds.yMax / amountStart;
+                    for (var index = 0; index < amountStart; index++)
                     {
-                        position = new Vector2(worldMinX, worldMaxY * index),
-                        size = new Vector2(laneSize.x, laneSize.y),
-                    };
-                    Lanes.Add(lane);
+                        var bounds = new Rect
+                        {
+                            position = new Vector2(worldMinX, worldMaxY * index),
+                            size = new Vector2(laneSize.x, laneSize.y),
+                        };
+                        regions.Add(new WorldMapParameters.Region
+                        {
+                            Bounds = bounds,
+                        });
+                    }
                 }
-            }
-            else
-            {
-                var laneSize = new Vector2(worldBounds.size.x / amountStart, worldBounds.size.y);
-                var worldMinY = WorldBounds.yMin;
-                var worldMaxX = WorldBounds.xMax / amountStart;
-                for (var index = 0; index < amountStart; index++)
+                else
                 {
-                    var lane = new Rect
+                    var regionSize = new Vector2(worldBounds.size.x / amountStart, worldBounds.size.y);
+                    var worldMinY = WorldBounds.yMin;
+                    var worldMaxX = WorldBounds.xMax / amountStart;
+                    for (var index = 0; index < amountStart; index++)
                     {
-                        position = new Vector2(worldMaxX * index, worldMinY),
-                        size = new Vector2(laneSize.x, laneSize.y),
-                    };
-                    Lanes.Add(lane);
+                        var bounds = new Rect
+                        {
+                            position = new Vector2(worldMaxX * index, worldMinY),
+                            size = new Vector2(regionSize.x, regionSize.y),
+                        };
+                        regions.Add(new WorldMapParameters.Region
+                        {
+                            Bounds = bounds,
+                        });
+                    }
                 }
+
+                Parameters.Regions = regions.ToArray();
             }
 
             // Generate Starting
@@ -71,7 +83,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
 
                     worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2 -
-                                      WorldMapParameters.SMALL_NUMBER;
+                                      SMALL_NUMBER;
                 }
 
                 if (parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
@@ -88,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
 
                     worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2 -
-                                      WorldMapParameters.SMALL_NUMBER;
+                                      SMALL_NUMBER;
                 }
 
                 Start.Add(worldPosition);
@@ -103,7 +115,7 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     var segment = WorldBounds.size.y / (amountEnd + 1);
                     worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2 +
-                                      WorldMapParameters.SMALL_NUMBER;
+                                      SMALL_NUMBER;
                     worldPosition.y = segment * (index + 1);
                 }
 
@@ -112,7 +124,7 @@ namespace Tools.WorldMapCore.Runtime
                     var segment = WorldBounds.size.x / (amountEnd + 1);
                     worldPosition.x = segment * (index + 1);
                     worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2 +
-                                      WorldMapParameters.SMALL_NUMBER;
+                                      SMALL_NUMBER;
                 }
 
                 End.Add(worldPosition);
