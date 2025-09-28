@@ -100,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> starting, List<WorldMapNode> ending)
         {
             // Create regions connections
-            if (data.Parameters.HasConnections)
+            if (data.Parameters.AmountOfLaneConnections > 0)
             {
                 var connections = new List<Graph<WorldMapNode>>();
                 for (var index = 0; index < graphRegistry.Count - 1; index++)

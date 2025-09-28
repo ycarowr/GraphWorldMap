@@ -65,9 +65,6 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Whether is using parallelism to generate the nodes.")]
         private bool useAsync = true;
 
-        [SerializeField] [Tooltip("Whether the regions are connected or not.")]
-        private bool hasConnections = true;
-
         [SerializeField] [Tooltip("The number of connections.")]
         private int amountOfLaneConnections = 1;
 
@@ -125,8 +122,6 @@ namespace Tools.WorldMapCore.Database
         public int AmountOfLaneConnections => amountOfLaneConnections;
 
         public SortMethod SortingMethod => sortMethod;
-
-        public bool HasConnections => hasConnections;
 
         public TMP_Text DebugDistanceText => debugDistanceText;
 
