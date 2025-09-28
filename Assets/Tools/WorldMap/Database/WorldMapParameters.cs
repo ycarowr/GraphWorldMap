@@ -133,7 +133,7 @@ namespace Tools.WorldMapCore.Database
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize + WorldMapStaticData.SMALL_VECTOR);
+            var bounds = new Rect(center, totalWorldSize);// + WorldMapStaticData.SMALL_VECTOR);
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
         }

@@ -74,16 +74,17 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
-            // Draw Graph
+            // Setup colors
             if (colors.Count < graphs.Count + regionConnectionsRegistry.Count)
             {
-                var delta = graphs.Count - colors.Count;
+                var delta = (graphs.Count + regionConnectionsRegistry.Count) - colors.Count;
                 for (var index = 0; index < delta; index++)
                 {
                     colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
                 }
             }
 
+            // Draw Graph
             List<Vector3> lines = new();
             for (var index = 0; index < graphs.Count; index++)
             {
