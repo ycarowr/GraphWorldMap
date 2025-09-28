@@ -26,7 +26,7 @@ namespace Tools.WorldMapCore.Runtime
                 var regions = new List<WorldMapParameters.Region>();
                 if (Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
                 {
-                    var laneSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
+                    var regionSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
                     var worldMinX = WorldBounds.xMin;
                     var worldMaxY = WorldBounds.yMax / amountStart;
                     for (var index = 0; index < amountStart; index++)
@@ -34,7 +34,7 @@ namespace Tools.WorldMapCore.Runtime
                         var bounds = new Rect
                         {
                             position = new Vector2(worldMinX, worldMaxY * index),
-                            size = new Vector2(laneSize.x, laneSize.y),
+                            size = new Vector2(regionSize.x, regionSize.y),
                         };
                         regions.Add(new WorldMapParameters.Region
                         {

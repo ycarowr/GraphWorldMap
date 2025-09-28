@@ -99,7 +99,7 @@ namespace Tools.WorldMapCore.Runtime
             List<Graph<WorldMapNode>> regionConnectionsRegistry, WorldMapStaticData data,
             List<WorldMapNode> starting, List<WorldMapNode> ending)
         {
-            // Create lanes connections
+            // Create regions connections
             if (data.Parameters.HasConnections)
             {
                 var connections = new List<Graph<WorldMapNode>>();
@@ -208,7 +208,7 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> nodes, List<WorldMapNode> starting,
             List<WorldMapNode> ending)
         {
-            // Register nodes according to their lanes
+            // Register nodes according to their regions
             for (var index = 0; index < nodes.Count; index++)
             {
                 var node = nodes[index];
@@ -299,13 +299,13 @@ namespace Tools.WorldMapCore.Runtime
 
         private static int FindNodeLaneIndex(WorldMapNode node, WorldMapStaticData data)
         {
-            var lanes = data.Parameters.Regions;
+            var regions = data.Parameters.Regions;
             var nearest = float.MaxValue;
             var nearestIndex = -1;
-            for (var index = 0; index < lanes.Length; index++)
+            for (var index = 0; index < regions.Length; index++)
             {
-                var lane = lanes[index];
-                var distance = Vector3.Distance(lane.Bounds.center, node.Bounds.center);
+                var region = regions[index];
+                var distance = Vector3.Distance(region.Bounds.center, node.Bounds.center);
                 if (distance < nearest)
                 {
                     nearest = distance;
@@ -318,16 +318,16 @@ namespace Tools.WorldMapCore.Runtime
 
         private static int FindNodeRegionIndex(WorldMapNode node, WorldMapStaticData data)
         {
-            var lanes = data.Parameters.Regions;
-            for (var index = 0; index < lanes.Length; index++)
+            var regions = data.Parameters.Regions;
+            for (var index = 0; index < regions.Length; index++)
             {
-                var lane = lanes[index];
+                var region = regions[index];
                 var vertex = new[]
                 {
-                    new Vector3(lane.Bounds.xMin, lane.Bounds.yMin, 0),
-                    new Vector3(lane.Bounds.xMin, lane.Bounds.yMax, 0),
-                    new Vector3(lane.Bounds.xMax, lane.Bounds.yMax, 0),
-                    new Vector3(lane.Bounds.xMax, lane.Bounds.yMin, 0),
+                    new Vector3(region.Bounds.xMin, region.Bounds.yMin, 0),
+                    new Vector3(region.Bounds.xMin, region.Bounds.yMax, 0),
+                    new Vector3(region.Bounds.xMax, region.Bounds.yMax, 0),
+                    new Vector3(region.Bounds.xMax, region.Bounds.yMin, 0),
                 };
 
                 if (CheckPointOverlapPolygon(vertex, node.Bounds.center))
