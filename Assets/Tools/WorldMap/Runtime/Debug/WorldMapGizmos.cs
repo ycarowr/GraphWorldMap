@@ -21,10 +21,18 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                // Draw lanes
-                foreach (var lane in data.Lanes)
+                var regions = data.Parameters.Regions;
+                for (var i = 0; i < regions.Length; i++)
                 {
-                    UGizmos.DrawWireCube(lane.center, Quaternion.identity, lane.size, Color.yellow);
+                    var region = regions[i];
+                    ReadOnlySpan<Vector3> points = new[]
+                    {
+                        new Vector3(region.Bounds.xMin, region.Bounds.yMin, 0),
+                        new Vector3(region.Bounds.xMin, region.Bounds.yMax, 0),
+                        new Vector3(region.Bounds.xMax, region.Bounds.yMax, 0),
+                        new Vector3(region.Bounds.xMax, region.Bounds.yMin, 0),
+                    };
+                    UGizmos.DrawLineStrip(points, true, Color.yellow);
                 }
             }
 

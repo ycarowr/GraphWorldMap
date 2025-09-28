@@ -8,11 +8,12 @@ namespace Tools.WorldMapCore.Runtime
     {
         public readonly WorldMapStaticData Data;
         private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
-        public readonly List<Graph<WorldMapNode>> GraphsRegistry;
-        public readonly WorldMapRandom Random;
-        public readonly List<WorldMapNode> Nodes;
-        public readonly List<WorldMapNode> Start;
         public readonly List<WorldMapNode> End;
+        public readonly List<Graph<WorldMapNode>> GraphsRegistry;
+        public readonly List<WorldMapNode> Nodes;
+        public readonly WorldMapRandom Random;
+        public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
+        public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
         {
@@ -23,6 +24,7 @@ namespace Tools.WorldMapCore.Runtime
             Start = new List<WorldMapNode>();
             End = new List<WorldMapNode>();
             GraphsRegistry = new List<Graph<WorldMapNode>>();
+            ConnectionsRegistry = new List<Graph<WorldMapNode>>();
             Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
             {
                 { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
@@ -70,7 +72,7 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            WorldMapHelper.CreateGraph(GraphsRegistry, Data, Nodes, Start, End);
+            WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End);
         }
 
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
@@ -100,11 +102,11 @@ namespace Tools.WorldMapCore.Runtime
 
             return null;
         }
-        
+
         public void OnDrawGizmos()
         {
             WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
-            WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, Data);
+            WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, ConnectionsRegistry, Data);
         }
     }
 }

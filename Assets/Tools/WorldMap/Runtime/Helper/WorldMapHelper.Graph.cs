@@ -8,51 +8,163 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static void CreateGraph(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data,
+        public static void CreateGraph(List<Graph<WorldMapNode>> graphRegistry,
+            List<Graph<WorldMapNode>> regionConnectionsRegistry, WorldMapStaticData data,
             List<WorldMapNode> nodes, List<WorldMapNode> starting, List<WorldMapNode> ending)
         {
-            // Register Start Nodes
-            for (var index = 0; index < starting.Count; index++)
-            {
-                var start = starting[index];
-                var graph = new Graph<WorldMapNode>();
-                graphRegistry.Add(graph);
-                graph.Register(start);
-            }
+            RegisterStartNodes(graphRegistry, starting, data);
+            IndexNodesByLanes(graphRegistry, data, nodes, starting, ending);
+            RegisterEndNodes(graphRegistry, ending);
+            SortNodes(graphRegistry, data);
+            RegistryConnections(graphRegistry, regionConnectionsRegistry, data, starting, ending);
+            ConnectAllNodes(graphRegistry, data, starting, ending);
+            ConnectMissingStartNodes(graphRegistry, nodes, starting);
+            ConnectMissingEndNodes(graphRegistry, nodes, ending);
+        }
 
-
-            // Register nodes according to their lanes
-            for (var index = 0; index < nodes.Count; index++)
+        private static void ConnectMissingEndNodes(List<Graph<WorldMapNode>> graphRegistry, List<WorldMapNode> nodes,
+            List<WorldMapNode> ending)
+        {
+            // Connect end leftovers
+            foreach (var end in ending)
             {
-                var node = nodes[index];
-                if (starting.Contains(node) || ending.Contains(node))
+                var hasConnection = false;
+                foreach (var graph in graphRegistry)
                 {
-                    continue;
+                    hasConnection |= graph.HasConnection(end);
                 }
 
-                var startIndex = FindNodeLaneIndex(node.Bounds, data);
-                if (startIndex == -1)
+                if (!hasConnection)
                 {
-                    continue;
+                    var graph = new Graph<WorldMapNode>();
+                    graphRegistry.Add(graph);
+                    var nearest = FindNearest(nodes, end, ending);
+                    graph.Register(nearest);
+                    graph.Register(end);
+                    graph.Connect(nearest, end, Vector3.Distance(nearest.Bounds.center, end.Bounds.center));
                 }
-
-                graphRegistry[startIndex].Register(node);
             }
+        }
 
-            // Register End nodes
-            foreach (var graph in graphRegistry)
+        private static void ConnectMissingStartNodes(List<Graph<WorldMapNode>> graphRegistry, List<WorldMapNode> nodes,
+            List<WorldMapNode> starting)
+        {
+            // Connect start leftovers
+            foreach (var start in starting)
             {
-                var endIndex = FindNearestEndIndex(graph, ending);
-                if (endIndex == -1)
+                var hasConnection = false;
+                foreach (var graph in graphRegistry)
                 {
-                    continue;
+                    hasConnection |= graph.HasConnection(start);
                 }
 
-                var end = ending[endIndex];
-                graph.Register(end);
+                if (!hasConnection)
+                {
+                    var graph = new Graph<WorldMapNode>();
+                    graphRegistry.Add(graph);
+                    var nearest = FindNearest(nodes, start, starting);
+                    graph.Register(start);
+                    graph.Register(nearest);
+                    graph.Connect(start, nearest, Vector3.Distance(start.Bounds.center, nearest.Bounds.center));
+                }
             }
+        }
 
+        private static void ConnectAllNodes(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data,
+            List<WorldMapNode> starting, List<WorldMapNode> ending)
+        {
+            // Connect all registered nodes from each graph sequentially
+            for (var graphIndex = 0; graphIndex < graphRegistry.Count; graphIndex++)
+            {
+                var graph = graphRegistry[graphIndex];
+                for (var index = 0; index < graph.Nodes.Count - 1; index++)
+                {
+                    var nextIndex = index + 1;
+                    var node = graph.Nodes[index];
+                    var nodeNext = graph.Nodes[nextIndex];
+                    if ((starting.Contains(node) && ending.Contains(nodeNext))
+                        || (starting.Contains(nodeNext) && ending.Contains(node)))
+                    {
+                        // skip straight connection start->end
+                        continue;
+                    }
 
+                    var distance = Vector3.Distance(node.Bounds.center, nodeNext.Bounds.center);
+                    graph.Connect(node, nodeNext, distance);
+                }
+            }
+        }
+
+        private static void RegistryConnections(List<Graph<WorldMapNode>> graphRegistry,
+            List<Graph<WorldMapNode>> regionConnectionsRegistry, WorldMapStaticData data,
+            List<WorldMapNode> starting, List<WorldMapNode> ending)
+        {
+            // Create regions connections
+            if (data.Parameters.HasConnections)
+            {
+                var connections = new List<Graph<WorldMapNode>>();
+                for (var index = 0; index < graphRegistry.Count - 1; index++)
+                {
+                    var connection = new Graph<WorldMapNode>();
+                    var indexNext = index + 1;
+
+                    var graph = graphRegistry[index];
+                    var graphNext = graphRegistry[indexNext];
+
+                    List<WorldMapNode> sort;
+                    List<WorldMapNode> sortNext;
+                    if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
+                    {
+                        sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
+                        sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
+                    }
+                    else
+                    {
+                        sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
+                        sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
+                    }
+
+                    foreach (var node in starting)
+                    {
+                        sort.Remove(node);
+                        sortNext.Remove(node);
+                    }
+
+                    foreach (var node in ending)
+                    {
+                        sort.Remove(node);
+                        sortNext.Remove(node);
+                    }
+
+                    for (var connectionCount = 0;
+                         connectionCount < data.Parameters.AmountOfLaneConnections;
+                         connectionCount++)
+                    {
+                        var rightMost = sort.Last();
+                        sort.Remove(rightMost);
+                        var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
+                        if (nearest != null)
+                        {
+                            connection.Register(rightMost);
+                            connection.Register(nearest);
+                            var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
+                            connection.Connect(rightMost, nearest, distance);
+                        }
+                    }
+
+                    connections.Add(connection);
+                }
+
+                // Lane connections are separated graphs
+                foreach (var connection in connections)
+                {
+                    regionConnectionsRegistry.Add(connection);
+                }
+            }
+        }
+
+        private static void SortNodes(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data)
+        {
             // Sort nodes according to the parameters, so we can have a proper direction to go to
             for (var index = 0; index < graphRegistry.Count; index++)
             {
@@ -74,112 +186,63 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
             }
+        }
 
+        private static void RegisterEndNodes(List<Graph<WorldMapNode>> graphRegistry, List<WorldMapNode> ending)
+        {
+            // Register End nodes
+            foreach (var graph in graphRegistry)
             {
-                // Create lanes connections
-                if (data.Parameters.HasConnections)
+                var endIndex = FindNearestEndIndex(graph, ending);
+                if (endIndex == -1)
                 {
-                    var connections = new List<Graph<WorldMapNode>>();
-                    for (var index = 0; index < graphRegistry.Count - 1; index++)
-                    {
-                        var connection = new Graph<WorldMapNode>();
-                        var indexNext = index + 1;
-
-                        var graph = graphRegistry[index];
-                        var graphNext = graphRegistry[indexNext];
-
-                        List<WorldMapNode> sort;
-                        List<WorldMapNode> sortNext;
-                        if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
-                        {
-                            sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
-                            sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
-                        }
-                        else
-                        {
-                            sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
-                            sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
-                        }
-
-                        foreach (var node in starting)
-                        {
-                            sort.Remove(node);
-                        }
-
-                        foreach (var node in ending)
-                        {
-                            sort.Remove(node);
-                        }
-
-                        foreach (var node in starting)
-                        {
-                            sortNext.Remove(node);
-                        }
-
-                        foreach (var node in ending)
-                        {
-                            sortNext.Remove(node);
-                        }
-
-                        for (var connectionCount = 0;
-                             connectionCount < data.Parameters.AmountOfLaneConnections;
-                             connectionCount++)
-                        {
-                            var rightMost = sort.Last();
-                            sort.Remove(rightMost);
-                            var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
-                            if (nearest != null)
-                            {
-                                connection.Register(rightMost);
-                                connection.Register(nearest);
-                                var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
-                                connection.Connect(rightMost, nearest, distance);
-                            }
-                        }
-
-                        connections.Add(connection);
-                    }
-
-                    // Lane connections are separated graphs
-                    foreach (var connection in connections)
-                    {
-                        graphRegistry.Add(connection);
-                    }
+                    continue;
                 }
+
+                var end = ending[endIndex];
+                graph.Register(end);
             }
+        }
 
-            // Connect all registered nodes from each graph sequentially
-            for (var startingIndex = 0; startingIndex < data.Parameters.AmountStart; startingIndex++)
+        private static void IndexNodesByLanes(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data,
+            List<WorldMapNode> nodes, List<WorldMapNode> starting,
+            List<WorldMapNode> ending)
+        {
+            // Register nodes according to their regions
+            for (var index = 0; index < nodes.Count; index++)
             {
-                var graph = graphRegistry[startingIndex];
-                for (var index = 0; index < graph.Nodes.Count - 1; index++)
+                var node = nodes[index];
+                if (starting.Contains(node) || ending.Contains(node))
                 {
-                    var nextIndex = index + 1;
-                    var node = graph.Nodes[index];
-                    var nodeNext = graph.Nodes[nextIndex];
-                    var distance = Vector3.Distance(node.Bounds.center, nodeNext.Bounds.center);
-                    graph.Connect(node, nodeNext, distance);
+                    continue;
                 }
+
+                var startIndex = FindNodeRegionIndex(node, data);
+                if (startIndex == -1)
+                {
+                    continue;
+                }
+
+                graphRegistry[startIndex].Register(node);
             }
+        }
 
-            // Connect end leftovers
-            foreach (var end in ending)
+        private static void RegisterStartNodes(List<Graph<WorldMapNode>> graphRegistry, List<WorldMapNode> starting,
+            WorldMapStaticData data)
+        {
+            // Register Start Nodes
+            for (var index = 0; index < starting.Count; index++)
             {
-                var hasConnection = false;
-                foreach (var graph in graphRegistry)
+                var start = starting[index];
+                var foundIndex = FindNodeLaneIndex(start, data);
+                if (graphRegistry.Count - 1 >= foundIndex)
                 {
-                    hasConnection |= graph.HasConnection(end);
+                    continue;
                 }
 
-                if (!hasConnection)
-                {
-                    var graph = new Graph<WorldMapNode>();
-                    graphRegistry.Add(graph);
-                    var nearest = FindNearest(nodes, end, ending);
-                    graph.Register(nearest);
-                    graph.Register(end);
-                    graph.Connect(nearest, end, Vector3.Distance(nearest.Bounds.center, end.Bounds.center));
-                }
+                var graph = new Graph<WorldMapNode>();
+                graphRegistry.Add(graph);
+                graph.Register(start);
             }
         }
 
@@ -234,15 +297,15 @@ namespace Tools.WorldMapCore.Runtime
             return nearestIndex;
         }
 
-        private static int FindNodeLaneIndex(Rect nodeBounds, WorldMapStaticData data)
+        private static int FindNodeLaneIndex(WorldMapNode node, WorldMapStaticData data)
         {
-            var lanes = data.Lanes;
+            var regions = data.Parameters.Regions;
             var nearest = float.MaxValue;
             var nearestIndex = -1;
-            for (var index = 0; index < lanes.Count; index++)
+            for (var index = 0; index < regions.Length; index++)
             {
-                var lane = lanes[index];
-                var distance = Vector3.Distance(lane.center, nodeBounds.center);
+                var region = regions[index];
+                var distance = Vector3.Distance(region.Bounds.center, node.Bounds.center);
                 if (distance < nearest)
                 {
                     nearest = distance;
@@ -251,6 +314,29 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             return nearestIndex;
+        }
+
+        private static int FindNodeRegionIndex(WorldMapNode node, WorldMapStaticData data)
+        {
+            var regions = data.Parameters.Regions;
+            for (var index = 0; index < regions.Length; index++)
+            {
+                var region = regions[index];
+                var vertex = new[]
+                {
+                    new Vector3(region.Bounds.xMin, region.Bounds.yMin, 0),
+                    new Vector3(region.Bounds.xMin, region.Bounds.yMax, 0),
+                    new Vector3(region.Bounds.xMax, region.Bounds.yMax, 0),
+                    new Vector3(region.Bounds.xMax, region.Bounds.yMin, 0),
+                };
+
+                if (CheckPointOverlapPolygon(vertex, node.Bounds.center))
+                {
+                    return index;
+                }
+            }
+
+            return -1;
         }
     }
 }
