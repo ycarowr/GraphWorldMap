@@ -16,24 +16,24 @@ MonoBehaviour:
   - Bounds:
       serializedVersion: 2
       x: 0
-      y: -0.000049591064
-      width: 33.333366
-      height: 100.0001
+      y: 0
+      width: 100
+      height: 300
   - Bounds:
       serializedVersion: 2
-      x: 33.333347
-      y: -0.000049591064
-      width: 33.333366
-      height: 100.0001
+      x: 100
+      y: 0
+      width: 100
+      height: 300
   - Bounds:
       serializedVersion: 2
-      x: 66.666695
-      y: -0.000049591064
-      width: 33.333366
-      height: 100.0001
+      x: 200
+      y: 0
+      width: 100
+      height: 300
   amount: 70
   nodeWorldSize: {x: 6, y: 6}
-  totalWorldSize: {x: 100, y: 100}
+  totalWorldSize: {x: 300, y: 300}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
@@ -44,11 +44,10 @@ MonoBehaviour:
   amountEnd: 1
   isPerfectSegmentLane: 1
   useAsync: 0
-  hasConnections: 1
-  amountOfLaneConnections: 3
+  amountOfLaneConnections: 0
   DebugValues:
-    Mode: 2147483647
-    DeletionReason: 2147483647
-  sortMethod: 2
+    Mode: 2
+    DeletionReason: 0
+  sortMethod: 1
   debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}
   isAutoRegion: 1

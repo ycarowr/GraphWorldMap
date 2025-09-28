@@ -50,7 +50,7 @@ namespace Tools.WorldMapCore.Database
         private int seed;
 
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
-        private bool hasRandomSeed = true;
+        private bool isRandomSeed = true;
 
         [SerializeField] private OrientationGraph orientation = OrientationGraph.LeftRight;
 
@@ -60,13 +60,11 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private int amountEnd = 1;
 
-        [SerializeField] private bool isPerfectSegmentLane;
-
         [SerializeField] [Tooltip("Whether is using parallelism to generate the nodes.")]
         private bool useAsync = true;
 
         [SerializeField] [Tooltip("The number of connections.")]
-        private int amountOfLaneConnections = 1;
+        private int amountOfRegionConnections = 1;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
@@ -91,9 +89,17 @@ namespace Tools.WorldMapCore.Database
             set => amount = value;
         }
 
-        public Vector2 NodeWorldSize => nodeWorldSize;
+        public Vector2 NodeWorldSize
+        {
+            get => nodeWorldSize;
+            set => nodeWorldSize = value;
+        }
 
-        public Vector2 TotalWorldSize => totalWorldSize;
+        public Vector2 TotalWorldSize
+        {
+            get => totalWorldSize;
+            set => totalWorldSize = value;
+        }
 
         public int Iterations => iterations;
 
@@ -107,28 +113,50 @@ namespace Tools.WorldMapCore.Database
             set => seed = value;
         }
 
-        public bool HasRandomSeed => hasRandomSeed;
+        public bool IsRandomSeed
+        {
+            get => isRandomSeed;
+            set => isRandomSeed = value;
+        }
 
-        public OrientationGraph Orientation => orientation;
+        public OrientationGraph Orientation
+        {
+            get => orientation;
+            set => orientation = value;
+        }
 
-        public int AmountStart => amountStart;
+        public int AmountStart
+        {
+            get => amountStart;
+            set => amountStart = value;
+        }
 
-        public int AmountEnd => amountEnd;
-
-        public bool IsPerfectSegmentLane => isPerfectSegmentLane;
+        public int AmountEnd
+        {
+            get => amountEnd;
+            set => amountEnd = value;
+        }
 
         public bool UseAsync => useAsync;
 
-        public int AmountOfLaneConnections => amountOfLaneConnections;
+        public int AmountOfRegionConnections
+        {
+            get => amountOfRegionConnections;
+            set => amountOfRegionConnections = value;
+        }
 
-        public SortMethod SortingMethod => sortMethod;
+        public SortMethod SortingMethod
+        {
+            get => sortMethod;
+            set => sortMethod = value;
+        }
 
         public TMP_Text DebugDistanceText => debugDistanceText;
 
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize);// + WorldMapStaticData.SMALL_VECTOR);
+            var bounds = new Rect(center, totalWorldSize); // + WorldMapStaticData.SMALL_VECTOR);
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
         }

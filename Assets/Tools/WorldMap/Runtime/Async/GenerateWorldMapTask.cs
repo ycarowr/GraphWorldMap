@@ -79,7 +79,7 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
-            var iterations = Data.Parameters.HasRandomSeed ? Data.Parameters.ParallelIterations : 1;
+            var iterations = Data.Parameters.IsRandomSeed ? Data.Parameters.ParallelIterations : 1;
             Debug.Log($"Dispatching Iterations. n = {iterations}");
 
             if (!Data.Parameters.UseAsync)

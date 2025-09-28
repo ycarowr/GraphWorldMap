@@ -100,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> starting, List<WorldMapNode> ending)
         {
             // Create regions connections
-            if (data.Parameters.AmountOfLaneConnections > 0)
+            if (data.Parameters.AmountOfRegionConnections > 0)
             {
                 var connections = new List<Graph<WorldMapNode>>();
                 for (var index = 0; index < graphRegistry.Count - 1; index++)
@@ -137,7 +137,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
 
                     for (var connectionCount = 0;
-                         connectionCount < data.Parameters.AmountOfLaneConnections;
+                         connectionCount < data.Parameters.AmountOfRegionConnections;
                          connectionCount++)
                     {
                         var rightMost = sort.Last();
