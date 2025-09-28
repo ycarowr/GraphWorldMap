@@ -6,8 +6,8 @@ namespace Tools.WorldMapCore.Runtime
 {
     public readonly struct WorldMapStaticData
     {
-        public static readonly Vector2 SMALL_VECTOR = new(SMALL_NUMBER, SMALL_NUMBER);
-        public const float SMALL_NUMBER = 0.0001f;
+        // public static readonly Vector2 SMALL_VECTOR = new(SMALL_NUMBER, SMALL_NUMBER);
+        // public const float SMALL_NUMBER = 0.0001f;
         public readonly WorldMapParameters Parameters;
         public readonly Rect WorldBounds;
         public readonly List<Vector3> Start;
@@ -82,8 +82,7 @@ namespace Tools.WorldMapCore.Runtime
                         worldPosition.y = segment / 2 + segment * index;
                     }
 
-                    worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2 -
-                                      SMALL_NUMBER;
+                    worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2;// - SMALL_NUMBER;
                 }
 
                 if (parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
@@ -99,8 +98,7 @@ namespace Tools.WorldMapCore.Runtime
                         worldPosition.x = segment / 2 + segment * index;
                     }
 
-                    worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2 -
-                                      SMALL_NUMBER;
+                    worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2;// - SMALL_NUMBER;
                 }
 
                 Start.Add(worldPosition);
@@ -114,8 +112,7 @@ namespace Tools.WorldMapCore.Runtime
                 if (parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
                 {
                     var segment = WorldBounds.size.y / (amountEnd + 1);
-                    worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2 +
-                                      SMALL_NUMBER;
+                    worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2;// + SMALL_NUMBER;
                     worldPosition.y = segment * (index + 1);
                 }
 
@@ -123,8 +120,7 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     var segment = WorldBounds.size.x / (amountEnd + 1);
                     worldPosition.x = segment * (index + 1);
-                    worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2 +
-                                      SMALL_NUMBER;
+                    worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2;// + SMALL_NUMBER;
                 }
 
                 End.Add(worldPosition);
