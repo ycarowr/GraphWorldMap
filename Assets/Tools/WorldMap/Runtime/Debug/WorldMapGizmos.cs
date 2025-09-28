@@ -124,7 +124,8 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.OutOfBounds)
+                if (isAll || data.Parameters.DebugValues.DeletionReason ==
+                    WorldMapParameters.EDeletionReason.OutOfBounds)
                 {
                     // Draw Bounds
                     var deleted = deletions[WorldMapParameters.EDeletionReason.OutOfBounds];

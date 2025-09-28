@@ -1169,9 +1169,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 785155353597673172}
     m_Modifications:
+    - target: {fileID: 2569229266317162412, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 166.2
+      objectReference: {fileID: 0}
     - target: {fileID: 2579177491995780651, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
       propertyPath: m_Name
       value: FieldInputContainer_HasSeed
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075038411995994561, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3075038411995994561, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815479982393120949, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -77.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815479982393120949, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00012207031
       objectReference: {fileID: 0}
     - target: {fileID: 5690510218488742739, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1290,7 +1310,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7933476119691687699, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 959fd163ea10cec46830ab3f78794c5e, type: 3}

@@ -10,6 +10,15 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
+        public enum EDeletionReason
+        {
+            None = 0,
+            Overlap = 1,
+            OutOfBounds = 2,
+
+            All = int.MaxValue,
+        }
+
         // Orientation is used to sort and display the graph.
         public enum EOrientationGraph
         {
@@ -24,15 +33,6 @@ namespace Tools.WorldMapCore.Database
             None = 0,
             Axis = 1, // the order of the nodes is created based on the X or Y position.
             Distance = 2, // the order of the nodes is created based on the distance to the end point.
-        }
-        
-        public enum EDeletionReason
-        {
-            None = 0,
-            Overlap = 1,
-            OutOfBounds = 2,
-
-            All = int.MaxValue,
         }
 
         [SerializeField] private Region[] RegionParameters;

@@ -7,13 +7,13 @@ namespace Tools.WorldMapCore.Runtime
 {
     public partial class WorldMap
     {
+        public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly WorldMapStaticData Data;
         private readonly Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> Deletions;
         public readonly List<WorldMapNode> End;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
-        public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
