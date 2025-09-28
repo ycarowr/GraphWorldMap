@@ -404,11 +404,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.67058825, g: 0.64705884, b: 0.64705884, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_NormalColor: {r: 0.24602674, g: 0.8207547, b: 0.24390352, a: 1}
+    m_HighlightedColor: {r: 0.19655302, g: 0.6509434, b: 0.19344072, a: 1}
+    m_PressedColor: {r: 0.38076955, g: 0.735849, b: 0.37833747, a: 1}
+    m_SelectedColor: {r: 0.19607843, g: 0.6509804, b: 0.19215687, a: 1}
+    m_DisabledColor: {r: 0.24705882, g: 0.81960785, b: 0.24313726, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -426,20 +426,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4526476550084217519}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 3cf7a73d4f174744895bf8bb7d1068c7, type: 2}
-        m_TargetAssemblyTypeName: Tools.WorldMapCore.Database.WorldMapParameters,
-          Assembly-CSharp
-        m_MethodName: Refresh
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &7767195828096557747
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,9 +569,9 @@ RectTransform:
   - {fileID: 6271945156734879781}
   m_Father: {fileID: 5202366464611647923}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 100, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -300}
   m_SizeDelta: {x: 200, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6930614205030304819
