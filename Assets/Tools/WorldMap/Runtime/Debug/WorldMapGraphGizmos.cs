@@ -59,7 +59,8 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        public static void DrawGizmos(List<Graph<WorldMapNode>> graphs, WorldMapStaticData data)
+        public static void DrawGizmos(List<Graph<WorldMapNode>> graphs,
+            List<Graph<WorldMapNode>> regionConnectionsRegistry, WorldMapStaticData data)
         {
             if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
                 data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Graph &&
@@ -74,7 +75,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             // Draw Graph
-            if (colors.Count < graphs.Count)
+            if (colors.Count < graphs.Count + regionConnectionsRegistry.Count)
             {
                 var delta = graphs.Count - colors.Count;
                 for (var index = 0; index < delta; index++)
@@ -100,6 +101,24 @@ namespace Tools.WorldMapCore.Runtime
                 }
 
                 UGizmos.DrawLineList(lines.ToArray(), colors[index]);
+            }
+            
+            for (var index = 0; index < regionConnectionsRegistry.Count; index++)
+            {
+                var currentGraph = regionConnectionsRegistry[index];
+                lines.Clear();
+                foreach (var connection in currentGraph.Connections)
+                {
+                    var nodeA = connection.Key;
+                    var targets = connection.Value;
+                    foreach (var nodeB in targets)
+                    {
+                        lines.Add(nodeA.Center);
+                        lines.Add(nodeB.Key.Center);
+                    }
+                }
+
+                UGizmos.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
             }
         }
     }
