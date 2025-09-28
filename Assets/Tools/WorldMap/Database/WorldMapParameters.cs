@@ -25,15 +25,8 @@ namespace Tools.WorldMapCore.Database
             Axis = 1, // the order of the nodes is created based on the X or Y position.
             Distance = 2, // the order of the nodes is created based on the distance to the end point.
         }
-        
-        [Serializable]
-        public class Region
-        {
-            public Rect Bounds;
-        }
-        
-        [SerializeField]
-        private Region[] RegionParameters;
+
+        [SerializeField] private Region[] RegionParameters;
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
@@ -69,20 +62,32 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private bool isPerfectSegmentLane;
 
-        [SerializeField] [Tooltip("Whether is using parallelism to generate the nodes.")] private bool useAsync = true;
+        [SerializeField] [Tooltip("Whether is using parallelism to generate the nodes.")]
+        private bool useAsync = true;
 
-        [SerializeField] [Tooltip("Whether the regions are connected or not.")] private bool hasConnections = true;
+        [SerializeField] [Tooltip("Whether the regions are connected or not.")]
+        private bool hasConnections = true;
 
-        [SerializeField] [Tooltip("The number of connections.")] private int amountOfLaneConnections = 1;
+        [SerializeField] [Tooltip("The number of connections.")]
+        private int amountOfLaneConnections = 1;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
-        [SerializeField] [Tooltip("The direction in which the path is created.")] private SortMethod sortMethod = SortMethod.Distance;
+        [SerializeField] [Tooltip("The direction in which the path is created.")]
+        private SortMethod sortMethod = SortMethod.Distance;
 
         [SerializeField] private TMP_Text debugDistanceText;
 
-        public Region[] Regions => RegionParameters;
-        
+        [SerializeField] private bool isAutoRegion = true;
+
+        public bool IsAutoRegion => isAutoRegion;
+
+        public Region[] Regions
+        {
+            get => RegionParameters;
+            set => RegionParameters = value;
+        }
+
         public int Amount
         {
             get => amount;
@@ -145,6 +150,12 @@ namespace Tools.WorldMapCore.Database
         private void RefreshColors()
         {
             WorldMapGraphGizmos.colors.Clear();
+        }
+
+        [Serializable]
+        public class Region
+        {
+            public Rect Bounds;
         }
 
         [Serializable]
