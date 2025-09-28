@@ -12,10 +12,10 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
             List<WorldMapNode> end,
-            Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
+            Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> deletions)
         {
-            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
+            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.Nodes)
             {
                 return;
             }
@@ -102,12 +102,12 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            var isAll = data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.All;
+            var isAll = data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.All;
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.Overlap)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.Overlap)
                 {
                     // Draw Overlap
-                    var deleted = deletions[WorldMap.EDeletionReason.Overlap];
+                    var deleted = deletions[WorldMapParameters.EDeletionReason.Overlap];
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
@@ -124,10 +124,10 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.OutOfBounds)
                 {
                     // Draw Bounds
-                    var deleted = deletions[WorldMap.EDeletionReason.OutOfBounds];
+                    var deleted = deletions[WorldMapParameters.EDeletionReason.OutOfBounds];
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];

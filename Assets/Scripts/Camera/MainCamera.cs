@@ -42,7 +42,7 @@ namespace Game
         private float CalcWorldAspect(Rect worldBounds, Vector2 nodeSize)
         {
             float worldAspect;
-            if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
+            if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
             {
                 worldAspect = (worldBounds.width + nodeSize.x) / worldBounds.height;
             }
@@ -57,7 +57,7 @@ namespace Game
         private void CalcOrthographicSize(float worldAspect, Rect worldBounds, Vector2 nodeSize)
         {
             var cameraComponent = GetComponent<Camera>();
-            if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
+            if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
             {
                 if (worldAspect > cameraComponent.aspect)
                 {

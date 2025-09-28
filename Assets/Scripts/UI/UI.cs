@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using TMPro;
 using Tools.WorldMapCore.Database;
+using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,7 @@ namespace Game.UI
         [SerializeField] private TMP_Dropdown orientationDropdown;
         [SerializeField] private TMP_Dropdown sortMethodDropdown;
         [SerializeField] private TMP_Dropdown debugModeDropdown;
+        [SerializeField] private TMP_Dropdown deletionDropdown;
 
         private void Awake()
         {
@@ -42,24 +44,33 @@ namespace Game.UI
             toggleIsRandom.onValueChanged.AddListener(SetIsRandom);
 
             orientationDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.OrientationGraph.LeftRight)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.LeftRight)));
             orientationDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.OrientationGraph.BottomTop)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.BottomTop)));
             orientationDropdown.onValueChanged.AddListener(SetOrientation);
 
-            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.SortMethod.Axis)));
-            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.SortMethod.Distance)));
+            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Axis)));
+            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Distance)));
             sortMethodDropdown.onValueChanged.AddListener(SetSortingMethod);
 
             debugModeDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.DrawMode.Nodes)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.None)));
             debugModeDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.DrawMode.Graph)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.Nodes)));
             debugModeDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.DrawMode.Distances)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.Graph)));
             debugModeDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.DrawMode.All)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.Distances)));
+            debugModeDropdown.options.Add(
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.All)));
             debugModeDropdown.onValueChanged.AddListener(SetDebugMode);
+            
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.None)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.Overlap)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfBounds)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.All)));
+            deletionDropdown.onValueChanged.AddListener(SetDeletion);
+            
             RefreshUI();
         }
 
@@ -87,28 +98,36 @@ namespace Game.UI
             nodeHeightInput.text = parameters.NodeWorldSize.y.ToString(CultureInfo.InvariantCulture);
             toggleIsRandom.isOn = parameters.IsRandomSeed;
             orientationDropdown.value = orientationDropdown.options.IndexOf(orientationDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.OrientationGraph>(x.text) == parameters.Orientation));
+                Enum.Parse<WorldMapParameters.EOrientationGraph>(x.text) == parameters.Orientation));
             sortMethodDropdown.value = sortMethodDropdown.options.IndexOf(sortMethodDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.SortMethod>(x.text) == parameters.SortingMethod));
+                Enum.Parse<WorldMapParameters.ESortMethod>(x.text) == parameters.SortingMethod));
             debugModeDropdown.value = debugModeDropdown.options.IndexOf(debugModeDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.DebugData.DrawMode>(x.text) == parameters.DebugValues.Mode));
+                Enum.Parse<WorldMapParameters.DebugData.EDrawMode>(x.text) == parameters.DebugValues.Mode));
+            deletionDropdown.value = deletionDropdown.options.IndexOf(deletionDropdown.options.Find(x =>
+                Enum.Parse<WorldMapParameters.EDeletionReason>(x.text) == parameters.DebugValues.DeletionReason));
+        }
+        
+        private void SetDeletion(int arg0)
+        {
+            var value = Enum.Parse<WorldMapParameters.EDeletionReason>(deletionDropdown.options[arg0].text);
+            parameters.DebugValues.DeletionReason = value;
         }
 
         private void SetDebugMode(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.DebugData.DrawMode>(debugModeDropdown.options[arg0].text);
+            var value = Enum.Parse<WorldMapParameters.DebugData.EDrawMode>(debugModeDropdown.options[arg0].text);
             parameters.DebugValues.Mode = value;
         }
 
         private void SetSortingMethod(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.SortMethod>(sortMethodDropdown.options[arg0].text);
+            var value = Enum.Parse<WorldMapParameters.ESortMethod>(sortMethodDropdown.options[arg0].text);
             parameters.SortingMethod = value;
         }
 
         private void SetOrientation(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.OrientationGraph>(orientationDropdown.options[arg0].text);
+            var value = Enum.Parse<WorldMapParameters.EOrientationGraph>(orientationDropdown.options[arg0].text);
             parameters.Orientation = value;
         }
 

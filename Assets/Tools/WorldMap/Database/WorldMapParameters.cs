@@ -11,7 +11,7 @@ namespace Tools.WorldMapCore.Database
     public class WorldMapParameters : ScriptableObject
     {
         // Orientation is used to sort and display the graph.
-        public enum OrientationGraph
+        public enum EOrientationGraph
         {
             None = 0,
             LeftRight = 1, // the direction is Left to Right
@@ -19,11 +19,20 @@ namespace Tools.WorldMapCore.Database
         }
 
         // Sorting method is used to order the nodes in the graph.
-        public enum SortMethod
+        public enum ESortMethod
         {
             None = 0,
             Axis = 1, // the order of the nodes is created based on the X or Y position.
             Distance = 2, // the order of the nodes is created based on the distance to the end point.
+        }
+        
+        public enum EDeletionReason
+        {
+            None = 0,
+            Overlap = 1,
+            OutOfBounds = 2,
+
+            All = int.MaxValue,
         }
 
         [SerializeField] private Region[] RegionParameters;
@@ -52,7 +61,7 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
         private bool isRandomSeed = true;
 
-        [SerializeField] private OrientationGraph orientation = OrientationGraph.LeftRight;
+        [SerializeField] private EOrientationGraph orientation = EOrientationGraph.LeftRight;
 
         [SerializeField] [Tooltip("Amount of starting nodes.")]
         private int amountStart = 1;
@@ -69,7 +78,7 @@ namespace Tools.WorldMapCore.Database
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
         [SerializeField] [Tooltip("The direction in which the path is created.")]
-        private SortMethod sortMethod = SortMethod.Distance;
+        private ESortMethod sortMethod = ESortMethod.Distance;
 
         [SerializeField] private TMP_Text debugDistanceText;
 
@@ -119,7 +128,7 @@ namespace Tools.WorldMapCore.Database
             set => isRandomSeed = value;
         }
 
-        public OrientationGraph Orientation
+        public EOrientationGraph Orientation
         {
             get => orientation;
             set => orientation = value;
@@ -145,7 +154,7 @@ namespace Tools.WorldMapCore.Database
             set => amountOfRegionConnections = value;
         }
 
-        public SortMethod SortingMethod
+        public ESortMethod SortingMethod
         {
             get => sortMethod;
             set => sortMethod = value;
@@ -184,7 +193,7 @@ namespace Tools.WorldMapCore.Database
         [Serializable]
         public class DebugData
         {
-            public enum DrawMode
+            public enum EDrawMode
             {
                 None = 0,
                 Nodes = 1,
@@ -193,8 +202,8 @@ namespace Tools.WorldMapCore.Database
                 All = int.MaxValue,
             }
 
-            public DrawMode Mode = DrawMode.All;
-            public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
+            public EDrawMode Mode = EDrawMode.All;
+            public EDeletionReason DeletionReason = EDeletionReason.All;
         }
     }
 }
