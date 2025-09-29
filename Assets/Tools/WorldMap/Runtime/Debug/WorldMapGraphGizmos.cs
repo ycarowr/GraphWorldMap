@@ -2,7 +2,6 @@
 using System.Globalization;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
-using UGizmo;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -101,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                UGizmos.DrawLineList(lines.ToArray(), colors[index]);
+                Lines.Instance.DrawLineList(lines.ToArray(), colors[index]);
             }
 
             for (var index = 0; index < regionConnectionsRegistry.Count; index++)
@@ -119,7 +118,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                UGizmos.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
+                Lines.Instance.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
             }
         }
     }

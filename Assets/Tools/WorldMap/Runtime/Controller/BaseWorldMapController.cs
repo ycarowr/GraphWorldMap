@@ -36,7 +36,6 @@ namespace Tools.WorldMapCore.Runtime
 
         protected virtual void Update()
         {
-            WorldMap?.OnDrawGizmos();
         }
 
         protected virtual void OnEnable()
@@ -85,7 +84,9 @@ namespace Tools.WorldMapCore.Runtime
                 worldMapNode.SetNode(node);
             }
 
+            Lines.Instance.Clear();
             WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);
+            WorldMap?.OnDrawGizmos();
             Debug.Log("Refresh Map");
         }
 

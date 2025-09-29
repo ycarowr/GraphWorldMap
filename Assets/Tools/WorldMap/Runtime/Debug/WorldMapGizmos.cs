@@ -32,7 +32,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(region.Bounds.xMax, region.Bounds.yMax, 0),
                         new Vector3(region.Bounds.xMax, region.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, Color.yellow);
+                    Lines.Instance.DrawLineStrip(points, Color.yellow);
                 }
             }
 
@@ -66,7 +66,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, Color.green);
+                    Lines.Instance.DrawLineStrip(points, Color.green);
                 }
             }
 
@@ -82,7 +82,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, new Color(60f / 255f, 179f / 255f, 113 / 255f));
+                    Lines.Instance.DrawLineStrip(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
                 }
             }
 
@@ -98,7 +98,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, new Color(106f / 255f, 90f / 255f, 205 / 255f));
+                    Lines.Instance.DrawLineStrip(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
                 }
             }
 
@@ -118,7 +118,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        UGizmos.DrawLineStrip(points, true, Color.red);
+                        Lines.Instance.DrawLineStrip(points, Color.red);
                     }
                 }
             }
@@ -139,7 +139,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        UGizmos.DrawLineStrip(points, true, Color.yellow);
+                        Lines.Instance.DrawLineStrip(points, Color.yellow);
                     }
                 }
             }

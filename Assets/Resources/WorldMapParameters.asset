@@ -17,37 +17,36 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 100
-      height: 300
+      width: 33.333332
+      height: 100
   - Bounds:
       serializedVersion: 2
-      x: 100
+      x: 33.333332
       y: 0
-      width: 100
-      height: 300
+      width: 33.333332
+      height: 100
   - Bounds:
       serializedVersion: 2
-      x: 200
+      x: 66.666664
       y: 0
-      width: 100
-      height: 300
+      width: 33.333332
+      height: 100
   amount: 70
   nodeWorldSize: {x: 6, y: 6}
-  totalWorldSize: {x: 300, y: 300}
+  totalWorldSize: {x: 100, y: 100}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 458888847
-  hasRandomSeed: 1
+  seed: 1633035330
+  isRandomSeed: 1
   orientation: 2
   amountStart: 3
   amountEnd: 1
-  isPerfectSegmentLane: 1
   useAsync: 0
-  amountOfLaneConnections: 0
+  amountOfRegionConnections: 1
   DebugValues:
-    Mode: 2
-    DeletionReason: 0
+    Mode: 2147483647
+    DeletionReason: 2147483647
   sortMethod: 1
   debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}
   isAutoRegion: 1
