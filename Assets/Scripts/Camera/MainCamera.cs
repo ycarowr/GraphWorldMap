@@ -41,17 +41,14 @@ namespace Game
 
         private float CalcWorldAspect(Rect worldBounds, Vector2 nodeSize)
         {
-            float worldAspect;
             if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
             {
-                worldAspect = (worldBounds.width + nodeSize.x) / worldBounds.height;
+                return (worldBounds.width + nodeSize.x) / worldBounds.height;
             }
             else
             {
-                worldAspect = worldBounds.width / (worldBounds.height + nodeSize.y);
+                return worldBounds.width / (worldBounds.height + nodeSize.y);
             }
-
-            return worldAspect;
         }
 
         private void CalcOrthographicSize(float worldAspect, Rect worldBounds, Vector2 nodeSize)
