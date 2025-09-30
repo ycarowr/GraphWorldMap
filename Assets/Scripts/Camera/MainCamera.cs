@@ -1,23 +1,24 @@
-using System;
 using Tools.Attributes;
 using Tools.WorldMapCore.Database;
+using ToolsYwr.Patterns.Singleton;
 using UnityEngine;
 
 namespace Game
 {
-    public class MainCamera : MonoBehaviour
+    public class MainCamera : SingletonMB<MainCamera>
     {
         [SerializeField] private Vector3 offset;
         [SerializeField] private GameWorldMap gameWorldMap;
-        
-        private void Awake()
-        {
-            gameWorldMap.OnCreate += OnCreateWorldMap;
-        }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             gameWorldMap.OnCreate -= OnCreateWorldMap;
+            base.OnDestroy();
+        }
+
+        protected override void OnAwake()
+        {
+            gameWorldMap.OnCreate += OnCreateWorldMap;
         }
 
         [Button]
@@ -27,6 +28,7 @@ namespace Game
             {
                 return;
             }
+
             CentralizePosition();
             SetOrthographicSize();
         }
@@ -45,10 +47,8 @@ namespace Game
             {
                 return (worldBounds.width + nodeSize.x) / worldBounds.height;
             }
-            else
-            {
-                return worldBounds.width / (worldBounds.height + nodeSize.y);
-            }
+
+            return worldBounds.width / (worldBounds.height + nodeSize.y);
         }
 
         private void CalcOrthographicSize(float worldAspect, Rect worldBounds, Vector2 nodeSize)
@@ -58,18 +58,20 @@ namespace Game
             {
                 if (worldAspect > cameraComponent.aspect)
                 {
-                    cameraComponent.orthographicSize = (worldBounds.width + nodeSize.x * 2) / (cameraComponent.aspect * 2);
+                    cameraComponent.orthographicSize =
+                        (worldBounds.width + nodeSize.x * 2) / (cameraComponent.aspect * 2);
                 }
                 else
                 {
-                    cameraComponent.orthographicSize = (worldBounds.height) / 2f;
+                    cameraComponent.orthographicSize = worldBounds.height / 2f;
                 }
             }
             else
             {
                 if (worldAspect > cameraComponent.aspect)
                 {
-                    cameraComponent.orthographicSize = (worldBounds.width + nodeSize.x * 2) / (cameraComponent.aspect * 2);
+                    cameraComponent.orthographicSize =
+                        (worldBounds.width + nodeSize.x * 2) / (cameraComponent.aspect * 2);
                 }
                 else
                 {

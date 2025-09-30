@@ -32,23 +32,9 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(region.Bounds.xMax, region.Bounds.yMax, 0),
                         new Vector3(region.Bounds.xMax, region.Bounds.yMin, 0),
                     };
-                    Lines.Instance.DrawLineStrip(points, Color.yellow);
+                    Lines.DrawLineStrip(points, Color.yellow);
                 }
             }
-
-// #if UNITY_EDITOR
-//             {
-//                 // Draw bounders
-//                 var bottomLeft = data.WorldBounds.min.ToString();
-//                 var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
-//                 var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
-//                 var topRight = data.WorldBounds.max.ToString();
-//                 UnityEditor.Handles.Label(data.WorldBounds.min, bottomLeft);
-//                 UnityEditor.Handles.Label(bottomRight, bottomRight.ToString());
-//                 UnityEditor.Handles.Label(topLeft, topLeft.ToString());
-//                 UnityEditor.Handles.Label(data.WorldBounds.max, topRight);
-//             }
-// #endif
 
             {
                 // Draw center 
@@ -66,7 +52,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    Lines.Instance.DrawLineStrip(points, Color.green);
+                    Lines.DrawLineStrip(points, Color.green);
                 }
             }
 
@@ -82,7 +68,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    Lines.Instance.DrawLineStrip(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
+                    Lines.DrawLineStrip(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
                 }
             }
 
@@ -98,7 +84,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    Lines.Instance.DrawLineStrip(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
+                    Lines.DrawLineStrip(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
                 }
             }
 
@@ -118,7 +104,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        Lines.Instance.DrawLineStrip(points, Color.red);
+                        Lines.DrawLineStrip(points, Color.red);
                     }
                 }
             }
@@ -139,7 +125,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        Lines.Instance.DrawLineStrip(points, Color.yellow);
+                        Lines.DrawLineStrip(points, Color.yellow);
                     }
                 }
             }

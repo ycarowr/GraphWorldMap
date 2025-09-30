@@ -84,7 +84,16 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private bool isAutoRegion = true;
 
+        [SerializeField] [Tooltip("The default line size for runtime. 100x100 area.")]
+        private int lineSize = 125;
+
         public bool IsAutoRegion => isAutoRegion;
+
+        public int LineSize
+        {
+            get => lineSize;
+            set => lineSize = value;
+        }
 
         public Region[] Regions
         {

@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using TMPro;
 using Tools.WorldMapCore.Database;
-using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +13,7 @@ namespace Game.UI
         [SerializeField] private Button generate;
         [SerializeField] private WorldMapParameters parameters;
         [SerializeField] private TMP_InputField amountInput;
+        [SerializeField] private TMP_InputField lineSizeInput;
         [SerializeField] private TMP_InputField amountConnections;
         [SerializeField] private TMP_InputField amountStartInput;
         [SerializeField] private TMP_InputField amountEndInput;
@@ -33,6 +33,7 @@ namespace Game.UI
             gameWorldMap.OnCreate += OnCreate;
             generate.onClick.AddListener(Generate);
             amountInput.onValueChanged.AddListener(SetAmount);
+            lineSizeInput.onValueChanged.AddListener(SetLineSize);
             amountConnections.onValueChanged.AddListener(SetAmountConnections);
             amountStartInput.onValueChanged.AddListener(SetAmountStart);
             amountEndInput.onValueChanged.AddListener(SetAmountEnd);
@@ -50,7 +51,8 @@ namespace Game.UI
             orientationDropdown.onValueChanged.AddListener(SetOrientation);
 
             sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Axis)));
-            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Distance)));
+            sortMethodDropdown.options.Add(
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Distance)));
             sortMethodDropdown.onValueChanged.AddListener(SetSortingMethod);
 
             debugModeDropdown.options.Add(
@@ -64,14 +66,21 @@ namespace Game.UI
             debugModeDropdown.options.Add(
                 new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.All)));
             debugModeDropdown.onValueChanged.AddListener(SetDebugMode);
-            
+
             deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.None)));
-            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.Overlap)));
-            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfBounds)));
+            deletionDropdown.options.Add(
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.Overlap)));
+            deletionDropdown.options.Add(
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfBounds)));
             deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.All)));
             deletionDropdown.onValueChanged.AddListener(SetDeletion);
-            
+
             RefreshUI();
+        }
+
+        private void SetLineSize(string arg0)
+        {
+            parameters.LineSize = int.Parse(arg0);
         }
 
         private void OnCreate()
@@ -91,6 +100,7 @@ namespace Game.UI
             amountConnections.text = parameters.AmountOfRegionConnections.ToString();
             amountStartInput.text = parameters.AmountStart.ToString();
             amountEndInput.text = parameters.AmountEnd.ToString();
+            lineSizeInput.text = parameters.LineSize.ToString();
             seedInput.text = parameters.Seed.ToString();
             worldWidthInput.text = parameters.TotalWorldSize.x.ToString(CultureInfo.InvariantCulture);
             worldHeightInput.text = parameters.TotalWorldSize.y.ToString(CultureInfo.InvariantCulture);
@@ -106,7 +116,7 @@ namespace Game.UI
             deletionDropdown.value = deletionDropdown.options.IndexOf(deletionDropdown.options.Find(x =>
                 Enum.Parse<WorldMapParameters.EDeletionReason>(x.text) == parameters.DebugValues.DeletionReason));
         }
-        
+
         private void SetDeletion(int arg0)
         {
             var value = Enum.Parse<WorldMapParameters.EDeletionReason>(deletionDropdown.options[arg0].text);

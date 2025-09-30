@@ -100,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.Instance.DrawLineList(lines.ToArray(), colors[index]);
+                Lines.DrawLineList(lines.ToArray(), colors[index]);
             }
 
             for (var index = 0; index < regionConnectionsRegistry.Count; index++)
@@ -118,7 +118,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.Instance.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
+                Lines.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
             }
         }
     }

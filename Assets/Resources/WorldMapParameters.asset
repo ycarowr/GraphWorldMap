@@ -37,7 +37,7 @@ MonoBehaviour:
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 1633035330
+  seed: 981150746
   isRandomSeed: 1
   orientation: 2
   amountStart: 3
@@ -50,3 +50,4 @@ MonoBehaviour:
   sortMethod: 1
   debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}
   isAutoRegion: 1
+  lineSize: 125
