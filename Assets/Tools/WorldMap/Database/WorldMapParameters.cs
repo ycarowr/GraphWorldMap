@@ -10,8 +10,17 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
+        public enum EDeletionReason
+        {
+            None = 0,
+            Overlap = 1,
+            OutOfBounds = 2,
+
+            All = int.MaxValue,
+        }
+
         // Orientation is used to sort and display the graph.
-        public enum OrientationGraph
+        public enum EOrientationGraph
         {
             None = 0,
             LeftRight = 1, // the direction is Left to Right
@@ -19,7 +28,7 @@ namespace Tools.WorldMapCore.Database
         }
 
         // Sorting method is used to order the nodes in the graph.
-        public enum SortMethod
+        public enum ESortMethod
         {
             None = 0,
             Axis = 1, // the order of the nodes is created based on the X or Y position.
@@ -50,9 +59,9 @@ namespace Tools.WorldMapCore.Database
         private int seed;
 
         [SerializeField] [Tooltip("Will the seed be used for generation of the map.")]
-        private bool hasRandomSeed = true;
+        private bool isRandomSeed = true;
 
-        [SerializeField] private OrientationGraph orientation = OrientationGraph.LeftRight;
+        [SerializeField] private EOrientationGraph orientation = EOrientationGraph.LeftRight;
 
         [SerializeField] [Tooltip("Amount of starting nodes.")]
         private int amountStart = 1;
@@ -60,27 +69,31 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] [Tooltip("Amount of ending nodes.")]
         private int amountEnd = 1;
 
-        [SerializeField] private bool isPerfectSegmentLane;
-
         [SerializeField] [Tooltip("Whether is using parallelism to generate the nodes.")]
         private bool useAsync = true;
 
-        [SerializeField] [Tooltip("Whether the regions are connected or not.")]
-        private bool hasConnections = true;
-
         [SerializeField] [Tooltip("The number of connections.")]
-        private int amountOfLaneConnections = 1;
+        private int amountOfRegionConnections = 1;
 
         [Tooltip("Runtime debug data.")] public DebugData DebugValues;
 
         [SerializeField] [Tooltip("The direction in which the path is created.")]
-        private SortMethod sortMethod = SortMethod.Distance;
+        private ESortMethod sortMethod = ESortMethod.Distance;
 
         [SerializeField] private TMP_Text debugDistanceText;
 
         [SerializeField] private bool isAutoRegion = true;
 
+        [SerializeField] [Tooltip("The default line size for runtime. 100x100 area.")]
+        private int lineSize = 125;
+
         public bool IsAutoRegion => isAutoRegion;
+
+        public int LineSize
+        {
+            get => lineSize;
+            set => lineSize = value;
+        }
 
         public Region[] Regions
         {
@@ -94,9 +107,17 @@ namespace Tools.WorldMapCore.Database
             set => amount = value;
         }
 
-        public Vector2 NodeWorldSize => nodeWorldSize;
+        public Vector2 NodeWorldSize
+        {
+            get => nodeWorldSize;
+            set => nodeWorldSize = value;
+        }
 
-        public Vector2 TotalWorldSize => totalWorldSize;
+        public Vector2 TotalWorldSize
+        {
+            get => totalWorldSize;
+            set => totalWorldSize = value;
+        }
 
         public int Iterations => iterations;
 
@@ -110,30 +131,50 @@ namespace Tools.WorldMapCore.Database
             set => seed = value;
         }
 
-        public bool HasRandomSeed => hasRandomSeed;
+        public bool IsRandomSeed
+        {
+            get => isRandomSeed;
+            set => isRandomSeed = value;
+        }
 
-        public OrientationGraph Orientation => orientation;
+        public EOrientationGraph Orientation
+        {
+            get => orientation;
+            set => orientation = value;
+        }
 
-        public int AmountStart => amountStart;
+        public int AmountStart
+        {
+            get => amountStart;
+            set => amountStart = value;
+        }
 
-        public int AmountEnd => amountEnd;
-
-        public bool IsPerfectSegmentLane => isPerfectSegmentLane;
+        public int AmountEnd
+        {
+            get => amountEnd;
+            set => amountEnd = value;
+        }
 
         public bool UseAsync => useAsync;
 
-        public int AmountOfLaneConnections => amountOfLaneConnections;
+        public int AmountOfRegionConnections
+        {
+            get => amountOfRegionConnections;
+            set => amountOfRegionConnections = value;
+        }
 
-        public SortMethod SortingMethod => sortMethod;
-
-        public bool HasConnections => hasConnections;
+        public ESortMethod SortingMethod
+        {
+            get => sortMethod;
+            set => sortMethod = value;
+        }
 
         public TMP_Text DebugDistanceText => debugDistanceText;
 
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize);// + WorldMapStaticData.SMALL_VECTOR);
+            var bounds = new Rect(center, totalWorldSize); // + WorldMapStaticData.SMALL_VECTOR);
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
         }
@@ -161,7 +202,7 @@ namespace Tools.WorldMapCore.Database
         [Serializable]
         public class DebugData
         {
-            public enum DrawMode
+            public enum EDrawMode
             {
                 None = 0,
                 Nodes = 1,
@@ -170,8 +211,8 @@ namespace Tools.WorldMapCore.Database
                 All = int.MaxValue,
             }
 
-            public DrawMode Mode = DrawMode.All;
-            public WorldMap.EDeletionReason DeletionReason = WorldMap.EDeletionReason.All;
+            public EDrawMode Mode = EDrawMode.All;
+            public EDeletionReason DeletionReason = EDeletionReason.All;
         }
     }
 }

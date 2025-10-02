@@ -11,17 +11,19 @@ namespace Tools.WorldMapCore.Runtime
             var nvert = vert.Length;
             var isHit = false;
             int i, j;
-            for (i = 0, j = nvert-1; i < nvert; j = i++) {
-                if (((vert[i].y > test.y) != (vert[j].y > test.y)) && 
-                    (test.x <(vert[j].x - vert[i].x) * (test.y - vert[i].y) 
-                        / (vert[j].y - vert[i].y) + vert[i].x))
+            for (i = 0, j = nvert - 1; i < nvert; j = i++)
+            {
+                if (vert[i].y > test.y != vert[j].y > test.y &&
+                    test.x < (vert[j].x - vert[i].x) * (test.y - vert[i].y)
+                    / (vert[j].y - vert[i].y) + vert[i].x)
                 {
                     isHit = !isHit;
                 }
             }
+
             return isHit;
         }
-        
+
         public static bool CheckOverlap(WorldMapNode node, List<WorldMapNode> nodes)
         {
             var count = nodes.Count;

@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using Tools.Graphs;
+using Tools.WorldMapCore.Database;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
     public partial class WorldMap
     {
+        public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly WorldMapStaticData Data;
-        private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
+        private readonly Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> Deletions;
         public readonly List<WorldMapNode> End;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
-        public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
@@ -25,10 +26,10 @@ namespace Tools.WorldMapCore.Runtime
             End = new List<WorldMapNode>();
             GraphsRegistry = new List<Graph<WorldMapNode>>();
             ConnectionsRegistry = new List<Graph<WorldMapNode>>();
-            Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
+            Deletions = new Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>>
             {
-                { EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
-                { EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { WorldMapParameters.EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
+                { WorldMapParameters.EDeletionReason.Overlap, new List<WorldMapNode>() },
             };
 
             // Starting
@@ -93,11 +94,11 @@ namespace Tools.WorldMapCore.Runtime
                     return newNode;
                 }
 
-                Deletions[EDeletionReason.OutOfBounds].Add(newNode);
+                Deletions[WorldMapParameters.EDeletionReason.OutOfBounds].Add(newNode);
             }
             else
             {
-                Deletions[EDeletionReason.Overlap].Add(newNode);
+                Deletions[WorldMapParameters.EDeletionReason.Overlap].Add(newNode);
             }
 
             return null;

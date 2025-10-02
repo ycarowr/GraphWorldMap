@@ -2,7 +2,6 @@
 using System.Globalization;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
-using UGizmo;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -23,8 +22,8 @@ namespace Tools.WorldMapCore.Runtime
         public static void DrawTextDistance(List<Graph<WorldMapNode>> graphs, WorldMapStaticData data,
             GameObject worldMapRoot)
         {
-            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
+            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.Distances)
             {
                 return;
             }
@@ -62,9 +61,9 @@ namespace Tools.WorldMapCore.Runtime
         public static void DrawGizmos(List<Graph<WorldMapNode>> graphs,
             List<Graph<WorldMapNode>> regionConnectionsRegistry, WorldMapStaticData data)
         {
-            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Graph &&
-                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Distances)
+            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.Graph &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.Distances)
             {
                 return;
             }
@@ -77,7 +76,7 @@ namespace Tools.WorldMapCore.Runtime
             // Setup colors
             if (colors.Count < graphs.Count + regionConnectionsRegistry.Count)
             {
-                var delta = (graphs.Count + regionConnectionsRegistry.Count) - colors.Count;
+                var delta = graphs.Count + regionConnectionsRegistry.Count - colors.Count;
                 for (var index = 0; index < delta; index++)
                 {
                     colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
@@ -101,9 +100,9 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                UGizmos.DrawLineList(lines.ToArray(), colors[index]);
+                Lines.DrawLineStrip(lines.ToArray(), colors[index], false);
             }
-            
+
             for (var index = 0; index < regionConnectionsRegistry.Count; index++)
             {
                 var currentGraph = regionConnectionsRegistry[index];
@@ -119,7 +118,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                UGizmos.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
+                Lines.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
             }
         }
     }

@@ -12,7 +12,6 @@ namespace Tools.WorldMapCore.Runtime
     }
 
     // Base generalized class for the map controller
-    [ExecuteInEditMode]
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
         where TNode : BaseWorldMapNode
@@ -34,11 +33,6 @@ namespace Tools.WorldMapCore.Runtime
             Create();
         }
 
-        protected virtual void Update()
-        {
-            WorldMap?.OnDrawGizmos();
-        }
-
         protected virtual void OnEnable()
         {
             OnCreate += OnRefreshMap;
@@ -47,6 +41,11 @@ namespace Tools.WorldMapCore.Runtime
         protected void OnDisable()
         {
             OnCreate -= OnRefreshMap;
+        }
+
+        private void OnDrawGizmos()
+        {
+            WorldMap?.OnDrawGizmos();
         }
 
         public event Action OnCreate = () => { };
@@ -83,6 +82,12 @@ namespace Tools.WorldMapCore.Runtime
                 var worldMapNode = Instantiate(WorldMapNodePrefab, WorldMapRoot.transform);
                 worldMapNode.name = "Node_" + index;
                 worldMapNode.SetNode(node);
+            }
+
+            if (Application.isPlaying)
+            {
+                Lines.Instance.Clear();
+                WorldMap?.OnDrawGizmos();
             }
 
             WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);

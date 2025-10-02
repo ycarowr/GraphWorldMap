@@ -11,7 +11,7 @@ namespace Tools.WorldMapCore.Runtime
         public WorldMapRandom(WorldMapStaticData data)
         {
             var newRandom = new Random();
-            Seed = data.Parameters.HasRandomSeed
+            Seed = data.Parameters.IsRandomSeed
                 ? newRandom.Next()
                 : data.Parameters.Seed;
             RandomGenerator = new Random(Seed);

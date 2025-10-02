@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Tools.WorldMapCore.Database;
-using UGizmo;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -12,10 +11,10 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
             List<WorldMapNode> end,
-            Dictionary<WorldMap.EDeletionReason, List<WorldMapNode>> deletions)
+            Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> deletions)
         {
-            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.All &&
-                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.DrawMode.Nodes)
+            if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
+                data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.Nodes)
             {
                 return;
             }
@@ -32,33 +31,19 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(region.Bounds.xMax, region.Bounds.yMax, 0),
                         new Vector3(region.Bounds.xMax, region.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, Color.yellow);
+                    Lines.DrawLineStrip(points, Color.yellow);
                 }
-            }
-
-// #if UNITY_EDITOR
-//             {
-//                 // Draw bounders
-//                 var bottomLeft = data.WorldBounds.min.ToString();
-//                 var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
-//                 var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
-//                 var topRight = data.WorldBounds.max.ToString();
-//                 UnityEditor.Handles.Label(data.WorldBounds.min, bottomLeft);
-//                 UnityEditor.Handles.Label(bottomRight, bottomRight.ToString());
-//                 UnityEditor.Handles.Label(topLeft, topLeft.ToString());
-//                 UnityEditor.Handles.Label(data.WorldBounds.max, topRight);
-//             }
-// #endif
-
-            {
-                // Draw center 
-                UGizmos.DrawWireSphere(data.WorldBounds.center, 0.2f, Color.magenta);
             }
 
             {
                 for (var i = 0; i < nodes.Count; i++)
                 {
                     var node = nodes[i];
+                    if (start.Contains(node) || end.Contains(node))
+                    {
+                        continue;
+                    }
+                    
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
@@ -66,7 +51,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, Color.green);
+                    Lines.DrawLineStrip(points, Color.green);
                 }
             }
 
@@ -82,7 +67,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, new Color(60f / 255f, 179f / 255f, 113 / 255f));
+                    Lines.DrawLineStrip(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
                 }
             }
 
@@ -98,16 +83,16 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                     };
-                    UGizmos.DrawLineStrip(points, true, new Color(106f / 255f, 90f / 255f, 205 / 255f));
+                    Lines.DrawLineStrip(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
                 }
             }
 
-            var isAll = data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.All;
+            var isAll = data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.All;
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.Overlap)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.Overlap)
                 {
                     // Draw Overlap
-                    var deleted = deletions[WorldMap.EDeletionReason.Overlap];
+                    var deleted = deletions[WorldMapParameters.EDeletionReason.Overlap];
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
@@ -118,16 +103,17 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        UGizmos.DrawLineStrip(points, true, Color.red);
+                        Lines.DrawLineStrip(points, Color.red);
                     }
                 }
             }
 
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMap.EDeletionReason.OutOfBounds)
+                if (isAll || data.Parameters.DebugValues.DeletionReason ==
+                    WorldMapParameters.EDeletionReason.OutOfBounds)
                 {
                     // Draw Bounds
-                    var deleted = deletions[WorldMap.EDeletionReason.OutOfBounds];
+                    var deleted = deletions[WorldMapParameters.EDeletionReason.OutOfBounds];
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
@@ -138,7 +124,7 @@ namespace Tools.WorldMapCore.Runtime
                             new Vector3(node.Bounds.xMax, node.Bounds.yMax, 0),
                             new Vector3(node.Bounds.xMax, node.Bounds.yMin, 0),
                         };
-                        UGizmos.DrawLineStrip(points, true, Color.yellow);
+                        Lines.DrawLineStrip(points, Color.yellow);
                     }
                 }
             }

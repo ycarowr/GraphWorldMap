@@ -100,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> starting, List<WorldMapNode> ending)
         {
             // Create regions connections
-            if (data.Parameters.HasConnections)
+            if (data.Parameters.AmountOfRegionConnections > 0)
             {
                 var connections = new List<Graph<WorldMapNode>>();
                 for (var index = 0; index < graphRegistry.Count - 1; index++)
@@ -113,7 +113,7 @@ namespace Tools.WorldMapCore.Runtime
 
                     List<WorldMapNode> sort;
                     List<WorldMapNode> sortNext;
-                    if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.BottomTop)
+                    if (data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.BottomTop)
                     {
                         sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
                         sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
@@ -136,10 +136,14 @@ namespace Tools.WorldMapCore.Runtime
                         sortNext.Remove(node);
                     }
 
-                    for (var connectionCount = 0;
-                         connectionCount < data.Parameters.AmountOfLaneConnections;
-                         connectionCount++)
+                    for (var connectionCount = 0; connectionCount < data.Parameters.AmountOfRegionConnections; connectionCount++)
                     {
+                        if (sort.Count <= 0)
+                        {
+                            // The list is empty
+                            continue;
+                        }
+
                         var rightMost = sort.Last();
                         sort.Remove(rightMost);
                         var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
@@ -170,13 +174,13 @@ namespace Tools.WorldMapCore.Runtime
             {
                 var end = graphRegistry[index].Nodes.Last();
                 var graph = graphRegistry[index];
-                if (data.Parameters.SortingMethod == WorldMapParameters.SortMethod.Distance)
+                if (data.Parameters.SortingMethod == WorldMapParameters.ESortMethod.Distance)
                 {
                     graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bounds.center));
                 }
                 else
                 {
-                    if (data.Parameters.Orientation == WorldMapParameters.OrientationGraph.LeftRight)
+                    if (data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
                     {
                         graph.Nodes.Sort(new WorldMapNodeCompareLeftRight());
                     }
@@ -267,7 +271,13 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            return nodes[nearestIndex];
+            if (nearestIndex >= 0 && nearestIndex < nodes.Count)
+            {
+                return nodes[nearestIndex];
+            }
+
+            // Can't find a connection
+            return null;
         }
 
         private static List<WorldMapNode> FindBorderNodes(Graph<WorldMapNode> graphNodes,
