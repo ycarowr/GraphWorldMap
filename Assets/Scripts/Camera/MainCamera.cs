@@ -7,6 +7,7 @@ namespace Game
 {
     public class MainCamera : SingletonMB<MainCamera>
     {
+        private const float SMALL_SPACING = 2;
         [SerializeField] private Vector3 offset;
         [SerializeField] private GameWorldMap gameWorldMap;
 
@@ -78,6 +79,8 @@ namespace Game
                     cameraComponent.orthographicSize = (worldBounds.height + nodeSize.y * 2) / 2f;
                 }
             }
+
+            cameraComponent.orthographicSize += SMALL_SPACING;
         }
 
         private void CentralizePosition()

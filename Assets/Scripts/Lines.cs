@@ -64,7 +64,7 @@ public class Lines : SingletonMB<Lines>
             return;
         }
 
-        for (var index = 0; index < positions.Length - 2; index+=2)
+        for (var index = 0; index < positions.Length - 2; index += 2)
         {
             var currentPosition = positions[index];
             var nextPosition = positions[index + 1];
