@@ -150,11 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059d7629304268b40bf29c9a5a077486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyOnLoad: 0
+  isSilent: 1
+  zoomSpeed: 10
   offset: {x: 0, y: 0, z: -5}
   gameWorldMap: {fileID: 0}
-  screenSafeZone:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0

@@ -5,11 +5,32 @@ using UnityEngine;
 
 namespace Game
 {
+    [ExecuteInEditMode]
     public class MainCamera : SingletonMB<MainCamera>
     {
         private const float SMALL_SPACING = 2;
+        [SerializeField] private float zoomSpeed = 200;
         [SerializeField] private Vector3 offset;
         [SerializeField] private GameWorldMap gameWorldMap;
+        private float Target { get; set; }
+        private Camera CameraComponent { get; set; }
+
+        private void Update()
+        {
+            if (!Mathf.Approximately(Target, CameraComponent.orthographicSize))
+            {
+                CameraComponent.orthographicSize =
+                    Mathf.Lerp(CameraComponent.orthographicSize, Target, zoomSpeed * Time.deltaTime);
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (CameraComponent == null)
+            {
+                CameraComponent = GetComponent<Camera>();
+            }
+        }
 
         protected override void OnDestroy()
         {
@@ -54,33 +75,32 @@ namespace Game
 
         private void CalcOrthographicSize(float worldAspect, Rect worldBounds, Vector2 nodeSize)
         {
-            var cameraComponent = GetComponent<Camera>();
+            const float minValue = 10000f; 
+            CameraComponent.orthographicSize = minValue;
             if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
             {
-                if (worldAspect > cameraComponent.aspect)
+                if (worldAspect > CameraComponent.aspect)
                 {
-                    cameraComponent.orthographicSize =
-                        (worldBounds.width + nodeSize.x * 2) / (cameraComponent.aspect * 2);
+                    Target = (worldBounds.width + nodeSize.x * 2) / (CameraComponent.aspect * 2);
                 }
                 else
                 {
-                    cameraComponent.orthographicSize = worldBounds.height / 2f;
+                    Target = worldBounds.height / 2f;
                 }
             }
             else
             {
-                if (worldAspect > cameraComponent.aspect)
+                if (worldAspect > CameraComponent.aspect)
                 {
-                    cameraComponent.orthographicSize =
-                        (worldBounds.width + nodeSize.x * 2) / (cameraComponent.aspect * 2);
+                    Target = (worldBounds.width + nodeSize.x * 2) / (CameraComponent.aspect * 2);
                 }
                 else
                 {
-                    cameraComponent.orthographicSize = (worldBounds.height + nodeSize.y * 2) / 2f;
+                    Target = (worldBounds.height + nodeSize.y * 2) / 2f;
                 }
             }
 
-            cameraComponent.orthographicSize += SMALL_SPACING;
+            Target += SMALL_SPACING;
         }
 
         private void CentralizePosition()
