@@ -45,6 +45,11 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < nodes.Count; i++)
                 {
                     var node = nodes[i];
+                    if (start.Contains(node) || end.Contains(node))
+                    {
+                        continue;
+                    }
+                    
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(node.Bounds.xMin, node.Bounds.yMin, 0),
