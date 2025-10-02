@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Tools.WorldMapCore.Database;
-using UGizmo;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -34,11 +33,6 @@ namespace Tools.WorldMapCore.Runtime
                     };
                     Lines.DrawLineStrip(points, Color.yellow);
                 }
-            }
-
-            {
-                // Draw center 
-                UGizmos.DrawWireSphere(data.WorldBounds.center, 0.2f, Color.magenta);
             }
 
             {

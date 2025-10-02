@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Tools.WorldMapCore.Database;
 using ToolsYwr.Patterns.Singleton;
-using UGizmo;
 using UnityEngine;
 
 public class Lines : SingletonMB<Lines>
@@ -51,11 +50,12 @@ public class Lines : SingletonMB<Lines>
         LineRegistry.Clear();
     }
 
-    public static void DrawLineList(Vector3[] positions, Color color, bool isLoop = true)
+    public static void DrawLineList(Vector3[] positions, Color color)
     {
         if (!Application.isPlaying)
         {
-            UGizmos.DrawLineList(positions, color);
+            Gizmos.color = color;
+            Gizmos.DrawLineList(positions);
             return;
         }
 
@@ -69,7 +69,6 @@ public class Lines : SingletonMB<Lines>
             var currentPosition = positions[index];
             var nextPosition = positions[index + 1];
             var line = Instance.AddLine();
-            line.loop = isLoop;
             line.SetPosition(0, currentPosition);
             line.SetPosition(1, nextPosition);
             line.positionCount = 2;
@@ -85,7 +84,8 @@ public class Lines : SingletonMB<Lines>
     {
         if (!Application.isPlaying)
         {
-            UGizmos.DrawLineStrip(positions, isLoop, color);
+            Gizmos.color = color;
+            Gizmos.DrawLineStrip(positions, isLoop);
             return;
         }
 
