@@ -100,7 +100,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.DrawLineStrip(lines.ToArray(), colors[index]);
+                Lines.DrawLineStrip(lines.ToArray(), colors[index], false);
             }
 
             for (var index = 0; index < regionConnectionsRegistry.Count; index++)

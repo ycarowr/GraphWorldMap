@@ -136,10 +136,14 @@ namespace Tools.WorldMapCore.Runtime
                         sortNext.Remove(node);
                     }
 
-                    for (var connectionCount = 0;
-                         connectionCount < data.Parameters.AmountOfRegionConnections;
-                         connectionCount++)
+                    for (var connectionCount = 0; connectionCount < data.Parameters.AmountOfRegionConnections; connectionCount++)
                     {
+                        if (sort.Count <= 0)
+                        {
+                            // The list is empty
+                            continue;
+                        }
+
                         var rightMost = sort.Last();
                         sort.Remove(rightMost);
                         var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
@@ -267,7 +271,13 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            return nodes[nearestIndex];
+            if (nearestIndex >= 0 && nearestIndex < nodes.Count)
+            {
+                return nodes[nearestIndex];
+            }
+
+            // Can't find a connection
+            return null;
         }
 
         private static List<WorldMapNode> FindBorderNodes(Graph<WorldMapNode> graphNodes,
