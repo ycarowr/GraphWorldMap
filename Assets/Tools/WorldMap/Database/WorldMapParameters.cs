@@ -155,7 +155,17 @@ namespace Tools.WorldMapCore.Database
             set => amountEnd = value;
         }
 
-        public bool UseAsync => useAsync;
+        public bool UseAsync
+        {
+            get
+            {
+#if UNITY_WEBGL_API && !UNITY_EDITOR
+                // I didn't manage to make it work for WebGL builds.
+                return false;
+#endif
+                return useAsync;
+            }
+        }
 
         public int AmountOfRegionConnections
         {
@@ -184,7 +194,6 @@ namespace Tools.WorldMapCore.Database
         public void Refresh()
         {
             FindFirstObjectByType<BaseWorldMapController>().Create();
-            FindFirstObjectByType<MainCamera>().OnCreateWorldMap();
         }
 
         [Button]
