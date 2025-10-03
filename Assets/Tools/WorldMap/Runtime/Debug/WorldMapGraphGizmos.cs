@@ -95,8 +95,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center);
-                        lines.Add(nodeB.Key.Center);
+                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 
@@ -113,8 +113,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center);
-                        lines.Add(nodeB.Key.Center);
+                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 
