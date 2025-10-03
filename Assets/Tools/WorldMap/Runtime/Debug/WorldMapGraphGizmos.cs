@@ -49,10 +49,11 @@ namespace Tools.WorldMapCore.Runtime
                             text = text[..4];
                         }
 
-                        var position = new Vector3(midpointX, midpointY, 0);
+                        var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
                         var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
                         tmpText.transform.position = position;
                         tmpText.text = text;
+                        tmpText.fontSize = data.Parameters.FontSize;
                     }
                 }
             }
@@ -95,8 +96,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center);
-                        lines.Add(nodeB.Key.Center);
+                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 
@@ -113,8 +114,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center);
-                        lines.Add(nodeB.Key.Center);
+                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 

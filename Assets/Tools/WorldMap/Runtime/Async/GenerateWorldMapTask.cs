@@ -80,7 +80,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             var iterations = Data.Parameters.IsRandomSeed ? Data.Parameters.ParallelIterations : 1;
-            Debug.Log($"Dispatching Iterations. n = {iterations}");
+            Debug.Log($"Total area valid. Dispatching Iterations...");
 
             if (!Data.Parameters.UseAsync)
             {

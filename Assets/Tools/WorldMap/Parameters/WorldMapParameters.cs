@@ -83,17 +83,19 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] private TMP_Text debugDistanceText;
 
         [SerializeField] private bool isAutoRegion = true;
+        
+        [SerializeField] private bool isAnimation = true;
 
         [SerializeField] [Tooltip("The default line size for runtime. 100x100 area.")]
-        private int lineSize = 125;
+        private float lineSize = 125;
+
+        public bool IsAnimation
+        {
+            get => isAnimation;
+            set => isAnimation = value;
+        }
 
         public bool IsAutoRegion => isAutoRegion;
-
-        public int LineSize
-        {
-            get => lineSize;
-            set => lineSize = value;
-        }
 
         public Region[] Regions
         {
@@ -155,7 +157,17 @@ namespace Tools.WorldMapCore.Database
             set => amountEnd = value;
         }
 
-        public bool UseAsync => useAsync;
+        public bool UseAsync
+        {
+            get
+            {
+#if UNITY_WEBGL_API && !UNITY_EDITOR
+                // I didn't manage to make it work for WebGL builds.
+                return false;
+#endif
+                return useAsync;
+            }
+        }
 
         public int AmountOfRegionConnections
         {
@@ -167,6 +179,30 @@ namespace Tools.WorldMapCore.Database
         {
             get => sortMethod;
             set => sortMethod = value;
+        }
+        
+        public float FontSize
+        {
+            get
+            {
+                const float defaultFontSize = 16f;
+                const float default100x100area = 100;
+                const float defaultFactorArea = defaultFontSize / default100x100area;
+                var area = TotalWorldSize.x * TotalWorldSize.y;
+                return Mathf.Sqrt(area) * defaultFactorArea;
+            }
+        }
+
+        public float LineSize
+        {
+            get
+            {
+                const float defaultLineSize = 0.15f;
+                const float default100x100area = 100;
+                const float defaultFactorArea = defaultLineSize / default100x100area;
+                var area = TotalWorldSize.x * TotalWorldSize.y;
+                return Mathf.Sqrt(area) * defaultFactorArea;
+            }
         }
 
         public TMP_Text DebugDistanceText => debugDistanceText;
@@ -181,10 +217,9 @@ namespace Tools.WorldMapCore.Database
 
 
         [Button]
-        public void Refresh()
+        public void Create()
         {
             FindFirstObjectByType<BaseWorldMapController>().Create();
-            FindFirstObjectByType<MainCamera>().OnCreateWorldMap();
         }
 
         [Button]

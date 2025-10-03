@@ -5,19 +5,29 @@ using UnityEngine;
 
 namespace Game
 {
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class MainCamera : SingletonMB<MainCamera>
     {
         private const float SMALL_SPACING = 2;
         [SerializeField] private float zoomSpeed = 200;
         [SerializeField] private Vector3 offset;
         [SerializeField] private GameWorldMap gameWorldMap;
+        private bool IsUpdatingZoom { get; set; }
         private float Target { get; set; }
         private Camera CameraComponent { get; set; }
 
         private void Update()
         {
-            if (!Mathf.Approximately(Target, CameraComponent.orthographicSize))
+            if (!IsUpdatingZoom)
+            {
+                return;
+            }
+
+            if (Mathf.Approximately(Target, CameraComponent.orthographicSize))
+            {
+                IsUpdatingZoom = false;
+            }
+            else
             {
                 CameraComponent.orthographicSize =
                     Mathf.Lerp(CameraComponent.orthographicSize, Target, zoomSpeed * Time.deltaTime);
@@ -26,33 +36,36 @@ namespace Game
 
         private void OnEnable()
         {
+            gameWorldMap.OnPostCreate += OnPostCreate;
             if (CameraComponent == null)
             {
                 CameraComponent = GetComponent<Camera>();
             }
         }
 
-        protected override void OnDestroy()
+        private void OnDisable()
         {
-            gameWorldMap.OnCreate -= OnCreateWorldMap;
-            base.OnDestroy();
-        }
-
-        protected override void OnAwake()
-        {
-            gameWorldMap.OnCreate += OnCreateWorldMap;
+            gameWorldMap.OnPostCreate -= OnPostCreate;
         }
 
         [Button]
-        public void OnCreateWorldMap()
+        public void OnPostCreate()
         {
             if (!IsValid())
             {
                 return;
             }
 
+            Debug.Log("OnPostCreate - Sync Zoom and Camera Position...");
+            ResetZoom();
             CentralizePosition();
             SetOrthographicSize();
+        }
+
+        private void ResetZoom()
+        {
+            const float minValue = 10000f;
+            CameraComponent.orthographicSize = minValue;
         }
 
         private void SetOrthographicSize()
@@ -61,6 +74,7 @@ namespace Game
             var nodeSize = gameWorldMap.WorldMap.Data.Parameters.NodeWorldSize;
             var worldAspect = CalcWorldAspect(worldBounds, nodeSize);
             CalcOrthographicSize(worldAspect, worldBounds, nodeSize);
+            IsUpdatingZoom = true;
         }
 
         private float CalcWorldAspect(Rect worldBounds, Vector2 nodeSize)
@@ -75,8 +89,6 @@ namespace Game
 
         private void CalcOrthographicSize(float worldAspect, Rect worldBounds, Vector2 nodeSize)
         {
-            const float minValue = 10000f; 
-            CameraComponent.orthographicSize = minValue;
             if (gameWorldMap.WorldMap.Data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
             {
                 if (worldAspect > CameraComponent.aspect)
@@ -101,6 +113,10 @@ namespace Game
             }
 
             Target += SMALL_SPACING;
+            if (!gameWorldMap.WorldMap.Data.Parameters.IsAnimation)
+            {
+                CameraComponent.orthographicSize = Target;
+            }
         }
 
         private void CentralizePosition()

@@ -13,7 +13,6 @@ namespace Game.UI
         [SerializeField] private Button generate;
         [SerializeField] private WorldMapParameters parameters;
         [SerializeField] private TMP_InputField amountInput;
-        [SerializeField] private TMP_InputField lineSizeInput;
         [SerializeField] private TMP_InputField amountConnections;
         [SerializeField] private TMP_InputField amountStartInput;
         [SerializeField] private TMP_InputField amountEndInput;
@@ -23,6 +22,7 @@ namespace Game.UI
         [SerializeField] private TMP_InputField nodeWidthInput;
         [SerializeField] private TMP_InputField nodeHeightInput;
         [SerializeField] private Toggle toggleIsRandom;
+        [SerializeField] private Toggle toggleAnimation;
         [SerializeField] private TMP_Dropdown orientationDropdown;
         [SerializeField] private TMP_Dropdown sortMethodDropdown;
         [SerializeField] private TMP_Dropdown debugModeDropdown;
@@ -30,10 +30,9 @@ namespace Game.UI
 
         private void Awake()
         {
-            gameWorldMap.OnCreate += OnCreate;
+            gameWorldMap.OnPostCreate += OnPostCreate;
             generate.onClick.AddListener(Generate);
             amountInput.onValueChanged.AddListener(SetAmount);
-            lineSizeInput.onValueChanged.AddListener(SetLineSize);
             amountConnections.onValueChanged.AddListener(SetAmountConnections);
             amountStartInput.onValueChanged.AddListener(SetAmountStart);
             amountEndInput.onValueChanged.AddListener(SetAmountEnd);
@@ -43,6 +42,7 @@ namespace Game.UI
             nodeWidthInput.onValueChanged.AddListener(SetWidthNode);
             nodeHeightInput.onValueChanged.AddListener(SetHeightNode);
             toggleIsRandom.onValueChanged.AddListener(SetIsRandom);
+            toggleAnimation.onValueChanged.AddListener(SetAnimation);
 
             orientationDropdown.options.Add(
                 new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.LeftRight)));
@@ -78,35 +78,30 @@ namespace Game.UI
             RefreshUI();
         }
 
-        private void SetLineSize(string arg0)
+        private void OnPostCreate()
         {
-            parameters.LineSize = int.Parse(arg0);
-        }
-
-        private void OnCreate()
-        {
-            seedInput.text = gameWorldMap.WorldMap.Random.Seed.ToString();
+            RefreshUI();
         }
 
         private void Generate()
         {
-            parameters.Refresh();
-            RefreshUI();
+            parameters.Create();
         }
 
         private void RefreshUI()
         {
+            Debug.Log("OnPostCreate - Refresh UI...");
             amountInput.text = parameters.Amount.ToString();
             amountConnections.text = parameters.AmountOfRegionConnections.ToString();
             amountStartInput.text = parameters.AmountStart.ToString();
             amountEndInput.text = parameters.AmountEnd.ToString();
-            lineSizeInput.text = parameters.LineSize.ToString();
             seedInput.text = parameters.Seed.ToString();
             worldWidthInput.text = parameters.TotalWorldSize.x.ToString(CultureInfo.InvariantCulture);
             worldHeightInput.text = parameters.TotalWorldSize.y.ToString(CultureInfo.InvariantCulture);
             nodeWidthInput.text = parameters.NodeWorldSize.x.ToString(CultureInfo.InvariantCulture);
             nodeHeightInput.text = parameters.NodeWorldSize.y.ToString(CultureInfo.InvariantCulture);
             toggleIsRandom.isOn = parameters.IsRandomSeed;
+            toggleAnimation.isOn = parameters.IsAnimation;
             orientationDropdown.value = orientationDropdown.options.IndexOf(orientationDropdown.options.Find(x =>
                 Enum.Parse<WorldMapParameters.EOrientationGraph>(x.text) == parameters.Orientation));
             sortMethodDropdown.value = sortMethodDropdown.options.IndexOf(sortMethodDropdown.options.Find(x =>
@@ -139,6 +134,11 @@ namespace Game.UI
         {
             var value = Enum.Parse<WorldMapParameters.EOrientationGraph>(orientationDropdown.options[arg0].text);
             parameters.Orientation = value;
+        }
+
+        private void SetAnimation(bool arg0)
+        {
+            parameters.IsAnimation = arg0;
         }
 
         private void SetIsRandom(bool arg0)
