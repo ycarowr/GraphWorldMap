@@ -80,6 +80,7 @@ namespace Game.UI
 
         private void OnPostCreate()
         {
+            seedInput.text = gameWorldMap.WorldMap.Random.Seed.ToString();
             RefreshUI();
         }
 
