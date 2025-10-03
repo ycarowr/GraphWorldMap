@@ -97,12 +97,6 @@ namespace Tools.WorldMapCore.Database
 
         public bool IsAutoRegion => isAutoRegion;
 
-        public float LineSize
-        {
-            get => lineSize;
-            set => lineSize = value;
-        }
-
         public Region[] Regions
         {
             get => RegionParameters;
@@ -193,19 +187,21 @@ namespace Tools.WorldMapCore.Database
             {
                 const float defaultFontSize = 16f;
                 const float default100x100area = 100;
+                const float defaultFactorArea = defaultFontSize / default100x100area;
                 var area = TotalWorldSize.x * TotalWorldSize.y;
-                return Mathf.Sqrt(area) * defaultFontSize / default100x100area;
+                return Mathf.Sqrt(area) * defaultFactorArea;
             }
         }
 
-        public float LineSize1
+        public float LineSize
         {
             get
             {
                 const float defaultLineSize = 0.15f;
                 const float default100x100area = 100;
+                const float defaultFactorArea = defaultLineSize / default100x100area;
                 var area = TotalWorldSize.x * TotalWorldSize.y;
-                return Mathf.Sqrt(area) * defaultLineSize / default100x100area;
+                return Mathf.Sqrt(area) * defaultFactorArea;
             }
         }
 

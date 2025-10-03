@@ -12,7 +12,6 @@ namespace Game.UI
         [SerializeField] private GameWorldMap gameWorldMap;
         [SerializeField] private Button generate;
         [SerializeField] private WorldMapParameters parameters;
-        [SerializeField] private Slider sliderLineSize;
         [SerializeField] private TMP_InputField amountInput;
         [SerializeField] private TMP_InputField amountConnections;
         [SerializeField] private TMP_InputField amountStartInput;
@@ -34,7 +33,6 @@ namespace Game.UI
             gameWorldMap.OnPostCreate += OnPostCreate;
             generate.onClick.AddListener(Generate);
             amountInput.onValueChanged.AddListener(SetAmount);
-            sliderLineSize.onValueChanged.AddListener(SetLineSize);
             amountConnections.onValueChanged.AddListener(SetAmountConnections);
             amountStartInput.onValueChanged.AddListener(SetAmountStart);
             amountEndInput.onValueChanged.AddListener(SetAmountEnd);
@@ -79,11 +77,6 @@ namespace Game.UI
 
             RefreshUI();
         }
-        
-        private void SetLineSize(float arg0)
-        {
-            parameters.LineSize = arg0;
-        }
 
         private void OnPostCreate()
         {
@@ -102,7 +95,6 @@ namespace Game.UI
             amountConnections.text = parameters.AmountOfRegionConnections.ToString();
             amountStartInput.text = parameters.AmountStart.ToString();
             amountEndInput.text = parameters.AmountEnd.ToString();
-            sliderLineSize.SetValueWithoutNotify(parameters.LineSize);
             seedInput.text = parameters.Seed.ToString();
             worldWidthInput.text = parameters.TotalWorldSize.x.ToString(CultureInfo.InvariantCulture);
             worldHeightInput.text = parameters.TotalWorldSize.y.ToString(CultureInfo.InvariantCulture);
@@ -143,7 +135,7 @@ namespace Game.UI
             var value = Enum.Parse<WorldMapParameters.EOrientationGraph>(orientationDropdown.options[arg0].text);
             parameters.Orientation = value;
         }
-        
+
         private void SetAnimation(bool arg0)
         {
             parameters.IsAnimation = arg0;
