@@ -186,6 +186,28 @@ namespace Tools.WorldMapCore.Database
             get => sortMethod;
             set => sortMethod = value;
         }
+        
+        public float FontSize
+        {
+            get
+            {
+                const float defaultFontSize = 16f;
+                const float default100x100area = 100;
+                var area = TotalWorldSize.x * TotalWorldSize.y;
+                return Mathf.Sqrt(area) * defaultFontSize / default100x100area;
+            }
+        }
+
+        public float LineSize1
+        {
+            get
+            {
+                const float defaultLineSize = 0.15f;
+                const float default100x100area = 100;
+                var area = TotalWorldSize.x * TotalWorldSize.y;
+                return Mathf.Sqrt(area) * defaultLineSize / default100x100area;
+            }
+        }
 
         public TMP_Text DebugDistanceText => debugDistanceText;
 

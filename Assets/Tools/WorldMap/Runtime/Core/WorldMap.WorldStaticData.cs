@@ -6,8 +6,6 @@ namespace Tools.WorldMapCore.Runtime
 {
     public readonly struct WorldMapStaticData
     {
-        // public static readonly Vector2 SMALL_VECTOR = new(SMALL_NUMBER, SMALL_NUMBER);
-        // public const float SMALL_NUMBER = 0.0001f;
         public readonly WorldMapParameters Parameters;
         public readonly Rect WorldBounds;
         public readonly List<Vector3> Start;

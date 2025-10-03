@@ -38,7 +38,7 @@ public class Lines : SingletonMB<Lines>
 
     public void Clear()
     {
-        LineSize = Instance.parameters.LineSize;
+        LineSize = Instance.parameters.LineSize1;
         foreach (var line in LineRegistry)
         {
             Destroy(line.gameObject);

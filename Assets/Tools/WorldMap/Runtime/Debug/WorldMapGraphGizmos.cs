@@ -49,10 +49,11 @@ namespace Tools.WorldMapCore.Runtime
                             text = text[..4];
                         }
 
-                        var position = new Vector3(midpointX, midpointY, 0);
+                        var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
                         var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
                         tmpText.transform.position = position;
                         tmpText.text = text;
+                        tmpText.fontSize = data.Parameters.FontSize;
                     }
                 }
             }

@@ -8,10 +8,11 @@ namespace Tools.WorldMapCore.Runtime
     public static class WorldMapGizmos
     {
         public const float ZPOSITION_REGIONBOUNDS = 0.1f;
-        public const float ZPOSITION_NODES = 0f;
         public const float ZPOSITION_REMOVED_NODES = 0.05f;
+        public const float ZPOSITION_NODES = 0f;
         public const float ZPOSITION_STARTEND_NODES = -0.1f;
         public static readonly Vector3 ZPOSITION_LINES = new Vector3(0, 0, -0.15f);
+        public const float ZPOSITION_DISTANCE = -0.17f;
         
         public static void DrawGizmos(WorldMapStaticData data,
             List<WorldMapNode> nodes,
