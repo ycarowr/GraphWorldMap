@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Lines : SingletonMB<Lines>
 {
-    public const float LineSizeFactor = 1000f;
     private const string LineName = "Line";
     private const string ShaderName = "Sprites/Default";
     private static Shader DefaultShader;
@@ -39,9 +38,7 @@ public class Lines : SingletonMB<Lines>
 
     public void Clear()
     {
-        var worldArea = Instance.parameters.TotalWorldSize.x * Instance.parameters.TotalWorldSize.y;
-        LineSize = Instance.parameters.LineSize / LineSizeFactor * worldArea / (100 * 100);
-
+        LineSize = Instance.parameters.LineSize;
         foreach (var line in LineRegistry)
         {
             Destroy(line.gameObject);

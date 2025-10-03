@@ -113,6 +113,10 @@ namespace Game
             }
 
             Target += SMALL_SPACING;
+            if (!gameWorldMap.WorldMap.Data.Parameters.IsAnimation)
+            {
+                CameraComponent.orthographicSize = Target;
+            }
         }
 
         private void CentralizePosition()

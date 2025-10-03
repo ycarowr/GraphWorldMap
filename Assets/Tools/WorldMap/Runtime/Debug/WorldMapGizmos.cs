@@ -37,7 +37,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(region.Bounds.xMax, region.Bounds.yMax, ZPOSITION_REGIONBOUNDS),
                         new Vector3(region.Bounds.xMax, region.Bounds.yMin, ZPOSITION_REGIONBOUNDS),
                     };
-                    Lines.DrawLineStrip(points, Color.yellow);
+                    Lines.DrawLineStrip(points, new Color(111f/255f, 29f/255f, 27f/255f));
                 }
             }
 
@@ -57,7 +57,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(node.Bounds.xMax, node.Bounds.yMax, ZPOSITION_NODES),
                         new Vector3(node.Bounds.xMax, node.Bounds.yMin, ZPOSITION_NODES),
                     };
-                    Lines.DrawLineStrip(points, Color.green);
+                    Lines.DrawLineStrip(points, new Color(75f/255f, 175f/255f, 40f/255f));
                 }
             }
 

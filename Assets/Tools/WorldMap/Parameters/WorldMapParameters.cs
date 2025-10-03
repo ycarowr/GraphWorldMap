@@ -83,13 +83,21 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] private TMP_Text debugDistanceText;
 
         [SerializeField] private bool isAutoRegion = true;
+        
+        [SerializeField] private bool isAnimation = true;
 
         [SerializeField] [Tooltip("The default line size for runtime. 100x100 area.")]
-        private int lineSize = 125;
+        private float lineSize = 125;
+
+        public bool IsAnimation
+        {
+            get => isAnimation;
+            set => isAnimation = value;
+        }
 
         public bool IsAutoRegion => isAutoRegion;
 
-        public int LineSize
+        public float LineSize
         {
             get => lineSize;
             set => lineSize = value;
