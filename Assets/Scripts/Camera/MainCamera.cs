@@ -22,7 +22,7 @@ namespace Game
             {
                 return;
             }
-            
+
             if (Mathf.Approximately(Target, CameraComponent.orthographicSize))
             {
                 IsUpdatingZoom = false;
@@ -33,7 +33,7 @@ namespace Game
                     Mathf.Lerp(CameraComponent.orthographicSize, Target, zoomSpeed * Time.deltaTime);
             }
         }
-        
+
         private void OnEnable()
         {
             gameWorldMap.OnPostCreate += OnPostCreate;
@@ -124,7 +124,6 @@ namespace Game
         private bool IsValid()
         {
             return gameWorldMap.WorldMap != null;
-            
         }
     }
 }

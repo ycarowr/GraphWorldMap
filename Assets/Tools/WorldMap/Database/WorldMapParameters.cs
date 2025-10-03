@@ -191,7 +191,7 @@ namespace Tools.WorldMapCore.Database
 
 
         [Button]
-        public void Refresh()
+        public void Create()
         {
             FindFirstObjectByType<BaseWorldMapController>().Create();
         }
