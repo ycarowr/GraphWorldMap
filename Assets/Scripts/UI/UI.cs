@@ -30,7 +30,7 @@ namespace Game.UI
 
         private void Awake()
         {
-            gameWorldMap.OnCreate += OnCreate;
+            gameWorldMap.OnPostCreate += OnPostCreate;
             generate.onClick.AddListener(Generate);
             amountInput.onValueChanged.AddListener(SetAmount);
             lineSizeInput.onValueChanged.AddListener(SetLineSize);
@@ -83,19 +83,20 @@ namespace Game.UI
             parameters.LineSize = int.Parse(arg0);
         }
 
-        private void OnCreate()
+        private void OnPostCreate()
         {
             seedInput.text = gameWorldMap.WorldMap.Random.Seed.ToString();
+            RefreshUI();
         }
 
         private void Generate()
         {
             parameters.Refresh();
-            RefreshUI();
         }
 
         private void RefreshUI()
         {
+            Debug.Log("OnPostCreate - Refresh UI...");
             amountInput.text = parameters.Amount.ToString();
             amountConnections.text = parameters.AmountOfRegionConnections.ToString();
             amountStartInput.text = parameters.AmountStart.ToString();

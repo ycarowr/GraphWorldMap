@@ -48,7 +48,15 @@ namespace Tools.WorldMapCore.Runtime
             WorldMap?.OnDrawGizmos();
         }
 
+        /// <summary>
+        ///  Dispatched once the World is Created.
+        /// </summary>
         public event Action OnCreate = () => { };
+        
+        /// <summary>
+        ///  Dispatched right after the World is Created.
+        /// </summary>
+        public event Action OnPostCreate = () => { };
 
         [Button]
         public override void Create()
@@ -92,6 +100,7 @@ namespace Tools.WorldMapCore.Runtime
 
             WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);
             Debug.Log("Refresh Map");
+            OnPostCreate?.Invoke();
         }
 
         private void SetupRoot()

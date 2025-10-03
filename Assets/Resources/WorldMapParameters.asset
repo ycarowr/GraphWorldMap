@@ -37,12 +37,12 @@ MonoBehaviour:
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 981150746
+  seed: 1835229089
   isRandomSeed: 1
   orientation: 2
   amountStart: 3
   amountEnd: 1
-  useAsync: 0
+  useAsync: 1
   amountOfRegionConnections: 1
   DebugValues:
     Mode: 2147483647
