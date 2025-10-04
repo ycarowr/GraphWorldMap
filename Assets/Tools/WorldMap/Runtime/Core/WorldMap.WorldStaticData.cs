@@ -124,5 +124,15 @@ namespace Tools.WorldMapCore.Runtime
 
             return false;
         }
+
+        public bool ValidateStarting()
+        {
+            return Parameters.AmountStart > 0;
+        }
+        
+        public bool ValidateEnding()
+        {
+            return Parameters.AmountEnd > 0;
+        }
     }
 }

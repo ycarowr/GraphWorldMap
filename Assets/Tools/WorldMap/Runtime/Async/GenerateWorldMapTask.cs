@@ -79,6 +79,18 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
             
+            if (!Data.ValidateStarting())
+            {
+                Debug.LogError("The amount of Start nodes has to be greater than zero.");
+                return;
+            }
+            
+            if (!Data.ValidateEnding())
+            {
+                Debug.LogError("The amount of End nodes has to be greater than zero.");
+                return;
+            }
+            
             if (!Data.ValidateAmount())
             {
                 Debug.LogError("The amount of Start plus End nodes is larger than the total amount of nodes.");
