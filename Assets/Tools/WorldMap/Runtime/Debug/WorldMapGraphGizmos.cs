@@ -14,7 +14,7 @@ namespace Tools.WorldMapCore.Runtime
             Color.magenta,
             Color.red,
             Color.cyan,
-            new Color(46 / 255f, 255 / 255f, 87f / 255f),
+            new Color(46f / 255f, 255f / 255f, 87f / 255f),
             new Color(244f / 255f, 164f / 255f, 96f / 255f),
             new Color(151f / 255f, 170f / 255f, 27f / 255f),
         };
@@ -27,6 +27,8 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
+            
+            DrawBounders(data, worldMapRoot);
 
             for (var index = 0; index < graphs.Count; index++)
             {
@@ -50,13 +52,30 @@ namespace Tools.WorldMapCore.Runtime
                         }
 
                         var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
-                        var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
-                        tmpText.transform.position = position;
-                        tmpText.text = text;
-                        tmpText.fontSize = data.Parameters.FontSize;
+                        CreateText(position, data, worldMapRoot, text);
                     }
                 }
             }
+        }
+
+        private static void DrawBounders(WorldMapStaticData data, GameObject worldMapRoot)
+        {
+            var bottomLeft = data.WorldBounds.min;
+            var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
+            var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
+            var topRight = data.WorldBounds.max;
+            CreateText(bottomLeft, data, worldMapRoot, bottomLeft.ToString());
+            CreateText(bottomRight, data, worldMapRoot, bottomRight.ToString());
+            CreateText(topLeft, data, worldMapRoot, topLeft.ToString());
+            CreateText(topRight, data, worldMapRoot, topRight.ToString());
+        }
+
+        private static void CreateText(Vector3 position, WorldMapStaticData data, GameObject worldMapRoot, string text)
+        {
+            var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
+            tmpText.transform.position = position;
+            tmpText.text = text;
+            tmpText.fontSize = data.Parameters.FontSize;
         }
 
         public static void DrawGizmos(List<Graph<WorldMapNode>> graphs,
