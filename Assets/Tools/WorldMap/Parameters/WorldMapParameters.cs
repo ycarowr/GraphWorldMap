@@ -86,9 +86,6 @@ namespace Tools.WorldMapCore.Database
         
         [SerializeField] private bool isAnimation = true;
 
-        [SerializeField] [Tooltip("The default line size for runtime. 100x100 area.")]
-        private float lineSize = 125;
-
         public bool IsAnimation
         {
             get => isAnimation;
