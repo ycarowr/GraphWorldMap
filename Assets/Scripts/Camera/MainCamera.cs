@@ -9,7 +9,9 @@ namespace Game
     public class MainCamera : SingletonMB<MainCamera>
     {
         private const float SMALL_SPACING = 2;
+        private const string Wheel = "Mouse ScrollWheel";
         [SerializeField] private float zoomSpeed = 200;
+        [SerializeField] private float zoomScrollSpeed = 200;
         [SerializeField] private Vector3 offset;
         [SerializeField] private GameWorldMap gameWorldMap;
         private bool IsUpdatingZoom { get; set; }
@@ -20,6 +22,7 @@ namespace Game
         {
             if (!IsUpdatingZoom)
             {
+                HandleZoom();
                 return;
             }
 
@@ -60,6 +63,17 @@ namespace Game
             ResetZoom();
             CentralizePosition();
             SetOrthographicSize();
+        }
+        
+        private void HandleZoom()
+        {
+            var scroll = Input.GetAxis(Wheel);
+            if (scroll != 0)
+            {
+                var currentZoom = CameraComponent.orthographicSize;
+                currentZoom += scroll * zoomScrollSpeed * Time.deltaTime;
+                CameraComponent.orthographicSize = currentZoom;
+            }
         }
 
         private void ResetZoom()

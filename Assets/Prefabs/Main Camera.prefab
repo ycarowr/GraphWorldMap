@@ -153,5 +153,6 @@ MonoBehaviour:
   isDontDestroyOnLoad: 0
   isSilent: 1
   zoomSpeed: 10
+  zoomScrollSpeed: 400
   offset: {x: 0, y: 0, z: -5}
   gameWorldMap: {fileID: 0}
