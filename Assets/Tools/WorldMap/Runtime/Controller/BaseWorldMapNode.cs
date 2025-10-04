@@ -7,21 +7,22 @@ namespace Tools.WorldMapCore.Runtime
     {
         private const string START = "START\n";
         private const string END = "END\n";
-        
+        public static int IndexColor = 0;
         [SerializeField] private GameObject content;
         [SerializeField] private TMP_Text titleText;
 
         public bool IsStarting { get; set; }
         public bool IsEnding { get; set; }
         
-        public void SetNode(WorldMapNode node, int indexColor)
+        public void SetNode(WorldMapNode node)
         {
             titleText.text = node.ID.ToString();
             transform.localPosition = node.Center;
             if (IsStarting)
             {
                 titleText.text = START + titleText.text;
-                titleText.color = WorldMapGraphGizmos.Colors[indexColor];
+                titleText.color = WorldMapGraphGizmos.Colors[IndexColor];
+                IndexColor++;
             }
             if (IsEnding)
             {

@@ -83,8 +83,8 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
+            BaseWorldMapNode.IndexColor = 0;
             var count = WorldMap.Nodes.Count;
-            var indexColor = 0;
             for (var index = 0; index < count; ++index)
             {
                 var node = WorldMap.Nodes[index];
@@ -93,13 +93,12 @@ namespace Tools.WorldMapCore.Runtime
                 if (WorldMap.Start.Contains(node))
                 {
                     worldMapNode.IsStarting = true;
-                    indexColor++;
                 }
                 if (WorldMap.End.Contains(node))
                 {
                     worldMapNode.IsEnding = true;
                 }
-                worldMapNode.SetNode(node, indexColor);
+                worldMapNode.SetNode(node);
             }
 
             if (Application.isPlaying)
