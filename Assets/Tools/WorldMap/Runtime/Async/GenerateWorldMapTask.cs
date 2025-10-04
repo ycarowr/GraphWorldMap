@@ -78,9 +78,15 @@ namespace Tools.WorldMapCore.Runtime
                 Debug.LogError("The requested amount of nodes is too large to fit in the area.");
                 return;
             }
+            
+            if (Data.ValidateAmount())
+            {
+                Debug.LogError("The amount of Start plus End nodes is larger than the total amount of nodes.");
+                return;
+            }
 
             var iterations = Data.Parameters.IsRandomSeed ? Data.Parameters.ParallelIterations : 1;
-            Debug.Log($"Total area valid. Dispatching Iterations...");
+            Debug.Log($"Data valid. Dispatching Iterations...");
 
             if (!Data.Parameters.UseAsync)
             {

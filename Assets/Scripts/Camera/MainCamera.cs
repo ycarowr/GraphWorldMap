@@ -70,16 +70,22 @@ namespace Game
             var scroll = Input.GetAxis(Wheel);
             if (scroll != 0)
             {
+                const int minZoom = 1;
                 var currentZoom = CameraComponent.orthographicSize;
-                currentZoom -= scroll * zoomScrollSpeed * Time.deltaTime;
-                CameraComponent.orthographicSize = currentZoom;
+                var delta = scroll * zoomScrollSpeed * Time.deltaTime;
+                var newValue = currentZoom - delta;
+                if (newValue > minZoom)
+                {
+                    currentZoom = newValue;
+                    CameraComponent.orthographicSize = currentZoom;
+                }
             }
         }
 
         private void ResetZoom()
         {
-            const float minValue = 10000f;
-            CameraComponent.orthographicSize = minValue;
+            const float maxValue = 10000f;
+            CameraComponent.orthographicSize = maxValue;
         }
 
         private void SetOrthographicSize()

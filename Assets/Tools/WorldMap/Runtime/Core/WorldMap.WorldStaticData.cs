@@ -114,5 +114,15 @@ namespace Tools.WorldMapCore.Runtime
             var totalNodeArea = nodeArea * Parameters.Amount;
             return totalNodeArea > totalArea;
         }
+        
+        public bool ValidateAmount()
+        {
+            if (Parameters.Amount > Parameters.AmountStart + Parameters.AmountEnd)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

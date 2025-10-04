@@ -222,7 +222,7 @@ namespace Tools.WorldMapCore.Database
         [Button]
         private void RefreshColors()
         {
-            WorldMapGraphGizmos.colors.Clear();
+            WorldMapGraphGizmos.Colors.Clear();
         }
 
         [Serializable]

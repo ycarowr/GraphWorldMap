@@ -8,7 +8,7 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGraphGizmos
     {
-        public static readonly List<Color> colors = new()
+        public static readonly List<Color> Colors = new()
         {
             Color.blue,
             Color.magenta,
@@ -85,12 +85,12 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             // Setup colors
-            if (colors.Count < graphs.Count + regionConnectionsRegistry.Count)
+            if (Colors.Count < graphs.Count + regionConnectionsRegistry.Count)
             {
-                var delta = graphs.Count + regionConnectionsRegistry.Count - colors.Count;
+                var delta = graphs.Count + regionConnectionsRegistry.Count - Colors.Count;
                 for (var index = 0; index < delta; index++)
                 {
-                    colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+                    Colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
                 }
             }
 
@@ -111,7 +111,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.DrawLineStrip(lines.ToArray(), colors[index], false);
+                Lines.DrawLineStrip(lines.ToArray(), Colors[index], false);
             }
 
             for (var index = 0; index < regionConnectionsRegistry.Count; index++)
@@ -129,7 +129,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
+                Lines.DrawLineList(lines.ToArray(), Colors[graphs.Count + index]);
             }
         }
     }
