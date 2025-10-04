@@ -64,14 +64,14 @@ namespace Game
             CentralizePosition();
             SetOrthographicSize();
         }
-        
+
         private void HandleZoom()
         {
             var scroll = Input.GetAxis(Wheel);
             if (scroll != 0)
             {
                 var currentZoom = CameraComponent.orthographicSize;
-                currentZoom += scroll * zoomScrollSpeed * Time.deltaTime;
+                currentZoom -= scroll * zoomScrollSpeed * Time.deltaTime;
                 CameraComponent.orthographicSize = currentZoom;
             }
         }

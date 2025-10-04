@@ -41,16 +41,7 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
                         var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
-                        var text = nodeB.Value.ToString(CultureInfo.InvariantCulture);
-                        if (text.Length < 4)
-                        {
-                            text = text[..1];
-                        }
-                        else
-                        {
-                            text = text[..4];
-                        }
-
+                        var text = ((int)nodeB.Value).ToString();
                         var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
                         CreateText(position, data, worldMapRoot, text);
                     }
