@@ -31,12 +31,13 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < regions.Length; i++)
                 {
                     var region = regions[i];
+                    var bound = region.Bounds; 
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(region.Bounds.xMin, region.Bounds.yMin, ZPOSITION_REGIONBOUNDS),
-                        new Vector3(region.Bounds.xMin, region.Bounds.yMax, ZPOSITION_REGIONBOUNDS),
-                        new Vector3(region.Bounds.xMax, region.Bounds.yMax, ZPOSITION_REGIONBOUNDS),
-                        new Vector3(region.Bounds.xMax, region.Bounds.yMin, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(bound.xMin, bound.yMin, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(bound.xMin, bound.yMax, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(bound.xMax, bound.yMax, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(bound.xMax, bound.yMin, ZPOSITION_REGIONBOUNDS),
                     };
                     Lines.DrawLineStrip(points, new Color(111f/255f, 29f/255f, 27f/255f));
                 }
@@ -50,13 +51,13 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         continue;
                     }
-                    
+                    var bound = node.Bounds; 
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, ZPOSITION_NODES),
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, ZPOSITION_NODES),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, ZPOSITION_NODES),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, ZPOSITION_NODES),
+                        new Vector3(bound.xMin, bound.yMin, ZPOSITION_NODES),
+                        new Vector3(bound.xMin, bound.yMax, ZPOSITION_NODES),
+                        new Vector3(bound.xMax, bound.yMax, ZPOSITION_NODES),
+                        new Vector3(bound.xMax, bound.yMin, ZPOSITION_NODES),
                     };
                     Lines.DrawLineStrip(points, new Color(75f/255f, 175f/255f, 40f/255f));
                 }
@@ -67,12 +68,13 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < start.Count; i++)
                 {
                     var node = start[i];
+                    var bound = node.Bounds; 
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, ZPOSITION_STARTEND_NODES),
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, ZPOSITION_STARTEND_NODES),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, ZPOSITION_STARTEND_NODES),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMin, bound.yMin, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMin, bound.yMax, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMax, bound.yMax, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMax, bound.yMin, ZPOSITION_STARTEND_NODES),
                     };
                     Lines.DrawLineStrip(points, new Color(60f / 255f, 179f / 255f, 113 / 255f));
                 }
@@ -83,12 +85,13 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < end.Count; i++)
                 {
                     var node = end[i];
+                    var bound = node.Bounds;
                     ReadOnlySpan<Vector3> points = new[]
                     {
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMin, ZPOSITION_STARTEND_NODES),
-                        new Vector3(node.Bounds.xMin, node.Bounds.yMax, ZPOSITION_STARTEND_NODES),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMax, ZPOSITION_STARTEND_NODES),
-                        new Vector3(node.Bounds.xMax, node.Bounds.yMin, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMin, bound.yMin, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMin, bound.yMax, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMax, bound.yMax, ZPOSITION_STARTEND_NODES),
+                        new Vector3(bound.xMax, bound.yMin, ZPOSITION_STARTEND_NODES),
                     };
                     Lines.DrawLineStrip(points, new Color(106f / 255f, 90f / 255f, 205 / 255f));
                 }
@@ -103,12 +106,13 @@ namespace Tools.WorldMapCore.Runtime
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
+                        var bound = node.Bounds;
                         ReadOnlySpan<Vector3> points = new[]
                         {
-                            new Vector3(node.Bounds.xMin, node.Bounds.yMin, ZPOSITION_REMOVED_NODES),
-                            new Vector3(node.Bounds.xMin, node.Bounds.yMax, ZPOSITION_REMOVED_NODES),
-                            new Vector3(node.Bounds.xMax, node.Bounds.yMax, ZPOSITION_REMOVED_NODES),
-                            new Vector3(node.Bounds.xMax, node.Bounds.yMin, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMin, bound.yMin, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMin, bound.yMax, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMax, bound.yMax, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMax, bound.yMin, ZPOSITION_REMOVED_NODES),
                         };
                         Lines.DrawLineStrip(points, Color.red);
                     }
@@ -124,12 +128,13 @@ namespace Tools.WorldMapCore.Runtime
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
+                        var bound = node.Bounds;
                         ReadOnlySpan<Vector3> points = new[]
                         {
-                            new Vector3(node.Bounds.xMin, node.Bounds.yMin, ZPOSITION_REMOVED_NODES),
-                            new Vector3(node.Bounds.xMin, node.Bounds.yMax, ZPOSITION_REMOVED_NODES),
-                            new Vector3(node.Bounds.xMax, node.Bounds.yMax, ZPOSITION_REMOVED_NODES),
-                            new Vector3(node.Bounds.xMax, node.Bounds.yMin, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMin, bound.yMin, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMin, bound.yMax, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMax, bound.yMax, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMax, bound.yMin, ZPOSITION_REMOVED_NODES),
                         };
                         Lines.DrawLineStrip(points, Color.yellow);
                     }
