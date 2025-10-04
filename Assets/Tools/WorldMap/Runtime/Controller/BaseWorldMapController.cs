@@ -83,12 +83,21 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
+            BaseWorldMapNode.IndexColor = 0;
             var count = WorldMap.Nodes.Count;
             for (var index = 0; index < count; ++index)
             {
                 var node = WorldMap.Nodes[index];
                 var worldMapNode = Instantiate(WorldMapNodePrefab, WorldMapRoot.transform);
                 worldMapNode.name = "Node_" + index;
+                if (WorldMap.Start.Contains(node))
+                {
+                    worldMapNode.IsStarting = true;
+                }
+                if (WorldMap.End.Contains(node))
+                {
+                    worldMapNode.IsEnding = true;
+                }
                 worldMapNode.SetNode(node);
             }
 

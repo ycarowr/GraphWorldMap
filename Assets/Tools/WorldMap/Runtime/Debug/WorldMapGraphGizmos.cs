@@ -8,13 +8,13 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static class WorldMapGraphGizmos
     {
-        public static readonly List<Color> colors = new()
+        public static readonly List<Color> Colors = new()
         {
             Color.blue,
             Color.magenta,
             Color.red,
             Color.cyan,
-            new Color(46 / 255f, 255 / 255f, 87f / 255f),
+            new Color(46f / 255f, 255f / 255f, 87f / 255f),
             new Color(244f / 255f, 164f / 255f, 96f / 255f),
             new Color(151f / 255f, 170f / 255f, 27f / 255f),
         };
@@ -27,6 +27,8 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
+            
+            DrawBounders(data, worldMapRoot);
 
             for (var index = 0; index < graphs.Count; index++)
             {
@@ -39,24 +41,32 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
                         var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
-                        var text = nodeB.Value.ToString(CultureInfo.InvariantCulture);
-                        if (text.Length < 4)
-                        {
-                            text = text[..1];
-                        }
-                        else
-                        {
-                            text = text[..4];
-                        }
-
+                        var text = ((int)nodeB.Value).ToString();
                         var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
-                        var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
-                        tmpText.transform.position = position;
-                        tmpText.text = text;
-                        tmpText.fontSize = data.Parameters.FontSize;
+                        CreateText(position, data, worldMapRoot, text);
                     }
                 }
             }
+        }
+
+        private static void DrawBounders(WorldMapStaticData data, GameObject worldMapRoot)
+        {
+            var bottomLeft = data.WorldBounds.min;
+            var bottomRight = data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0);
+            var topLeft = data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax);
+            var topRight = data.WorldBounds.max;
+            CreateText(bottomLeft, data, worldMapRoot, bottomLeft.ToString());
+            CreateText(bottomRight, data, worldMapRoot, bottomRight.ToString());
+            CreateText(topLeft, data, worldMapRoot, topLeft.ToString());
+            CreateText(topRight, data, worldMapRoot, topRight.ToString());
+        }
+
+        private static void CreateText(Vector3 position, WorldMapStaticData data, GameObject worldMapRoot, string text)
+        {
+            var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
+            tmpText.transform.position = position;
+            tmpText.text = text;
+            tmpText.fontSize = data.Parameters.FontSize;
         }
 
         public static void DrawGizmos(List<Graph<WorldMapNode>> graphs,
@@ -75,12 +85,12 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             // Setup colors
-            if (colors.Count < graphs.Count + regionConnectionsRegistry.Count)
+            if (Colors.Count < graphs.Count + regionConnectionsRegistry.Count)
             {
-                var delta = graphs.Count + regionConnectionsRegistry.Count - colors.Count;
+                var delta = graphs.Count + regionConnectionsRegistry.Count - Colors.Count;
                 for (var index = 0; index < delta; index++)
                 {
-                    colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+                    Colors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
                 }
             }
 
@@ -101,7 +111,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.DrawLineStrip(lines.ToArray(), colors[index], false);
+                Lines.DrawLineStrip(lines.ToArray(), Colors[index], false);
             }
 
             for (var index = 0; index < regionConnectionsRegistry.Count; index++)
@@ -119,7 +129,7 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
 
-                Lines.DrawLineList(lines.ToArray(), colors[graphs.Count + index]);
+                Lines.DrawLineList(lines.ToArray(), Colors[graphs.Count + index]);
             }
         }
     }
