@@ -112,7 +112,7 @@ namespace Tools.WorldMapCore.Runtime
             var totalArea = WorldBounds.size.x * WorldBounds.size.y;
             var nodeArea = Parameters.NodeWorldSize.x * Parameters.NodeWorldSize.y;
             var totalNodeArea = nodeArea * Parameters.Amount;
-            return totalNodeArea > totalArea;
+            return totalNodeArea < totalArea;
         }
         
         public bool ValidateAmount()

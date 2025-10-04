@@ -73,13 +73,13 @@ namespace Tools.WorldMapCore.Runtime
             HasStarted = true;
             ResetData();
 
-            if (Data.ValidateTotalArea())
+            if (!Data.ValidateTotalArea())
             {
                 Debug.LogError("The requested amount of nodes is too large to fit in the area.");
                 return;
             }
             
-            if (Data.ValidateAmount())
+            if (!Data.ValidateAmount())
             {
                 Debug.LogError("The amount of Start plus End nodes is larger than the total amount of nodes.");
                 return;

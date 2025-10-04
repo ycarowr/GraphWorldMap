@@ -31,7 +31,7 @@ MonoBehaviour:
       y: 0
       width: 33.333332
       height: 100
-  amount: 70
+  amount: 40
   nodeWorldSize: {x: 6, y: 6}
   totalWorldSize: {x: 100, y: 100}
   iterations: 65536
@@ -39,16 +39,15 @@ MonoBehaviour:
   timeout: 60
   seed: 962750930
   isRandomSeed: 1
-  orientation: 2
+  orientation: 1
   amountStart: 3
   amountEnd: 1
   useAsync: 0
-  amountOfRegionConnections: 1
+  amountOfRegionConnections: 0
   DebugValues:
     Mode: 2147483647
-    DeletionReason: 2147483647
-  sortMethod: 1
+    DeletionReason: 0
+  sortMethod: 2
   debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}
   isAutoRegion: 1
-  isAnimation: 0
-  lineSize: 0.25
+  isAnimation: 1
