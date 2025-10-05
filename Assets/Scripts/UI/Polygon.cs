@@ -9,6 +9,9 @@ public class Polygon : MonoBehaviour
     public Rect two;
     public Rect three;
     public Rect four;
+    public Rect five;
+
+    public Rect[] adjacents;
     
     public void OnDrawGizmos()
     {
@@ -19,14 +22,14 @@ public class Polygon : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(three.center, three.size);
         four = WorldMapHelper.FindRectIntersection(one, two);
+        five = WorldMapHelper.FindRectIntersection(one, three);
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(four.center, four.size);
-    }
+        Gizmos.DrawWireCube(five.center, five.size);
 
-    public void Update()
-    {
-        Debug.Log(WorldMapHelper.CheckOverlapX(one, two) + " " + WorldMapHelper.CheckOverlapY(one, two));
+        adjacents = WorldMapHelper.FindAdjacentRects(one, new[]
+        {
+            two, three
+        });
     }
-
-    
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
@@ -29,10 +31,8 @@ namespace Tools.WorldMapCore.Runtime
             var count = nodes.Count;
             for (var index = 0; index < count; index++)
             {
-                var nodeOverlap = nodes[index];
-                var rectA = new Rect(node.Center, node.Size);
-                var rectB = new Rect(nodeOverlap.Center, nodeOverlap.Size);
-                if (!CheckRectOverlap(rectA, rectB))
+                var current = nodes[index];
+                if (!CheckRectOverlap(node.Bounds, current.Bounds))
                 {
                     return false;
                 }
@@ -43,10 +43,29 @@ namespace Tools.WorldMapCore.Runtime
 
         private static bool CheckRectOverlap(Rect rectA, Rect rectB)
         {
-            return !(rectA.x < rectB.x + rectB.size.x) ||
-                   !(rectA.y < rectB.y + rectB.size.y) ||
-                   !(rectB.x < rectA.x + rectA.size.x) ||
-                   !(rectB.y < rectA.y + rectA.size.y);
+            var point0B = new Vector2(rectB.xMin, rectB.yMin);
+            var point1B = new Vector2(rectB.xMin, rectB.yMax);
+            var point2B = new Vector2(rectB.xMax, rectB.yMax);
+            var point3B = new Vector2(rectB.xMax, rectB.yMin);
+
+            var overlap0B = rectA.Contains(point0B);
+            var overlap1B = rectA.Contains(point1B);
+            var overlap2B = rectA.Contains(point2B);
+            var overlap3B = rectA.Contains(point3B);
+
+            var point0A = new Vector2(rectA.xMin, rectA.yMin);
+            var point1A = new Vector2(rectA.xMin, rectA.yMax);
+            var point2A = new Vector2(rectA.xMax, rectA.yMax);
+            var point3A = new Vector2(rectA.xMax, rectA.yMin);
+
+            var overlap0A = rectB.Contains(point0A);
+            var overlap1A = rectB.Contains(point1A);
+            var overlap2A = rectB.Contains(point2A);
+            var overlap3A = rectB.Contains(point3A);
+
+            var overlapInA = overlap0B || overlap1B || overlap2B || overlap3B;
+            var overlapInB = overlap0A || overlap1A || overlap2A || overlap3A;
+            return !(overlapInA || overlapInB);
         }
 
         public static bool CheckOverlapX(Rect lhs, Rect rhs)
@@ -81,6 +100,73 @@ namespace Tools.WorldMapCore.Runtime
             return false;
         }
 
+        public static Rect[] FindAdjacentRects(Rect target, Rect[] rects)
+        {
+            var adjacents = new List<Rect>();
+            var overlapsX = new List<Rect>();
+            var overlapsY = new List<Rect>();
+            foreach (var current in rects)
+            {
+                if (CheckOverlapX(target, current))
+                {
+                    overlapsX.Add(current);
+                }
+
+                if (CheckOverlapY(target, current))
+                {
+                    overlapsY.Add(current);
+                }
+            }
+            
+            foreach (var right in overlapsX)
+            {
+                var overlapRect = FindRectIntersection(target, right);
+                var isAdjacent = true;
+                foreach (var middle in overlapsX)
+                {
+                    if (middle == right)
+                    {
+                        continue;
+                    }
+
+                    if (!CheckRectOverlap(overlapRect, middle))
+                    {
+                        isAdjacent = false;
+                    }
+                }
+
+                if (isAdjacent)
+                {
+                    adjacents.Add(right);
+                }
+            }
+
+            foreach (var right in overlapsY)
+            {
+                var overlapRect = FindRectIntersection(target, right);
+                var isAdjacent = true;
+                foreach (var middle in overlapsY)
+                {
+                    if (middle == right)
+                    {
+                        continue;
+                    }
+
+                    if (!CheckRectOverlap(overlapRect, middle))
+                    {
+                        isAdjacent = false;
+                    }
+                }
+
+                if (isAdjacent)
+                {
+                    adjacents.Add(right);
+                }
+            }
+
+            return adjacents.ToArray();
+        }
+
         public static Rect FindRectIntersection(Rect lhs, Rect rhs)
         {
             var lhsRight = lhs.center.x + lhs.width / 2;
@@ -98,7 +184,25 @@ namespace Tools.WorldMapCore.Runtime
                 yMin = Mathf.Min(lhsTop, rhsTop),
                 yMax = Mathf.Max(lhsBottom, rhsBottom),
             };
-            return intersection;
+            return intersection.ClearNegativeSize();
+        }
+        
+        public static Rect ClearNegativeSize(this Rect rect)
+        {
+            var newRect = new Rect(rect);
+            if (newRect.width < 0)
+            {
+                newRect.x += newRect.width;
+                newRect.width = Mathf.Abs(newRect.width);
+            }
+
+            if (newRect.height < 0)
+            {
+                newRect.y += newRect.height;
+                newRect.height = Mathf.Abs(newRect.height);
+            }
+
+            return newRect;
         }
     }
 }

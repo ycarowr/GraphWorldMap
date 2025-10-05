@@ -37,6 +37,11 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] private Region[] RegionParameters;
 
+        [SerializeField]
+        private Vector2 minRegionSize = Vector2.one;
+        [SerializeField]
+        private Vector2 maxRegionSize = Vector2.one;
+        
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
 
