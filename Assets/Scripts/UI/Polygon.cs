@@ -1,48 +1,32 @@
+using System;
+using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 
 [ExecuteAlways]
 public class Polygon : MonoBehaviour
 {
-    public Vector3[] vertices;
-    public LineRenderer lineRenderer;
-
-    public void Awake()
+    public Rect one;
+    public Rect two;
+    public Rect three;
+    public Rect four;
+    
+    public void OnDrawGizmos()
     {
-        lineRenderer.SetPositions(vertices);
-        lineRenderer.loop = true;
-        lineRenderer.positionCount = vertices.Length;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(one.center, one.size);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(two.center, two.size);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(three.center, three.size);
+        four = WorldMapHelper.FindRectIntersection(one, two);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(four.center, four.size);
     }
 
-    public void OnEnable()
+    public void Update()
     {
-        lineRenderer.SetPositions(vertices);
-        lineRenderer.loop = true;
-        lineRenderer.positionCount = vertices.Length;
+        Debug.Log(WorldMapHelper.CheckOverlapX(one, two) + " " + WorldMapHelper.CheckOverlapY(one, two));
     }
 
-    //public void OnDrawGizmos()
-    //{
-    //Gizmos.color = Color.cyan;
-    //Gizmos.DrawLineStrip(vertices, true);
-    //Gizmos.DrawWireSphere(CalcCentroid(), 1);
-    //}
-
-
-    public Vector3 CalcCentroid()
-    {
-        if (vertices == null || vertices.Length < 3)
-        {
-            return Vector3.zero;
-        }
-
-        var centroid = Vector3.zero;
-        foreach (var v in vertices)
-        {
-            centroid += v;
-        }
-
-        centroid /= vertices.Length;
-
-        return centroid;
-    }
+    
 }
