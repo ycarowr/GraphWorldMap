@@ -27,7 +27,7 @@ public class Polygon : MonoBehaviour
         Gizmos.DrawWireCube(four.center, four.size);
         Gizmos.DrawWireCube(five.center, five.size);
 
-        adjacents = WorldMapHelper.FindAdjacentRects(one, new[]
+        adjacents = WorldMapHelper.FindAdjacentRects(2 ,one, new[]
         {
             two, three
         });

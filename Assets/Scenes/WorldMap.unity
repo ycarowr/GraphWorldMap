@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 1218493073}
   - component: {fileID: 1218493072}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Polygon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,40 +161,40 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1
-    height: 1
+    height: 0.99
   two:
     serializedVersion: 2
-    x: 1.46
+    x: 1.5
     y: 0
-    width: 1
-    height: 1
+    width: 0.5
+    height: 0.5
   three:
     serializedVersion: 2
-    x: 2.75
-    y: 0
+    x: 2
+    y: 0.77
     width: 1
     height: 1
   four:
     serializedVersion: 2
     x: 1
-    y: 1
-    width: 0.46000004
-    height: -1
+    y: 0
+    width: 0.5
+    height: 0.5
   five:
     serializedVersion: 2
     x: 1
-    y: 1
-    width: 1.75
-    height: -1
+    y: 0.77
+    width: 1
+    height: 0.22000003
   adjacents:
   - serializedVersion: 2
-    x: 1.46
+    x: 1.5
     y: 0
-    width: 1
-    height: 1
+    width: 0.5
+    height: 0.5
   - serializedVersion: 2
-    x: 2.75
-    y: 0
+    x: 2
+    y: 0.77
     width: 1
     height: 1
 --- !u!4 &1218493073

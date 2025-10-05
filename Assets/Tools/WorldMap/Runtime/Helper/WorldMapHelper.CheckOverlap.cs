@@ -100,13 +100,18 @@ namespace Tools.WorldMapCore.Runtime
             return false;
         }
 
-        public static Rect[] FindAdjacentRects(Rect target, Rect[] rects)
+        public static Rect[] FindAdjacentRects(float distance, Rect target, Rect[] rects)
         {
-            var adjacents = new List<Rect>();
+            var adjacent = new List<Rect>();
             var overlapsX = new List<Rect>();
             var overlapsY = new List<Rect>();
             foreach (var current in rects)
             {
+                if (Vector2.Distance(current.center, target.center) > distance)
+                {
+                    continue;
+                }
+                
                 if (CheckOverlapX(target, current))
                 {
                     overlapsX.Add(current);
@@ -137,7 +142,7 @@ namespace Tools.WorldMapCore.Runtime
 
                 if (isAdjacent)
                 {
-                    adjacents.Add(right);
+                    adjacent.Add(right);
                 }
             }
 
@@ -160,11 +165,11 @@ namespace Tools.WorldMapCore.Runtime
 
                 if (isAdjacent)
                 {
-                    adjacents.Add(right);
+                    adjacent.Add(right);
                 }
             }
 
-            return adjacents.ToArray();
+            return adjacent.ToArray();
         }
 
         public static Rect FindRectIntersection(Rect lhs, Rect rhs)
