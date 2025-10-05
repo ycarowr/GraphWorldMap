@@ -71,7 +71,7 @@ namespace Game.UI
             deletionDropdown.options.Add(
                 new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.Overlap)));
             deletionDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfBounds)));
+                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfWorldBounds)));
             deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.All)));
             deletionDropdown.onValueChanged.AddListener(SetDeletion);
 

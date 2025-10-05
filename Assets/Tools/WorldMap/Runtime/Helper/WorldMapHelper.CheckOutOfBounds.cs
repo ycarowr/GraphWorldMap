@@ -4,7 +4,7 @@ namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static bool CheckBounds(WorldMapNode node, WorldMapStaticData data)
+        public static bool CheckWorldBounds(WorldMapNode node, WorldMapStaticData data)
         {
             var worldBounds = data.WorldBounds;
             var nodeBounds = node.Bounds;
@@ -22,6 +22,20 @@ namespace Tools.WorldMapCore.Runtime
                    rectA.Contains(point1) &&
                    rectA.Contains(point2) &&
                    rectA.Contains(point3);
+        }
+
+        public static bool CheckRegionBounds(WorldMapNode newNode, WorldMapStaticData data)
+        {
+            var regions = data.Parameters.Regions;
+            var nodeBounds = newNode.Bounds;
+
+            var isOutOfBounds = false;
+            foreach (var region in regions)
+            {
+                isOutOfBounds |= CheckRectContains(region.Bounds, nodeBounds);
+            }
+
+            return isOutOfBounds;
         }
     }
 }

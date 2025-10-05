@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        //https://wrfranklin.org/Research/Short_Notes/pnpoly.html
-        public static bool CheckPointOverlapPolygon(Vector3[] vert, Vector3 test)
+        /// <summary>
+        ///     Checks whether a point overlaps with a polygon.
+        ///     See more: https://wrfranklin.org/Research/Short_Notes/pnpoly.html
+        /// </summary>
+        private static bool CheckPointOverlapPolygon(Vector3[] vert, Vector3 test)
         {
             var nvert = vert.Length;
             var isHit = false;
@@ -41,6 +42,10 @@ namespace Tools.WorldMapCore.Runtime
             return true;
         }
 
+        /// <summary>
+        ///     Checks whether two rectangles overlap.
+        ///     Lots of things can be optimized.
+        /// </summary>
         private static bool CheckRectOverlap(Rect rectA, Rect rectB)
         {
             var point0B = new Vector2(rectB.xMin, rectB.yMin);
@@ -68,7 +73,7 @@ namespace Tools.WorldMapCore.Runtime
             return !(overlapInA || overlapInB);
         }
 
-        public static bool CheckOverlapX(Rect lhs, Rect rhs)
+        private static bool CheckOverlapX(Rect lhs, Rect rhs)
         {
             var left = lhs.center.x < rhs.center.x ? lhs : rhs;
             var right = lhs.center.x < rhs.center.x ? rhs : lhs;
@@ -84,7 +89,7 @@ namespace Tools.WorldMapCore.Runtime
             return false;
         }
 
-        public static bool CheckOverlapY(Rect lhs, Rect rhs)
+        private static bool CheckOverlapY(Rect lhs, Rect rhs)
         {
             var bottom = lhs.center.y < rhs.center.y ? lhs : rhs;
             var top = lhs.center.y < rhs.center.y ? rhs : lhs;
@@ -111,7 +116,7 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     continue;
                 }
-                
+
                 if (CheckOverlapX(target, current))
                 {
                     overlapsX.Add(current);
@@ -122,7 +127,7 @@ namespace Tools.WorldMapCore.Runtime
                     overlapsY.Add(current);
                 }
             }
-            
+
             foreach (var right in overlapsX)
             {
                 var overlapRect = FindRectIntersection(target, right);
@@ -189,10 +194,10 @@ namespace Tools.WorldMapCore.Runtime
                 yMin = Mathf.Min(lhsTop, rhsTop),
                 yMax = Mathf.Max(lhsBottom, rhsBottom),
             };
-            return intersection.ClearNegativeSize();
+            return intersection.Sanitize();
         }
-        
-        public static Rect ClearNegativeSize(this Rect rect)
+
+        private static Rect Sanitize(this Rect rect)
         {
             var newRect = new Rect(rect);
             if (newRect.width < 0)

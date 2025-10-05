@@ -11,14 +11,14 @@ namespace Tools.WorldMapCore.Runtime
         public const float ZPOSITION_REMOVED_NODES = 0.05f;
         public const float ZPOSITION_NODES = 0f;
         public const float ZPOSITION_STARTEND_NODES = -0.1f;
-        public static readonly Vector3 ZPOSITION_LINES = new Vector3(0, 0, -0.15f);
         public const float ZPOSITION_DISTANCE = -0.17f;
-        
+        public static readonly Vector3 ZPOSITION_LINES = new(0, 0, -0.15f);
+
         public static void DrawGizmos(WorldMapStaticData data,
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
             List<WorldMapNode> end,
-            Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> deletions)
+            Dictionary<EDeletionReason, List<WorldMapNode>> deletions)
         {
             if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
                 data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.Nodes)
@@ -31,7 +31,7 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < regions.Length; i++)
                 {
                     var region = regions[i];
-                    var bound = region.Bounds; 
+                    var bound = region.Bounds;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(bound.xMin, bound.yMin, ZPOSITION_REGIONBOUNDS),
@@ -39,7 +39,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(bound.xMax, bound.yMax, ZPOSITION_REGIONBOUNDS),
                         new Vector3(bound.xMax, bound.yMin, ZPOSITION_REGIONBOUNDS),
                     };
-                    Lines.DrawLineStrip(points, new Color(111f/255f, 29f/255f, 27f/255f));
+                    Lines.DrawLineStrip(points, new Color(111f / 255f, 29f / 255f, 27f / 255f));
                 }
             }
 
@@ -51,7 +51,8 @@ namespace Tools.WorldMapCore.Runtime
                     {
                         continue;
                     }
-                    var bound = node.Bounds; 
+
+                    var bound = node.Bounds;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(bound.xMin, bound.yMin, ZPOSITION_NODES),
@@ -59,7 +60,7 @@ namespace Tools.WorldMapCore.Runtime
                         new Vector3(bound.xMax, bound.yMax, ZPOSITION_NODES),
                         new Vector3(bound.xMax, bound.yMin, ZPOSITION_NODES),
                     };
-                    Lines.DrawLineStrip(points, new Color(75f/255f, 175f/255f, 40f/255f));
+                    Lines.DrawLineStrip(points, new Color(75f / 255f, 175f / 255f, 40f / 255f));
                 }
             }
 
@@ -68,7 +69,7 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < start.Count; i++)
                 {
                     var node = start[i];
-                    var bound = node.Bounds; 
+                    var bound = node.Bounds;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(bound.xMin, bound.yMin, ZPOSITION_STARTEND_NODES),
@@ -97,12 +98,12 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            var isAll = data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.All;
+            var isAll = data.Parameters.DebugValues.DeletionReason == EDeletionReason.All;
             {
-                if (isAll || data.Parameters.DebugValues.DeletionReason == WorldMapParameters.EDeletionReason.Overlap)
+                if (isAll || data.Parameters.DebugValues.DeletionReason == EDeletionReason.Overlap)
                 {
                     // Draw Overlap
-                    var deleted = deletions[WorldMapParameters.EDeletionReason.Overlap];
+                    var deleted = deletions[EDeletionReason.Overlap];
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
@@ -121,10 +122,32 @@ namespace Tools.WorldMapCore.Runtime
 
             {
                 if (isAll || data.Parameters.DebugValues.DeletionReason ==
-                    WorldMapParameters.EDeletionReason.OutOfBounds)
+                    EDeletionReason.OutOfWorldBounds)
                 {
-                    // Draw Bounds
-                    var deleted = deletions[WorldMapParameters.EDeletionReason.OutOfBounds];
+                    // Draw Out of World Bounds
+                    var deleted = deletions[EDeletionReason.OutOfWorldBounds];
+                    for (var i = 0; i < deleted.Count; i++)
+                    {
+                        var node = deleted[i];
+                        var bound = node.Bounds;
+                        ReadOnlySpan<Vector3> points = new[]
+                        {
+                            new Vector3(bound.xMin, bound.yMin, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMin, bound.yMax, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMax, bound.yMax, ZPOSITION_REMOVED_NODES),
+                            new Vector3(bound.xMax, bound.yMin, ZPOSITION_REMOVED_NODES),
+                        };
+                        Lines.DrawLineStrip(points, Color.yellow);
+                    }
+                }
+            }
+
+            {
+                if (isAll || data.Parameters.DebugValues.DeletionReason ==
+                    EDeletionReason.OutOfRegionBounds)
+                {
+                    // Draw Out of Region Bounds
+                    var deleted = deletions[EDeletionReason.OutOfRegionBounds];
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];

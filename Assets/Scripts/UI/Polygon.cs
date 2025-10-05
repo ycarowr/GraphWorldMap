@@ -1,4 +1,3 @@
-using System;
 using Tools.WorldMapCore.Runtime;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public class Polygon : MonoBehaviour
     public Rect five;
 
     public Rect[] adjacents;
-    
+
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
@@ -27,9 +26,9 @@ public class Polygon : MonoBehaviour
         Gizmos.DrawWireCube(four.center, four.size);
         Gizmos.DrawWireCube(five.center, five.size);
 
-        adjacents = WorldMapHelper.FindAdjacentRects(2 ,one, new[]
+        adjacents = WorldMapHelper.FindAdjacentRects(2, one, new[]
         {
-            two, three
+            two, three,
         });
     }
 }

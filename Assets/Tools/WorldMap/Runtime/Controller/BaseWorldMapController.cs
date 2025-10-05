@@ -49,12 +49,12 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         /// <summary>
-        ///  Dispatched once the World is Created.
+        ///     Dispatched once the World is Created.
         /// </summary>
         public event Action OnCreate = () => { };
-        
+
         /// <summary>
-        ///  Dispatched right after the World is Created.
+        ///     Dispatched right after the World is Created.
         /// </summary>
         public event Action OnPostCreate = () => { };
 
@@ -94,10 +94,12 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     worldMapNode.IsStarting = true;
                 }
+
                 if (WorldMap.End.Contains(node))
                 {
                     worldMapNode.IsEnding = true;
                 }
+
                 worldMapNode.SetNode(node);
             }
 

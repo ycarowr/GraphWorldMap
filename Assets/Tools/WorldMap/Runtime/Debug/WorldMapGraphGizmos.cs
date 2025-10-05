@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
-            
+
             DrawBounders(data, worldMapRoot);
 
             for (var index = 0; index < graphs.Count; index++)

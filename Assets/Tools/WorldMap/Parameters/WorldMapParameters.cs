@@ -1,5 +1,4 @@
 ﻿using System;
-using Game;
 using TMPro;
 using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
@@ -10,38 +9,15 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        public enum EDeletionReason
-        {
-            None = 0,
-            Overlap = 1,
-            OutOfBounds = 2,
-
-            All = int.MaxValue,
-        }
-
-        // Orientation is used to sort and display the graph.
-        public enum EOrientationGraph
-        {
-            None = 0,
-            LeftRight = 1, // the direction is Left to Right
-            BottomTop = 2, // the direction is Bottom to Top
-        }
-
-        // Sorting method is used to order the nodes in the graph.
-        public enum ESortMethod
-        {
-            None = 0,
-            Axis = 1, // the order of the nodes is created based on the X or Y position.
-            Distance = 2, // the order of the nodes is created based on the distance to the end point.
-        }
-
         [SerializeField] private Region[] RegionParameters;
 
-        [SerializeField]
-        private Vector2 minRegionSize = Vector2.one;
-        [SerializeField]
-        private Vector2 maxRegionSize = Vector2.one;
-        
+        [SerializeField] [Tooltip("Total amount of regions that will be created.")]
+        private int amountRegions = 6;
+
+        [SerializeField] private Vector2 minRegionSize = Vector2.one;
+
+        [SerializeField] private Vector2 maxRegionSize = Vector2.one;
+
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
 
@@ -88,7 +64,7 @@ namespace Tools.WorldMapCore.Database
         [SerializeField] private TMP_Text debugDistanceText;
 
         [SerializeField] private bool isAutoRegion = true;
-        
+
         [SerializeField] private bool isAnimation = true;
 
         public bool IsAnimation
@@ -121,6 +97,16 @@ namespace Tools.WorldMapCore.Database
         {
             get => totalWorldSize;
             set => totalWorldSize = value;
+        }
+
+        public Vector2 MinRegionSize => minRegionSize;
+
+        public Vector2 MaxRegionSize => maxRegionSize;
+
+        public int AmountRegions
+        {
+            get => amountRegions;
+            set => amountRegions = value;
         }
 
         public int Iterations => iterations;
@@ -182,7 +168,7 @@ namespace Tools.WorldMapCore.Database
             get => sortMethod;
             set => sortMethod = value;
         }
-        
+
         public float FontSize
         {
             get

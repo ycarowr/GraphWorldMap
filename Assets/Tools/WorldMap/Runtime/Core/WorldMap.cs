@@ -9,7 +9,7 @@ namespace Tools.WorldMapCore.Runtime
     {
         public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly WorldMapStaticData Data;
-        private readonly Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> Deletions;
+        private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
         public readonly List<WorldMapNode> End;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly List<WorldMapNode> Nodes;
@@ -26,10 +26,11 @@ namespace Tools.WorldMapCore.Runtime
             End = new List<WorldMapNode>();
             GraphsRegistry = new List<Graph<WorldMapNode>>();
             ConnectionsRegistry = new List<Graph<WorldMapNode>>();
-            Deletions = new Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>>
+            Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
             {
-                { WorldMapParameters.EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
-                { WorldMapParameters.EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { EDeletionReason.OutOfWorldBounds, new List<WorldMapNode>() },
+                { EDeletionReason.OutOfRegionBounds, new List<WorldMapNode>() },
             };
 
             // Starting
@@ -89,16 +90,23 @@ namespace Tools.WorldMapCore.Runtime
 
             if (WorldMapHelper.CheckOverlap(newNode, Nodes))
             {
-                if (WorldMapHelper.CheckBounds(newNode, Data))
+                if (WorldMapHelper.CheckWorldBounds(newNode, Data))
                 {
-                    return newNode;
-                }
+                    if (WorldMapHelper.CheckRegionBounds(newNode, Data))
+                    {
+                        return newNode;
+                    }
 
-                Deletions[WorldMapParameters.EDeletionReason.OutOfBounds].Add(newNode);
+                    Deletions[EDeletionReason.OutOfRegionBounds].Add(newNode);
+                }
+                else
+                {
+                    Deletions[EDeletionReason.OutOfWorldBounds].Add(newNode);
+                }
             }
             else
             {
-                Deletions[WorldMapParameters.EDeletionReason.Overlap].Add(newNode);
+                Deletions[EDeletionReason.Overlap].Add(newNode);
             }
 
             return null;

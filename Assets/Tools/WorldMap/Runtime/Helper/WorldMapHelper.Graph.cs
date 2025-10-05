@@ -113,7 +113,7 @@ namespace Tools.WorldMapCore.Runtime
 
                     List<WorldMapNode> sort;
                     List<WorldMapNode> sortNext;
-                    if (data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.BottomTop)
+                    if (data.Parameters.Orientation == EOrientationGraph.BottomTop)
                     {
                         sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
                         sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
@@ -136,7 +136,9 @@ namespace Tools.WorldMapCore.Runtime
                         sortNext.Remove(node);
                     }
 
-                    for (var connectionCount = 0; connectionCount < data.Parameters.AmountOfRegionConnections; connectionCount++)
+                    for (var connectionCount = 0;
+                         connectionCount < data.Parameters.AmountOfRegionConnections;
+                         connectionCount++)
                     {
                         if (sort.Count <= 0)
                         {
@@ -174,13 +176,13 @@ namespace Tools.WorldMapCore.Runtime
             {
                 var end = graphRegistry[index].Nodes.Last();
                 var graph = graphRegistry[index];
-                if (data.Parameters.SortingMethod == WorldMapParameters.ESortMethod.Distance)
+                if (data.Parameters.SortingMethod == ESortMethod.Distance)
                 {
                     graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bounds.center));
                 }
                 else
                 {
-                    if (data.Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
+                    if (data.Parameters.Orientation == EOrientationGraph.LeftRight)
                     {
                         graph.Nodes.Sort(new WorldMapNodeCompareLeftRight());
                     }

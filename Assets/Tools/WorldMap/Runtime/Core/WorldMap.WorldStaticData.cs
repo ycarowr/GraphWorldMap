@@ -22,7 +22,7 @@ namespace Tools.WorldMapCore.Runtime
             if (parameters.IsAutoRegion)
             {
                 var regions = new List<WorldMapParameters.Region>();
-                if (Parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
+                if (Parameters.Orientation == EOrientationGraph.LeftRight)
                 {
                     var regionSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
                     var worldMinX = WorldBounds.xMin;
@@ -67,14 +67,14 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < amountStart; index++)
             {
                 var worldPosition = Vector2.zero;
-                if (parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
+                if (parameters.Orientation == EOrientationGraph.LeftRight)
                 {
                     var segment = WorldBounds.size.y / (amountStart + 1);
                     worldPosition.y = segment * (index + 1);
                     worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2; // - SMALL_NUMBER;
                 }
 
-                if (parameters.Orientation == WorldMapParameters.EOrientationGraph.BottomTop)
+                if (parameters.Orientation == EOrientationGraph.BottomTop)
                 {
                     var segment = WorldBounds.size.x / (amountStart + 1);
                     worldPosition.x = segment * (index + 1);
@@ -89,14 +89,14 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < amountEnd; index++)
             {
                 var worldPosition = Vector2.zero;
-                if (parameters.Orientation == WorldMapParameters.EOrientationGraph.LeftRight)
+                if (parameters.Orientation == EOrientationGraph.LeftRight)
                 {
                     var segment = WorldBounds.size.y / (amountEnd + 1);
                     worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2; // + SMALL_NUMBER;
                     worldPosition.y = segment * (index + 1);
                 }
 
-                if (parameters.Orientation == WorldMapParameters.EOrientationGraph.BottomTop)
+                if (parameters.Orientation == EOrientationGraph.BottomTop)
                 {
                     var segment = WorldBounds.size.x / (amountEnd + 1);
                     worldPosition.x = segment * (index + 1);
@@ -114,7 +114,7 @@ namespace Tools.WorldMapCore.Runtime
             var totalNodeArea = nodeArea * Parameters.Amount;
             return totalNodeArea < totalArea;
         }
-        
+
         public bool ValidateAmount()
         {
             if (Parameters.Amount > Parameters.AmountStart + Parameters.AmountEnd)
@@ -129,7 +129,7 @@ namespace Tools.WorldMapCore.Runtime
         {
             return Parameters.AmountStart > 0;
         }
-        
+
         public bool ValidateEnding()
         {
             return Parameters.AmountEnd > 0;

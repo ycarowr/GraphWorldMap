@@ -78,19 +78,19 @@ namespace Tools.WorldMapCore.Runtime
                 Debug.LogError("The requested amount of nodes is too large to fit in the area.");
                 return;
             }
-            
+
             if (!Data.ValidateStarting())
             {
                 Debug.LogError("The amount of Start nodes has to be greater than zero.");
                 return;
             }
-            
+
             if (!Data.ValidateEnding())
             {
                 Debug.LogError("The amount of End nodes has to be greater than zero.");
                 return;
             }
-            
+
             if (!Data.ValidateAmount())
             {
                 Debug.LogError("The amount of Start plus End nodes is larger than the total amount of nodes.");
@@ -98,7 +98,7 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             var iterations = Data.Parameters.IsRandomSeed ? Data.Parameters.ParallelIterations : 1;
-            Debug.Log($"Data valid. Dispatching Iterations...");
+            Debug.Log("Data valid. Dispatching Iterations...");
 
             if (!Data.Parameters.UseAsync)
             {
