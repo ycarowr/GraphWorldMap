@@ -35,7 +35,6 @@ namespace Tools.WorldMapCore.Runtime
         {
             if (PerfectWorldMap != null)
             {
-                //Debug.Log($"Skipped {index}");
                 return;
             }
 
@@ -102,6 +101,8 @@ namespace Tools.WorldMapCore.Runtime
 
             if (!Data.Parameters.UseAsync)
             {
+                // If we don't use async the dispatches each
+                // iteration one by one
                 for (var index = 0; index < iterations; index++)
                 {
                     GenerateWorldMapIteration(index);
@@ -111,6 +112,7 @@ namespace Tools.WorldMapCore.Runtime
                 return;
             }
 
+            // If we are using async. We schedule the tasks.
             for (var i = 0; i < iterations; i++)
             {
                 var index = i;
