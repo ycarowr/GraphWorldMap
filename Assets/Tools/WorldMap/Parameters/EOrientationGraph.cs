@@ -1,7 +1,7 @@
 ﻿namespace Tools.WorldMapCore.Database
 {
     /// <summary>
-    /// Orientation is used to sort and display the graph.
+    ///     Orientation is used to sort and display the graph.
     /// </summary>
     public enum EOrientationGraph
     {

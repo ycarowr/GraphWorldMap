@@ -15,11 +15,11 @@ namespace Tools.WorldMapCore.Runtime
             RegisterRegionGraphs(graphRegistry, data);
             IndexNodesByRegion(graphRegistry, data, nodes, starting, ending);
             SanitizeRegions(graphRegistry, data);
-            RegisterStartNodes(graphRegistry, starting);
-            RegisterEndNodes(graphRegistry, ending);
+            RegisterStartNodes(graphRegistry, data, starting);
+            RegisterEndNodes(graphRegistry, data, ending);
             SortNodes(graphRegistry, data);
             ConnectAllNodes(graphRegistry, data, starting, ending);
-            
+
             /*
             RegisterStartNodes(graphRegistry, starting, data);
             IndexNodesByLanes(graphRegistry, data, nodes, starting, ending);
@@ -75,7 +75,7 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     continue;
                 }
-                
+
                 var minX = float.MaxValue;
                 var minY = float.MaxValue;
                 var maxX = float.MinValue;
@@ -98,7 +98,9 @@ namespace Tools.WorldMapCore.Runtime
                 };
                 sanitizedRect.Sanitize();
                 data.SanitizedRegions.Add(sanitizedRect);
-            };
+            }
+
+            ;
         }
 
         private static void ConnectMissingStartNodes(List<Graph<WorldMapNode>> graphRegistry, List<WorldMapNode> nodes,
@@ -250,7 +252,7 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         private static void IndexNodesByRegion(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data,
-            List<WorldMapNode> nodes, 
+            List<WorldMapNode> nodes,
             List<WorldMapNode> starting,
             List<WorldMapNode> ending)
         {
@@ -273,29 +275,85 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        private static void RegisterStartNodes(
-            List<Graph<WorldMapNode>> graphRegistry,
+        private static void RegisterStartNodes(List<Graph<WorldMapNode>> graphRegistry,
+            WorldMapStaticData data,
             List<WorldMapNode> starting)
         {
-            foreach (var graph in graphRegistry)
+            var isVertical = data.Parameters.Orientation == EOrientationGraph.BottomTop;
+            var regions = data.Parameters.Regions;
+            for (var index = 0; index < graphRegistry.Count; index++)
             {
-                var Index = FindNearestIndex(graph, starting);
-                if (Index == -1)
+                var graph = graphRegistry[index];
+                var currentRegion = regions[index];
+                var shouldConnectWithStart = true;
+
+                foreach (var region in regions)
+                {
+                    if (currentRegion == region)
+                    {
+                        continue;
+                    }
+
+                    if (isVertical)
+                    {
+                        shouldConnectWithStart &= !region.Bounds.IsOnBottom(currentRegion.Bounds);
+                    }
+                    else
+                    {
+                        shouldConnectWithStart &= !region.Bounds.IsOnLeft(currentRegion.Bounds);
+                    }
+                }
+
+                if (!shouldConnectWithStart)
                 {
                     continue;
                 }
 
-                var end = starting[Index];
-                graph.Register(end);
+                var nearestIndex = FindNearestIndex(graph, starting);
+                if (nearestIndex == -1)
+                {
+                    continue;
+                }
+
+                var start = starting[nearestIndex];
+                graph.Register(start);
             }
         }
-        
-        private static void RegisterEndNodes(
-            List<Graph<WorldMapNode>> graphRegistry,
+
+        private static void RegisterEndNodes(List<Graph<WorldMapNode>> graphRegistry,
+            WorldMapStaticData data,
             List<WorldMapNode> ending)
         {
-            foreach (var graph in graphRegistry)
+            var isVertical = data.Parameters.Orientation == EOrientationGraph.BottomTop;
+            var regions = data.Parameters.Regions;
+            for (var index = 0; index < graphRegistry.Count; index++)
             {
+                var graph = graphRegistry[index];
+                var currentRegion = regions[index];
+                var shouldConnectWithEnd = true;
+
+                foreach (var region in regions)
+                {
+                    if (currentRegion == region)
+                    {
+                        continue;
+                    }
+
+                    if (isVertical)
+                    {
+                        shouldConnectWithEnd &= !region.Bounds.IsOnTop(currentRegion.Bounds);
+                    }
+                    else
+                    {
+                        shouldConnectWithEnd &= !region.Bounds.IsOnRight(currentRegion.Bounds);
+                    }
+                }
+
+                if (!shouldConnectWithEnd)
+                {
+                    continue;
+                }
+
                 var endIndex = FindNearestIndex(graph, ending);
                 if (endIndex == -1)
                 {
@@ -306,7 +364,7 @@ namespace Tools.WorldMapCore.Runtime
                 graph.Register(end);
             }
         }
-        
+
         private static int FindNearestRegionIndex(WorldMapNode node, WorldMapStaticData data)
         {
             var regions = data.Parameters.Regions;
@@ -316,7 +374,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < regions.Length; index++)
             {
                 var region = regions[index];
-                var distance  = Vector3.Distance(node.Bounds.center, region.Bounds.center);
+                var distance = Vector3.Distance(node.Bounds.center, region.Bounds.center);
                 var distanceEdge =
                     data.Parameters.Orientation == EOrientationGraph.BottomTop
                         ? Mathf.Abs(region.Bounds.yMin - node.Bounds.center.y)
@@ -345,7 +403,7 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     continue;
                 }
-                
+
                 var distance = Vector3.Distance(start.Bounds.center, node.Bounds.center);
                 if (distance < nearestNodeDistance)
                 {
@@ -353,7 +411,7 @@ namespace Tools.WorldMapCore.Runtime
                     nearestNodeDistance = distance;
                 }
             }
-            
+
             return FindNodeRegionIndex(nearestNode, data);
         }
 

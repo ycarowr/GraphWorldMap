@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEngine;
 
@@ -17,7 +16,7 @@ namespace Tools.WorldMapCore.Runtime
         {
             Parameters = parameters;
             WorldBounds = worldBounds;
-            SanitizedRegions =  new List<Rect>();
+            SanitizedRegions = new List<Rect>();
             var amountStart = parameters.AmountStart;
             var amountEnd = parameters.AmountEnd;
 

@@ -1,7 +1,7 @@
 ﻿namespace Tools.WorldMapCore.Database
 {
     /// <summary>
-    /// Sorting method is used to order the nodes in the graph. 
+    ///     Sorting method is used to order the nodes in the graph.
     /// </summary>
     public enum ESortMethod
     {

@@ -73,7 +73,7 @@ namespace Tools.WorldMapCore.Runtime
                     Nodes.Add(generated);
                 }
             }
-            
+
             WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End);
         }
 

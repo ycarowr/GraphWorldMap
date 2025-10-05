@@ -1,7 +1,7 @@
 ﻿namespace Tools.WorldMapCore.Database
 {
     /// <summary>
-    ///  Reason why a node was not generated.
+    ///     Reason why a node was not generated.
     /// </summary>
     public enum EDeletionReason
     {

@@ -41,7 +41,7 @@ namespace Tools.WorldMapCore.Runtime
                     };
                     Lines.DrawLineStrip(points, new Color(111f / 255f, 29f / 255f, 27f / 255f));
                 }
-                
+
                 var sanitizedRegions = data.SanitizedRegions;
                 for (var i = 0; i < sanitizedRegions.Count; i++)
                 {
