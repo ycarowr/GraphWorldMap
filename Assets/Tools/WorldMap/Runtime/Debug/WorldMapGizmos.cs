@@ -41,6 +41,20 @@ namespace Tools.WorldMapCore.Runtime
                     };
                     Lines.DrawLineStrip(points, new Color(111f / 255f, 29f / 255f, 27f / 255f));
                 }
+                
+                var sanitizedRegions = data.SanitizedRegions;
+                for (var i = 0; i < sanitizedRegions.Count; i++)
+                {
+                    var region = sanitizedRegions[i];
+                    ReadOnlySpan<Vector3> points = new[]
+                    {
+                        new Vector3(region.xMin, region.yMin, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(region.xMin, region.yMax, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(region.xMax, region.yMax, ZPOSITION_REGIONBOUNDS),
+                        new Vector3(region.xMax, region.yMin, ZPOSITION_REGIONBOUNDS),
+                    };
+                    Lines.DrawLineStrip(points, Color.red);
+                }
             }
 
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEngine;
 
@@ -10,11 +11,13 @@ namespace Tools.WorldMapCore.Runtime
         public readonly Rect WorldBounds;
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
+        public readonly List<Rect> SanitizedRegions;
 
         public WorldMapStaticData(WorldMapParameters parameters, Rect worldBounds)
         {
             Parameters = parameters;
             WorldBounds = worldBounds;
+            SanitizedRegions =  new List<Rect>();
             var amountStart = parameters.AmountStart;
             var amountEnd = parameters.AmountEnd;
 

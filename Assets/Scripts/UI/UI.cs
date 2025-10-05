@@ -45,14 +45,14 @@ namespace Game.UI
             toggleAnimation.onValueChanged.AddListener(SetAnimation);
 
             orientationDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.LeftRight)));
+                new TMP_Dropdown.OptionData(nameof(EOrientationGraph.LeftRight)));
             orientationDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.BottomTop)));
+                new TMP_Dropdown.OptionData(nameof(EOrientationGraph.BottomTop)));
             orientationDropdown.onValueChanged.AddListener(SetOrientation);
 
-            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Axis)));
+            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(ESortMethod.Axis)));
             sortMethodDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Distance)));
+                new TMP_Dropdown.OptionData(nameof(ESortMethod.Distance)));
             sortMethodDropdown.onValueChanged.AddListener(SetSortingMethod);
 
             debugModeDropdown.options.Add(
@@ -67,12 +67,12 @@ namespace Game.UI
                 new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.All)));
             debugModeDropdown.onValueChanged.AddListener(SetDebugMode);
 
-            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.None)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(EDeletionReason.None)));
             deletionDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.Overlap)));
+                new TMP_Dropdown.OptionData(nameof(EDeletionReason.Overlap)));
             deletionDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfWorldBounds)));
-            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.All)));
+                new TMP_Dropdown.OptionData(nameof(EDeletionReason.OutOfWorldBounds)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(EDeletionReason.All)));
             deletionDropdown.onValueChanged.AddListener(SetDeletion);
 
             RefreshUI();
@@ -104,18 +104,18 @@ namespace Game.UI
             toggleIsRandom.isOn = parameters.IsRandomSeed;
             toggleAnimation.isOn = parameters.IsAnimation;
             orientationDropdown.value = orientationDropdown.options.IndexOf(orientationDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.EOrientationGraph>(x.text) == parameters.Orientation));
+                Enum.Parse<EOrientationGraph>(x.text) == parameters.Orientation));
             sortMethodDropdown.value = sortMethodDropdown.options.IndexOf(sortMethodDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.ESortMethod>(x.text) == parameters.SortingMethod));
+                Enum.Parse<ESortMethod>(x.text) == parameters.SortingMethod));
             debugModeDropdown.value = debugModeDropdown.options.IndexOf(debugModeDropdown.options.Find(x =>
                 Enum.Parse<WorldMapParameters.DebugData.EDrawMode>(x.text) == parameters.DebugValues.Mode));
             deletionDropdown.value = deletionDropdown.options.IndexOf(deletionDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.EDeletionReason>(x.text) == parameters.DebugValues.DeletionReason));
+                Enum.Parse<EDeletionReason>(x.text) == parameters.DebugValues.DeletionReason));
         }
 
         private void SetDeletion(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.EDeletionReason>(deletionDropdown.options[arg0].text);
+            var value = Enum.Parse<EDeletionReason>(deletionDropdown.options[arg0].text);
             parameters.DebugValues.DeletionReason = value;
         }
 
@@ -127,13 +127,13 @@ namespace Game.UI
 
         private void SetSortingMethod(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.ESortMethod>(sortMethodDropdown.options[arg0].text);
+            var value = Enum.Parse<ESortMethod>(sortMethodDropdown.options[arg0].text);
             parameters.SortingMethod = value;
         }
 
         private void SetOrientation(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.EOrientationGraph>(orientationDropdown.options[arg0].text);
+            var value = Enum.Parse<EOrientationGraph>(orientationDropdown.options[arg0].text);
             parameters.Orientation = value;
         }
 

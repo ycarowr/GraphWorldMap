@@ -12,6 +12,7 @@ namespace Tools.WorldMapCore.Runtime
     }
 
     // Base generalized class for the map controller
+    [ExecuteAlways]
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
         where TNode : BaseWorldMapNode

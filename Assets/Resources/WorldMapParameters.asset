@@ -34,16 +34,16 @@ MonoBehaviour:
   amountRegions: 6
   minRegionSize: {x: 1, y: 1}
   maxRegionSize: {x: 1, y: 1}
-  amount: 10
+  amount: 30
   nodeWorldSize: {x: 6, y: 6}
   totalWorldSize: {x: 60, y: 60}
   iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 994113970
+  seed: 469515742
   isRandomSeed: 0
   orientation: 2
-  amountStart: 2
+  amountStart: 1
   amountEnd: 1
   useAsync: 0
   amountOfRegionConnections: 1
