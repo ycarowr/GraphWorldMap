@@ -9,8 +9,6 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        [SerializeField] private Region[] RegionParameters;
-
         [SerializeField] [Tooltip("Total amount of regions that will be created.")]
         private int amountRegions = 6;
 
@@ -59,9 +57,7 @@ namespace Tools.WorldMapCore.Database
         private ESortMethod sortMethod = ESortMethod.Distance;
 
         [SerializeField] private TMP_Text debugDistanceText;
-
-        [SerializeField] private bool isAutoRegion = true;
-
+        
         [SerializeField] private bool isAnimation = true;
 
         public bool IsAnimation
@@ -69,8 +65,6 @@ namespace Tools.WorldMapCore.Database
             get => isAnimation;
             set => isAnimation = value;
         }
-
-        public bool IsAutoRegion => isAutoRegion;
         
         public int Amount
         {

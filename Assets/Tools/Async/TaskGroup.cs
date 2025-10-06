@@ -39,7 +39,7 @@ namespace Tools.Async
         {
             try
             {
-                OnStart?.Invoke();
+                OnStart.Invoke();
                 SetupTimeout();
                 try
                 {
@@ -60,6 +60,7 @@ namespace Tools.Async
 
         private void SetupTimeout()
         {
+            Debug.Log($"Setup Timeout {Timeout}s");
             new Thread(() =>
             {
                 Thread.Sleep(Timeout * 1000);

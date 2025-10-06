@@ -9,7 +9,7 @@ namespace Tools.WorldMapCore.Runtime
         ///     Checks whether a point overlaps with a polygon.
         ///     See more: https://wrfranklin.org/Research/Short_Notes/pnpoly.html
         /// </summary>
-        private static bool CheckPointOverlapPolygon(Vector3[] vert, Vector3 test)
+        private static bool IsPointOverlapPolygon(Vector3[] vert, Vector3 test)
         {
             var nvert = vert.Length;
             var isHit = false;
@@ -27,7 +27,7 @@ namespace Tools.WorldMapCore.Runtime
             return isHit;
         }
 
-        public static bool CheckOverlap<T>(T instance, List<T> list) where T : IBound
+        public static bool IsOverlap<T>(T instance, List<T> list) where T : IBound
         {
             var count = list.Count;
             for (var index = 0; index < count; index++)
@@ -54,7 +54,7 @@ namespace Tools.WorldMapCore.Runtime
                    rectB.y < rectA.y + rectA.size.y;
         }
 
-        private static bool CheckOverlapX(Rect lhs, Rect rhs)
+        private static bool IsOverlapX(Rect lhs, Rect rhs)
         {
             var left = lhs.center.x < rhs.center.x ? lhs : rhs;
             var right = lhs.center.x < rhs.center.x ? rhs : lhs;
@@ -70,7 +70,7 @@ namespace Tools.WorldMapCore.Runtime
             return false;
         }
 
-        private static bool CheckOverlapY(Rect lhs, Rect rhs)
+        private static bool IsOverlapY(Rect lhs, Rect rhs)
         {
             var bottom = lhs.center.y < rhs.center.y ? lhs : rhs;
             var top = lhs.center.y < rhs.center.y ? rhs : lhs;
@@ -98,12 +98,12 @@ namespace Tools.WorldMapCore.Runtime
                     continue;
                 }
 
-                if (CheckOverlapX(target, current))
+                if (IsOverlapX(target, current))
                 {
                     overlapsX.Add(current);
                 }
 
-                if (CheckOverlapY(target, current))
+                if (IsOverlapY(target, current))
                 {
                     overlapsY.Add(current);
                 }

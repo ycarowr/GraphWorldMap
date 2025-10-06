@@ -10,18 +10,20 @@ namespace Tools.WorldMapCore.Runtime
             data.Parameters.Timeout)
         {
             Data = data;
-            OnStart += () => { Debug.Log("Parallel Iteration Started!"); };
+            OnStart += () => { Debug.Log("Generation Started!"); };
 
             OnComplete += () =>
             {
                 HasCompleted = true;
-                Debug.Log("Parallel Iteration Completed!");
+                Debug.Log("Generation Completed!");
             };
         }
 
-        public bool HasStarted { get; set; }
-        public bool HasCompleted { get; set; }
+        private bool HasStarted { get; set; }
+        private bool HasCompleted { get; set; }
 
+        private bool HasValue { get; set; }
+        
         // Cached value of the perfect amount requested. Can be null in the end of the async process.
         private WorldMap PerfectWorldMap { get; set; }
 
@@ -42,12 +44,19 @@ namespace Tools.WorldMapCore.Runtime
             var amount = Data.Parameters.Amount;
             worldMapInstance.GenerateRegions();
             worldMapInstance.GenerateNodes();
+            worldMapInstance.GenerateGraph();
 
+            if (HasCompleted || HasValue)
+            {
+                return;
+            }
+            
             // if this is the ideal number we return it
             var currentAmount = worldMapInstance.Nodes.Count;
             if (currentAmount == amount)
             {
-                Debug.Log($"Parallel Iteration index:{index} Seed:{worldMapInstance.Random.Seed} Perfect!");
+                HasValue = true;
+                Debug.Log($"Iteration index: {index} Seed:{worldMapInstance.Random.Seed} Perfect!");
                 PerfectWorldMap = worldMapInstance;
                 Cancel();
                 return;
@@ -59,7 +68,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 NearIdealValue = delta;
                 NearIdealWorldMap = worldMapInstance;
-                Debug.Log($"Parallel Iteration index:{index} Seed:{NearIdealWorldMap.Random.Seed} Delta: {delta}");
+                Debug.Log($"Iteration index: {index} Seed:{NearIdealWorldMap.Random.Seed} Delta: {delta}");
             }
         }
 
@@ -96,25 +105,20 @@ namespace Tools.WorldMapCore.Runtime
                 Debug.LogError("The amount of Start plus End nodes is larger than the total amount of nodes.");
                 return;
             }
-
-            var iterations = Data.Parameters.IsRandomSeed ? Data.Parameters.ParallelIterations : 1;
-            Debug.Log("Data valid. Dispatching Iterations...");
-
+            
             if (!Data.Parameters.UseAsync)
             {
-                // If we don't use async the dispatches each
-                // iteration one by one
-                for (var index = 0; index < iterations; index++)
-                {
-                    GenerateWorldMapIteration(index);
-                }
-
+                Debug.Log("Synchronous call. Dispatching single iteration...");
+                // If we don't use async we dispatch a single iteration and hope for the best.
+                GenerateWorldMapIteration(0);
                 OnComplete.Invoke();
                 return;
             }
 
+            var parallelIterations = Data.Parameters.ParallelIterations;
+            Debug.Log($"Asynchronous call. Dispatching {parallelIterations} parallel iterations...");
             // If we are using async. We schedule the tasks.
-            for (var i = 0; i < iterations; i++)
+            for (var i = 0; i < parallelIterations; i++)
             {
                 var index = i;
                 AddTask(() => GenerateWorldMapIteration(index));

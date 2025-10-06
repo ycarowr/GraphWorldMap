@@ -68,15 +68,18 @@ namespace Tools.WorldMapCore.Runtime
             const int maxCount = 1<<20;
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
-                count++;
                 var worldPosition = Random.GenerateRandomWorldPosition(Data);
                 var generated = GenerateNodeAt(worldPosition);
                 if (generated != null)
                 {
                     Nodes.Add(generated);
                 }
+                count++;
             }
+        }
 
+        public void GenerateGraph()
+        {
             WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End, Regions);
         }
 
@@ -91,7 +94,7 @@ namespace Tools.WorldMapCore.Runtime
                 return newNode;
             }
 
-            if (WorldMapHelper.CheckOverlap(newNode, Nodes))
+            if (WorldMapHelper.IsOverlap(newNode, Nodes))
             {
                 if (WorldMapHelper.CheckWorldBounds(newNode.Bounds, Data))
                 {
@@ -146,7 +149,7 @@ namespace Tools.WorldMapCore.Runtime
                 Data.Parameters.MaxRegionSize.y);
             var region = new WorldMapRegion(worldPosition, new Vector2(sizeX, sizeY));
 
-            if (WorldMapHelper.CheckOverlap(region, Regions))
+            if (WorldMapHelper.IsOverlap(region, Regions))
             {
                 if (WorldMapHelper.CheckWorldBounds(region.Bound, Data))
                 {

@@ -1,6 +1,13 @@
+using System;
+using System.Linq;
 using Tools.WorldMapCore.Runtime;
+using Unity.VisualScripting;
 using UnityEngine;
-
+/// <summary>
+/// /// (x:144.616837, y:110.736389, width:39.2478371, height:35.2059364)
+/// (x:43.6880569, y:138.950775, width:49.7264061, height:19.8072186)
+/// (x:146.974487, y:108.479897, width:22.2342281, height:45.3999443)
+/// </summary>
 [ExecuteAlways]
 public class Polygon : MonoBehaviour
 {
@@ -30,5 +37,11 @@ public class Polygon : MonoBehaviour
         {
             two, three,
         });
+    }
+
+    
+    public void Update()
+    {
+        //Debug.Log(WorldMapHelper.IsRectOverlap(two, one));
     }
 }

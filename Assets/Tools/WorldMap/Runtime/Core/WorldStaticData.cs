@@ -10,53 +10,14 @@ namespace Tools.WorldMapCore.Runtime
         public readonly Rect WorldBounds;
         public readonly List<Vector3> Start;
         public readonly List<Vector3> End;
-        public readonly List<Rect> SanitizedRegions;
 
         public WorldMapStaticData(WorldMapParameters parameters, Rect worldBounds)
         {
             Parameters = parameters;
             WorldBounds = worldBounds;
-            SanitizedRegions = new List<Rect>();
-
             var amountStart = parameters.AmountStart;
             var amountEnd = parameters.AmountEnd;
-
-            // Generate Lanes
-            if (parameters.IsAutoRegion)
-            {
-                var regions = new List<WorldMapParameters.Region>();
-                if (Parameters.Orientation == EOrientationGraph.LeftRight)
-                {
-                    var regionSize = new Vector2(worldBounds.size.x, worldBounds.size.y / amountStart);
-                    var worldMinX = WorldBounds.xMin;
-                    var worldMaxY = WorldBounds.yMax / amountStart;
-                    for (var index = 0; index < amountStart; index++)
-                    {
-                        var bounds = new Rect
-                        {
-                            position = new Vector2(worldMinX, worldMaxY * index),
-                            size = new Vector2(regionSize.x, regionSize.y),
-                        };
-                        regions.Add(new WorldMapParameters.Region(bounds));
-                    }
-                }
-                else
-                {
-                    var regionSize = new Vector2(worldBounds.size.x / amountStart, worldBounds.size.y);
-                    var worldMinY = WorldBounds.yMin;
-                    var worldMaxX = WorldBounds.xMax / amountStart;
-                    for (var index = 0; index < amountStart; index++)
-                    {
-                        var bounds = new Rect
-                        {
-                            position = new Vector2(worldMaxX * index, worldMinY),
-                            size = new Vector2(regionSize.x, regionSize.y),
-                        };
-                        regions.Add(new WorldMapParameters.Region(bounds));
-                    }
-                }
-            }
-
+            
             // Generate Starting
             Start = new List<Vector3>();
             for (var index = 0; index < amountStart; index++)

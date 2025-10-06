@@ -13,13 +13,12 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> nodes, List<WorldMapNode> starting, List<WorldMapNode> ending,
             List<WorldMapRegion> regions)
         {
-            RegisterRegionGraphs(graphRegistry, data, regions);
+            RegisterRegionGraphs(graphRegistry, regions);
             IndexNodesByRegion(graphRegistry, data, nodes, starting, ending, regions);
-            SanitizeRegions(graphRegistry, data);
             RegisterStartNodes(graphRegistry, data, starting, regions);
             RegisterEndNodes(graphRegistry, data, ending, regions);
             SortNodes(graphRegistry, data);
-            ConnectAllNodes(graphRegistry, data, starting, ending);
+            ConnectAllNodes(graphRegistry, starting, ending);
 
             /*
             RegisterStartNodes(graphRegistry, starting, data);
@@ -35,10 +34,9 @@ namespace Tools.WorldMapCore.Runtime
 
         private static void RegisterRegionGraphs(
             List<Graph<WorldMapNode>> graphRegistry,
-            WorldMapStaticData data,
             List<WorldMapRegion> regions)
         {
-            foreach (var region in regions)
+            for (var index = 0; index < regions.Count; index++)
             {
                 graphRegistry.Add(new Graph<WorldMapNode>());
             }
@@ -68,44 +66,6 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        private static void SanitizeRegions(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data)
-        {
-            data.SanitizedRegions.Clear();
-            for (var index = 0; index < graphRegistry.Count; index++)
-            {
-                var graph = graphRegistry[index];
-                if (graph.Count < 1)
-                {
-                    continue;
-                }
-
-                var minX = float.MaxValue;
-                var minY = float.MaxValue;
-                var maxX = float.MinValue;
-                var maxY = float.MinValue;
-
-                foreach (var node in graph.Nodes)
-                {
-                    minX = Mathf.Min(node.Bounds.xMin, minX);
-                    minY = Mathf.Min(node.Bounds.yMin, minY);
-                    maxX = Mathf.Max(node.Bounds.xMax, maxX);
-                    maxY = Mathf.Max(node.Bounds.yMax, maxY);
-                }
-
-                var sanitizedRect = new Rect
-                {
-                    xMin = minX,
-                    yMin = minY,
-                    xMax = maxX,
-                    yMax = maxY,
-                };
-                sanitizedRect.Sanitize();
-                data.SanitizedRegions.Add(sanitizedRect);
-            }
-
-            ;
-        }
-
         private static void ConnectMissingStartNodes(List<Graph<WorldMapNode>> graphRegistry, List<WorldMapNode> nodes,
             List<WorldMapNode> starting)
         {
@@ -130,8 +90,10 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        private static void ConnectAllNodes(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data,
-            List<WorldMapNode> starting, List<WorldMapNode> ending)
+        private static void ConnectAllNodes(
+            List<Graph<WorldMapNode>> graphRegistry,
+            List<WorldMapNode> starting,
+            List<WorldMapNode> ending)
         {
             // Connect all registered nodes from each graph sequentially
             for (var graphIndex = 0; graphIndex < graphRegistry.Count; graphIndex++)
@@ -155,9 +117,12 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        private static void RegistryConnections(List<Graph<WorldMapNode>> graphRegistry,
-            List<Graph<WorldMapNode>> regionConnectionsRegistry, WorldMapStaticData data,
-            List<WorldMapNode> starting, List<WorldMapNode> ending)
+        private static void RegistryConnections(
+            List<Graph<WorldMapNode>> graphRegistry,
+            List<Graph<WorldMapNode>> regionConnectionsRegistry,
+            WorldMapStaticData data,
+            List<WorldMapNode> starting,
+            List<WorldMapNode> ending)
         {
             // Create regions connections
             if (data.Parameters.AmountOfRegionConnections > 0)
@@ -257,7 +222,8 @@ namespace Tools.WorldMapCore.Runtime
         private static void IndexNodesByRegion(List<Graph<WorldMapNode>> graphRegistry, WorldMapStaticData data,
             List<WorldMapNode> nodes,
             List<WorldMapNode> starting,
-            List<WorldMapNode> ending, List<WorldMapRegion> regions)
+            List<WorldMapNode> ending,
+            List<WorldMapRegion> regions)
         {
             // Register nodes according to their regions
             for (var index = 0; index < nodes.Count; index++)
