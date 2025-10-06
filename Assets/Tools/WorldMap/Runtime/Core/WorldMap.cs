@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
@@ -64,7 +65,7 @@ namespace Tools.WorldMapCore.Runtime
         {
             var amountToCreate = Data.Parameters.Amount;
             var count = 0;
-            const int maxCount = 65535;
+            const int maxCount = 1<<20;
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
                 count++;
@@ -124,26 +125,26 @@ namespace Tools.WorldMapCore.Runtime
         {
             var amountToCreate = Data.Parameters.AmountRegions;
             var count = 0;
-            const int maxCount = 65535;
+            const int maxCount = 1<<20;
             while (Regions.Count != amountToCreate && count < maxCount)
             {
-                count++;
-                var worldPosition = Random.GenerateRandomWorldPosition(Data);
-                var generated = GenerateRegionAt(worldPosition);
+                var generated = GenerateRegion();
                 if (generated != null)
                 {
                     Regions.Add(generated);
                 }
+                count++;
             }
         }
 
-        private WorldMapRegion GenerateRegionAt(Vector2 worldPosition, bool skipChecks = false)
+        private WorldMapRegion GenerateRegion()
         {
+            var worldPosition = Random.GenerateRandomWorldPosition(Data);
             var sizeX = Random.GenerateRandomBetweenMinMax(Data.Parameters.MinRegionSize.x,
                 Data.Parameters.MaxRegionSize.x);
             var sizeY = Random.GenerateRandomBetweenMinMax(Data.Parameters.MinRegionSize.y,
                 Data.Parameters.MaxRegionSize.y);
-            var region = new WorldMapRegion(worldPosition, Data.Parameters.MaxRegionSize);
+            var region = new WorldMapRegion(worldPosition, new Vector2(sizeX, sizeY));
 
             if (WorldMapHelper.CheckOverlap(region, Regions))
             {

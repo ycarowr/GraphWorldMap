@@ -33,7 +33,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < count; index++)
             {
                 var current = list[index];
-                if (!CheckRectOverlap(instance.Bound, current.Bound))
+                if (IsRectOverlap(instance.Bound, current.Bound))
                 {
                     return false;
                 }
@@ -46,31 +46,12 @@ namespace Tools.WorldMapCore.Runtime
         ///     Checks whether two rectangles overlap.
         ///     Lots of things can be optimized.
         /// </summary>
-        private static bool CheckRectOverlap(Rect rectA, Rect rectB)
+        public static bool IsRectOverlap(Rect rectA, Rect rectB)
         {
-            var point0B = new Vector2(rectB.xMin, rectB.yMin);
-            var point1B = new Vector2(rectB.xMin, rectB.yMax);
-            var point2B = new Vector2(rectB.xMax, rectB.yMax);
-            var point3B = new Vector2(rectB.xMax, rectB.yMin);
-
-            var overlap0B = rectA.Contains(point0B);
-            var overlap1B = rectA.Contains(point1B);
-            var overlap2B = rectA.Contains(point2B);
-            var overlap3B = rectA.Contains(point3B);
-
-            var point0A = new Vector2(rectA.xMin, rectA.yMin);
-            var point1A = new Vector2(rectA.xMin, rectA.yMax);
-            var point2A = new Vector2(rectA.xMax, rectA.yMax);
-            var point3A = new Vector2(rectA.xMax, rectA.yMin);
-
-            var overlap0A = rectB.Contains(point0A);
-            var overlap1A = rectB.Contains(point1A);
-            var overlap2A = rectB.Contains(point2A);
-            var overlap3A = rectB.Contains(point3A);
-
-            var overlapInA = overlap0B || overlap1B || overlap2B || overlap3B;
-            var overlapInB = overlap0A || overlap1A || overlap2A || overlap3A;
-            return !(overlapInA || overlapInB);
+            return rectA.x < rectB.x + rectB.size.x &&
+                   rectA.y < rectB.y + rectB.size.y &&
+                   rectB.x < rectA.x + rectA.size.x &&
+                   rectB.y < rectA.y + rectA.size.y;
         }
 
         private static bool CheckOverlapX(Rect lhs, Rect rhs)
@@ -139,7 +120,7 @@ namespace Tools.WorldMapCore.Runtime
                         continue;
                     }
 
-                    if (!CheckRectOverlap(overlapRect, middle))
+                    if (IsRectOverlap(overlapRect, middle))
                     {
                         isAdjacent = false;
                     }
@@ -162,7 +143,7 @@ namespace Tools.WorldMapCore.Runtime
                         continue;
                     }
 
-                    if (!CheckRectOverlap(overlapRect, middle))
+                    if (IsRectOverlap(overlapRect, middle))
                     {
                         isAdjacent = false;
                     }
