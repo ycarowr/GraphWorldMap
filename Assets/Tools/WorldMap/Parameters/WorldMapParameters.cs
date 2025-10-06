@@ -28,9 +28,6 @@ namespace Tools.WorldMapCore.Database
         private Vector2 totalWorldSize = new(90, 60);
 
         [SerializeField] [Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
-        private int iterations = 65535;
-
-        [SerializeField] [Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
         private int parallelIterations = 100;
 
         [SerializeField] [Tooltip("Timeout for parallel iterations in Seconds.")]
@@ -74,13 +71,7 @@ namespace Tools.WorldMapCore.Database
         }
 
         public bool IsAutoRegion => isAutoRegion;
-
-        public Region[] Regions
-        {
-            get => RegionParameters;
-            set => RegionParameters = value;
-        }
-
+        
         public int Amount
         {
             get => amount;
@@ -108,8 +99,6 @@ namespace Tools.WorldMapCore.Database
             get => amountRegions;
             set => amountRegions = value;
         }
-
-        public int Iterations => iterations;
 
         public int ParallelIterations => parallelIterations;
 
@@ -198,7 +187,7 @@ namespace Tools.WorldMapCore.Database
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize); // + WorldMapStaticData.SMALL_VECTOR);
+            var bounds = new Rect(center, totalWorldSize);
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
         }
@@ -220,6 +209,11 @@ namespace Tools.WorldMapCore.Database
         public class Region
         {
             public Rect Bounds;
+
+            public Region(Rect bounds)
+            {
+                Bounds = bounds;
+            }
         }
 
         [Serializable]

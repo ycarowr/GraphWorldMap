@@ -32,21 +32,20 @@ MonoBehaviour:
       width: 25
       height: 25
   amountRegions: 6
-  minRegionSize: {x: 1, y: 1}
-  maxRegionSize: {x: 1, y: 1}
-  amount: 30
-  nodeWorldSize: {x: 6, y: 6}
-  totalWorldSize: {x: 60, y: 60}
-  iterations: 65536
+  minRegionSize: {x: 15, y: 15}
+  maxRegionSize: {x: 64, y: 64}
+  amount: 100
+  nodeWorldSize: {x: 10, y: 10}
+  totalWorldSize: {x: 200, y: 200}
   parallelIterations: 300
   timeout: 60
   seed: 469515742
-  isRandomSeed: 0
+  isRandomSeed: 1
   orientation: 2
   amountStart: 1
   amountEnd: 1
-  useAsync: 0
-  amountOfRegionConnections: 1
+  useAsync: 1
+  amountOfRegionConnections: 0
   DebugValues:
     Mode: 2147483647
     DeletionReason: 0

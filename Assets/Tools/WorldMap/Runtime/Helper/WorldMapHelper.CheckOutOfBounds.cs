@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static bool CheckWorldBounds(WorldMapNode node, WorldMapStaticData data)
+        public static bool CheckWorldBounds(Rect rect, WorldMapStaticData data)
         {
             var worldBounds = data.WorldBounds;
-            var nodeBounds = node.Bounds;
-            return CheckRectContains(worldBounds, nodeBounds);
+            return CheckRectContains(worldBounds, rect);
         }
 
         private static bool CheckRectContains(Rect rectA, Rect rectB)
@@ -24,9 +24,9 @@ namespace Tools.WorldMapCore.Runtime
                    rectA.Contains(point3);
         }
 
-        public static bool CheckRegionBounds(WorldMapNode newNode, WorldMapStaticData data)
+        public static bool CheckRegionBounds(WorldMapNode newNode, List<WorldMapRegion> regions,
+            WorldMapStaticData data)
         {
-            var regions = data.Parameters.Regions;
             var nodeBounds = newNode.Bounds;
 
             var isOutOfBounds = false;

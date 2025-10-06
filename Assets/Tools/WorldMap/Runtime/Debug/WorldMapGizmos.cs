@@ -18,6 +18,7 @@ namespace Tools.WorldMapCore.Runtime
             List<WorldMapNode> nodes,
             List<WorldMapNode> start,
             List<WorldMapNode> end,
+            List<WorldMapRegion> regions,
             Dictionary<EDeletionReason, List<WorldMapNode>> deletions)
         {
             if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
@@ -27,25 +28,10 @@ namespace Tools.WorldMapCore.Runtime
             }
 
             {
-                var regions = data.Parameters.Regions;
-                for (var i = 0; i < regions.Length; i++)
+                var generatedRegions = regions;
+                for (var i = 0; i < generatedRegions.Count; i++)
                 {
-                    var region = regions[i];
-                    var bound = region.Bounds;
-                    ReadOnlySpan<Vector3> points = new[]
-                    {
-                        new Vector3(bound.xMin, bound.yMin, ZPOSITION_REGIONBOUNDS),
-                        new Vector3(bound.xMin, bound.yMax, ZPOSITION_REGIONBOUNDS),
-                        new Vector3(bound.xMax, bound.yMax, ZPOSITION_REGIONBOUNDS),
-                        new Vector3(bound.xMax, bound.yMin, ZPOSITION_REGIONBOUNDS),
-                    };
-                    Lines.DrawLineStrip(points, new Color(111f / 255f, 29f / 255f, 27f / 255f));
-                }
-
-                var sanitizedRegions = data.SanitizedRegions;
-                for (var i = 0; i < sanitizedRegions.Count; i++)
-                {
-                    var region = sanitizedRegions[i];
+                    var region = generatedRegions[i].Bounds;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(region.xMin, region.yMin, ZPOSITION_REGIONBOUNDS),

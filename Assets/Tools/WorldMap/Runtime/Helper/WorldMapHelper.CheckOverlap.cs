@@ -27,13 +27,13 @@ namespace Tools.WorldMapCore.Runtime
             return isHit;
         }
 
-        public static bool CheckOverlap(WorldMapNode node, List<WorldMapNode> nodes)
+        public static bool CheckOverlap<T>(T instance, List<T> list) where T : IBound
         {
-            var count = nodes.Count;
+            var count = list.Count;
             for (var index = 0; index < count; index++)
             {
-                var current = nodes[index];
-                if (!CheckRectOverlap(node.Bounds, current.Bounds))
+                var current = list[index];
+                if (!CheckRectOverlap(instance.Bound, current.Bound))
                 {
                     return false;
                 }
@@ -197,7 +197,7 @@ namespace Tools.WorldMapCore.Runtime
             return intersection.Sanitize();
         }
 
-        private static Rect Sanitize(this Rect rect)
+        public static Rect Sanitize(this Rect rect)
         {
             var newRect = new Rect(rect);
             if (newRect.width < 0)

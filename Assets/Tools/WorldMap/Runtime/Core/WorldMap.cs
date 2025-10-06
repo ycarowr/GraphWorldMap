@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public partial class WorldMap
+    public class WorldMap
     {
         public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly WorldMapStaticData Data;
@@ -14,6 +14,7 @@ namespace Tools.WorldMapCore.Runtime
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
+        public readonly List<WorldMapRegion> Regions;
         public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
@@ -24,6 +25,7 @@ namespace Tools.WorldMapCore.Runtime
             Nodes = new List<WorldMapNode>();
             Start = new List<WorldMapNode>();
             End = new List<WorldMapNode>();
+            Regions = new List<WorldMapRegion>();
             GraphsRegistry = new List<Graph<WorldMapNode>>();
             ConnectionsRegistry = new List<Graph<WorldMapNode>>();
             Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
@@ -62,11 +64,11 @@ namespace Tools.WorldMapCore.Runtime
         {
             var amountToCreate = Data.Parameters.Amount;
             var count = 0;
-            var maxCount = Mathf.Max(Data.Parameters.Iterations, amountToCreate);
+            const int maxCount = 65535;
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
                 count++;
-                var worldPosition = Random.GenerateRandomPosition(Data);
+                var worldPosition = Random.GenerateRandomWorldPosition(Data);
                 var generated = GenerateNodeAt(worldPosition);
                 if (generated != null)
                 {
@@ -74,7 +76,7 @@ namespace Tools.WorldMapCore.Runtime
                 }
             }
 
-            WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End);
+            WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End, Regions);
         }
 
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
@@ -90,9 +92,9 @@ namespace Tools.WorldMapCore.Runtime
 
             if (WorldMapHelper.CheckOverlap(newNode, Nodes))
             {
-                if (WorldMapHelper.CheckWorldBounds(newNode, Data))
+                if (WorldMapHelper.CheckWorldBounds(newNode.Bounds, Data))
                 {
-                    if (WorldMapHelper.CheckRegionBounds(newNode, Data))
+                    if (WorldMapHelper.CheckRegionBounds(newNode, Regions, Data))
                     {
                         return newNode;
                     }
@@ -114,8 +116,44 @@ namespace Tools.WorldMapCore.Runtime
 
         public void OnDrawGizmos()
         {
-            WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
+            WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Regions, Deletions);
             WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, ConnectionsRegistry, Data);
+        }
+
+        public void GenerateRegions()
+        {
+            var amountToCreate = Data.Parameters.AmountRegions;
+            var count = 0;
+            const int maxCount = 65535;
+            while (Regions.Count != amountToCreate && count < maxCount)
+            {
+                count++;
+                var worldPosition = Random.GenerateRandomWorldPosition(Data);
+                var generated = GenerateRegionAt(worldPosition);
+                if (generated != null)
+                {
+                    Regions.Add(generated);
+                }
+            }
+        }
+
+        private WorldMapRegion GenerateRegionAt(Vector2 worldPosition, bool skipChecks = false)
+        {
+            var sizeX = Random.GenerateRandomBetweenMinMax(Data.Parameters.MinRegionSize.x,
+                Data.Parameters.MaxRegionSize.x);
+            var sizeY = Random.GenerateRandomBetweenMinMax(Data.Parameters.MinRegionSize.y,
+                Data.Parameters.MaxRegionSize.y);
+            var region = new WorldMapRegion(worldPosition, Data.Parameters.MaxRegionSize);
+
+            if (WorldMapHelper.CheckOverlap(region, Regions))
+            {
+                if (WorldMapHelper.CheckWorldBounds(region.Bound, Data))
+                {
+                    return region;
+                }
+            }
+
+            return null;
         }
     }
 }

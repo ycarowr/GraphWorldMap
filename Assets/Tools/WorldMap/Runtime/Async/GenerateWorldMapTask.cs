@@ -40,6 +40,7 @@ namespace Tools.WorldMapCore.Runtime
 
             var worldMapInstance = new WorldMap(Data);
             var amount = Data.Parameters.Amount;
+            worldMapInstance.GenerateRegions();
             worldMapInstance.GenerateNodes();
 
             // if this is the ideal number we return it

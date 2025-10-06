@@ -17,6 +17,7 @@ namespace Tools.WorldMapCore.Runtime
             Parameters = parameters;
             WorldBounds = worldBounds;
             SanitizedRegions = new List<Rect>();
+
             var amountStart = parameters.AmountStart;
             var amountEnd = parameters.AmountEnd;
 
@@ -36,10 +37,7 @@ namespace Tools.WorldMapCore.Runtime
                             position = new Vector2(worldMinX, worldMaxY * index),
                             size = new Vector2(regionSize.x, regionSize.y),
                         };
-                        regions.Add(new WorldMapParameters.Region
-                        {
-                            Bounds = bounds,
-                        });
+                        regions.Add(new WorldMapParameters.Region(bounds));
                     }
                 }
                 else
@@ -54,14 +52,9 @@ namespace Tools.WorldMapCore.Runtime
                             position = new Vector2(worldMaxX * index, worldMinY),
                             size = new Vector2(regionSize.x, regionSize.y),
                         };
-                        regions.Add(new WorldMapParameters.Region
-                        {
-                            Bounds = bounds,
-                        });
+                        regions.Add(new WorldMapParameters.Region(bounds));
                     }
                 }
-
-                Parameters.Regions = regions.ToArray();
             }
 
             // Generate Starting
@@ -73,14 +66,14 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     var segment = WorldBounds.size.y / (amountStart + 1);
                     worldPosition.y = segment * (index + 1);
-                    worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2; // - SMALL_NUMBER;
+                    worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2;
                 }
 
                 if (parameters.Orientation == EOrientationGraph.BottomTop)
                 {
                     var segment = WorldBounds.size.x / (amountStart + 1);
                     worldPosition.x = segment * (index + 1);
-                    worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2; // - SMALL_NUMBER;
+                    worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2;
                 }
 
                 Start.Add(worldPosition);
@@ -94,7 +87,7 @@ namespace Tools.WorldMapCore.Runtime
                 if (parameters.Orientation == EOrientationGraph.LeftRight)
                 {
                     var segment = WorldBounds.size.y / (amountEnd + 1);
-                    worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2; // + SMALL_NUMBER;
+                    worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2;
                     worldPosition.y = segment * (index + 1);
                 }
 
@@ -102,7 +95,7 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     var segment = WorldBounds.size.x / (amountEnd + 1);
                     worldPosition.x = segment * (index + 1);
-                    worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2; // + SMALL_NUMBER;
+                    worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2;
                 }
 
                 End.Add(worldPosition);

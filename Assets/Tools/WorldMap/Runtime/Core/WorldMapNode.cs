@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public class WorldMapNode : BaseGraphNode
+    public class WorldMapNode : BaseGraphNode, IBound
     {
         public readonly Rect Bounds;
         public readonly int ID;
@@ -13,9 +13,11 @@ namespace Tools.WorldMapCore.Runtime
             ID = id;
             Bounds = new Rect(worldPosition, size);
             Bounds.center = worldPosition;
+            Bounds.Sanitize();
         }
 
         public Vector3 Center => Bounds.center;
         public Vector2 Size => Bounds.size;
+        public Rect Bound => Bounds;
     }
 }
