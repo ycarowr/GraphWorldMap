@@ -40,22 +40,22 @@ namespace Tools.WorldMapCore.Runtime
 
         public static bool IsOnLeft(this Rect rectA, Rect rectB)
         {
-            return rectB.xMin > rectA.xMax;
+            return rectA.xMax <= rectB.xMin;
         }
 
         public static bool IsOnRight(this Rect rectA, Rect rectB)
         {
-            return rectA.xMax < rectB.xMin;
+            return rectA.xMin >= rectB.xMax;
         }
 
         public static bool IsOnTop(this Rect rectA, Rect rectB)
         {
-            return rectA.yMin > rectB.yMax;
+            return rectA.yMin >= rectB.yMax;
         }
 
         public static bool IsOnBottom(this Rect rectA, Rect rectB)
         {
-            return rectA.yMax < rectB.yMin;
+            return rectA.yMax <= rectB.yMin;
         }
     }
 }
