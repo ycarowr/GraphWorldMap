@@ -23,22 +23,22 @@ namespace Tools.WorldMapCore.Runtime
                 return -1;
             }
 
-            if (lhs.Bounds.center.x > rhs.Bounds.center.x)
+            if (lhs.Bound.center.x > rhs.Bound.center.x)
             {
                 return 1;
             }
 
-            if (lhs.Bounds.center.x < rhs.Bounds.center.x)
+            if (lhs.Bound.center.x < rhs.Bound.center.x)
             {
                 return -1;
             }
 
-            if (lhs.Bounds.center.y < rhs.Bounds.center.y)
+            if (lhs.Bound.center.y < rhs.Bound.center.y)
             {
                 return 1;
             }
 
-            if (lhs.Bounds.center.y < rhs.Bounds.center.y)
+            if (lhs.Bound.center.y < rhs.Bound.center.y)
             {
                 return -1;
             }

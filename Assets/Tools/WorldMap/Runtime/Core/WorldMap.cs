@@ -96,7 +96,7 @@ namespace Tools.WorldMapCore.Runtime
 
             if (WorldMapHelper.IsOverlap(newNode, Nodes))
             {
-                if (WorldMapHelper.CheckWorldBounds(newNode.Bounds, Data))
+                if (WorldMapHelper.CheckWorldBounds(newNode.Bound, Data))
                 {
                     if (WorldMapHelper.CheckRegionBounds(newNode, Regions, Data))
                     {

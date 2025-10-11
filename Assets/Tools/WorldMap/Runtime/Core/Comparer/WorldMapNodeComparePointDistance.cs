@@ -29,8 +29,8 @@ namespace Tools.WorldMapCore.Runtime
                 return -1;
             }
 
-            var distanceLhs = Vector3.Distance(lhs.Bounds.center, Point);
-            var distanceRhs = Vector3.Distance(rhs.Bounds.center, Point);
+            var distanceLhs = Vector3.Distance(lhs.Bound.center, Point);
+            var distanceRhs = Vector3.Distance(rhs.Bound.center, Point);
             if (distanceLhs > distanceRhs)
             {
                 return 1;

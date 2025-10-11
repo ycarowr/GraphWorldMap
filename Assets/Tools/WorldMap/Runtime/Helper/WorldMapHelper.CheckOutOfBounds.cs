@@ -27,7 +27,7 @@ namespace Tools.WorldMapCore.Runtime
         public static bool CheckRegionBounds(WorldMapNode newNode, List<WorldMapRegion> regions,
             WorldMapStaticData data)
         {
-            var nodeBounds = newNode.Bounds;
+            var nodeBounds = newNode.Bound;
 
             var isOutOfBounds = false;
             foreach (var region in regions)

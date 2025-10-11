@@ -63,7 +63,7 @@ namespace Tools.WorldMapCore.Runtime
                     var nearest = FindNearest(nodes, end, ending);
                     graph.Register(nearest);
                     graph.Register(end);
-                    graph.Connect(nearest, end, Vector3.Distance(nearest.Bounds.center, end.Bounds.center));
+                    graph.Connect(nearest, end, Vector3.Distance(nearest.Bound.center, end.Bound.center));
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace Tools.WorldMapCore.Runtime
                     var nearest = FindNearest(nodes, start, starting);
                     graph.Register(start);
                     graph.Register(nearest);
-                    graph.Connect(start, nearest, Vector3.Distance(start.Bounds.center, nearest.Bounds.center));
+                    graph.Connect(start, nearest, Vector3.Distance(start.Bound.center, nearest.Bound.center));
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace Tools.WorldMapCore.Runtime
                         continue;
                     }
 
-                    var distance = Vector3.Distance(node.Bounds.center, nodeNext.Bounds.center);
+                    var distance = Vector3.Distance(node.Bound.center, nodeNext.Bound.center);
                     graph.Connect(node, nodeNext, distance);
                 }
             }
@@ -130,31 +130,31 @@ namespace Tools.WorldMapCore.Runtime
             if (data.Parameters.AmountOfRegionConnections > 0)
             {
                 var connections = new List<Graph<WorldMapNode>>();
-                var regionBounds = new Rect[regions.Count];
+                var regionBound = new Rect[regions.Count];
                 for (var index = 0; index < regions.Count; index++)
                 {
                     var region = regions[index];
-                    regionBounds[index] = region.Bounds;
+                    regionBound[index] = region.Bound;
                 }
 
                 for (var index = 0; index < regions.Count; index++)
                 {
                     var region = regions[index];
-                    var adjacent = FindAdjacentRects(int.MaxValue, region.Bound, regionBounds);
+                    var adjacent = FindAdjacentRects(int.MaxValue, region.Bound, regionBound);
                     foreach (var adjacentRegionRect in adjacent)
                     {
-                        if (IsOnRight(adjacentRegionRect, region.Bounds))
+                        if (IsOnRight(adjacentRegionRect, region.Bound))
                         {
                             continue;
                         }
 
-                        if (IsOnTop(adjacentRegionRect, region.Bounds))
+                        if (IsOnTop(adjacentRegionRect, region.Bound))
                         {
                             continue;
                         }
 
                         var connection = new Graph<WorldMapNode>();
-                        var indexAdjacent = Array.IndexOf(regionBounds, adjacentRegionRect);
+                        var indexAdjacent = Array.IndexOf(regionBound, adjacentRegionRect);
                         var current = new List<WorldMapNode>(graphRegistry[index].Nodes);
                         var currentAdjacent = new List<WorldMapNode>(graphRegistry[indexAdjacent].Nodes);
 
@@ -197,7 +197,7 @@ namespace Tools.WorldMapCore.Runtime
 
                             connection.Register(left);
                             connection.Register(right);
-                            var distance = Vector3.Distance(left.Bounds.center, right.Bounds.center);
+                            var distance = Vector3.Distance(left.Bound.center, right.Bound.center);
                             connection.Connect(left, right, distance);
                         }
 
@@ -254,7 +254,7 @@ namespace Tools.WorldMapCore.Runtime
                 //         {
                 //             connection.Register(rightMost);
                 //             connection.Register(nearest);
-                //             var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
+                //             var distance = Vector3.Distance(rightMost.Bound.center, nearest.Bound.center);
                 //             connection.Connect(rightMost, nearest, distance);
                 //         }
                 //     }
@@ -277,7 +277,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 foreach (var nodeB in listB)
                 {
-                    var distance = Vector3.Distance(nodeA.Bounds.center, nodeB.Bounds.center);
+                    var distance = Vector3.Distance(nodeA.Bound.center, nodeB.Bound.center);
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -297,7 +297,7 @@ namespace Tools.WorldMapCore.Runtime
                 var graph = graphRegistry[index];
                 if (data.Parameters.SortingMethod == ESortMethod.Distance)
                 {
-                    graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bounds.center));
+                    graph.Nodes.Sort(new WorldMapNodeComparePointDistance(end.Bound.center));
                 }
                 else
                 {
@@ -359,11 +359,11 @@ namespace Tools.WorldMapCore.Runtime
 
                     if (isVertical)
                     {
-                        shouldConnectWithStart &= !region.Bounds.IsOnBottom(currentRegion.Bounds);
+                        shouldConnectWithStart &= !region.Bound.IsOnBottom(currentRegion.Bound);
                     }
                     else
                     {
-                        shouldConnectWithStart &= !region.Bounds.IsOnLeft(currentRegion.Bounds);
+                        shouldConnectWithStart &= !region.Bound.IsOnLeft(currentRegion.Bound);
                     }
                 }
 
@@ -404,11 +404,11 @@ namespace Tools.WorldMapCore.Runtime
 
                     if (isVertical)
                     {
-                        shouldConnectWithEnd &= !region.Bounds.IsOnTop(currentRegion.Bounds);
+                        shouldConnectWithEnd &= !region.Bound.IsOnTop(currentRegion.Bound);
                     }
                     else
                     {
-                        shouldConnectWithEnd &= !region.Bounds.IsOnRight(currentRegion.Bounds);
+                        shouldConnectWithEnd &= !region.Bound.IsOnRight(currentRegion.Bound);
                     }
                 }
 
@@ -437,11 +437,11 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < regions.Count; index++)
             {
                 var region = regions[index];
-                var distance = Vector3.Distance(node.Bounds.center, region.Bounds.center);
+                var distance = Vector3.Distance(node.Bound.center, region.Bound.center);
                 var distanceEdge =
                     data.Parameters.Orientation == EOrientationGraph.BottomTop
-                        ? Mathf.Abs(region.Bounds.yMin - node.Bounds.center.y)
-                        : Mathf.Abs(region.Bounds.xMin - node.Bounds.center.x);
+                        ? Mathf.Abs(region.Bound.yMin - node.Bound.center.y)
+                        : Mathf.Abs(region.Bound.xMin - node.Bound.center.x);
                 if (distance < nearest && distanceEdge < nearestEdge)
                 {
                     nearest = distance;
@@ -468,7 +468,7 @@ namespace Tools.WorldMapCore.Runtime
                     continue;
                 }
 
-                var distance = Vector3.Distance(start.Bounds.center, node.Bounds.center);
+                var distance = Vector3.Distance(start.Bound.center, node.Bound.center);
                 if (distance < nearestNodeDistance)
                 {
                     nearestNode = node;
@@ -492,7 +492,7 @@ namespace Tools.WorldMapCore.Runtime
                     continue;
                 }
 
-                var distance = Vector3.Distance(target.Bounds.center, node.Bounds.center);
+                var distance = Vector3.Distance(target.Bound.center, node.Bound.center);
                 if (distance < nearest)
                 {
                     nearest = distance;
@@ -525,7 +525,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < nodes.Count; index++)
             {
                 var node = nodes[index];
-                var distance = Vector3.Distance(node.Bounds.center, graphNodes.Nodes[^1].Bounds.center);
+                var distance = Vector3.Distance(node.Bound.center, graphNodes.Nodes[^1].Bound.center);
                 if (distance < nearest)
                 {
                     nearest = distance;
@@ -541,7 +541,7 @@ namespace Tools.WorldMapCore.Runtime
             for (var index = 0; index < regions.Count; index++)
             {
                 var region = regions[index];
-                if (CheckRectContains(region.Bounds, node.Bounds))
+                if (CheckRectContains(region.Bound, node.Bound))
                 {
                     return index;
                 }

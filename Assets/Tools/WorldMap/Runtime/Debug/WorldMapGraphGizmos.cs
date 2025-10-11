@@ -43,8 +43,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
-                        var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
+                        var midpointX = (nodeB.Key.Bound.center.x + nodeA.Bound.center.x) / 2;
+                        var midpointY = (nodeB.Key.Bound.center.y + nodeA.Bound.center.y) / 2;
                         var text = ((int)nodeB.Value).ToString();
                         var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
                         CreateText(position, data, worldMapRoot, text);
@@ -116,8 +116,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
-                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeA.Bound.center.x, nodeA.Bound.center.y) + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeB.Key.Bound.center.x, nodeB.Key.Bound.center.y)+ WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 
@@ -134,8 +134,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
-                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeA.Bound.center.x, nodeA.Bound.center.y) + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeB.Key.Bound.center.x, nodeB.Key.Bound.center.y)+ WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 

@@ -31,7 +31,7 @@ namespace Tools.WorldMapCore.Runtime
                 var generatedRegions = regions;
                 for (var i = 0; i < generatedRegions.Count; i++)
                 {
-                    var region = generatedRegions[i].Bounds;
+                    var region = generatedRegions[i].Bound;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(region.xMin, region.yMin, ZPOSITION_REGIONBOUNDS),
@@ -52,7 +52,7 @@ namespace Tools.WorldMapCore.Runtime
                         continue;
                     }
 
-                    var bound = node.Bounds;
+                    var bound = node.Bound;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(bound.xMin, bound.yMin, ZPOSITION_NODES),
@@ -69,7 +69,7 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < start.Count; i++)
                 {
                     var node = start[i];
-                    var bound = node.Bounds;
+                    var bound = node.Bound;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(bound.xMin, bound.yMin, ZPOSITION_STARTEND_NODES),
@@ -86,7 +86,7 @@ namespace Tools.WorldMapCore.Runtime
                 for (var i = 0; i < end.Count; i++)
                 {
                     var node = end[i];
-                    var bound = node.Bounds;
+                    var bound = node.Bound;
                     ReadOnlySpan<Vector3> points = new[]
                     {
                         new Vector3(bound.xMin, bound.yMin, ZPOSITION_STARTEND_NODES),
@@ -107,7 +107,7 @@ namespace Tools.WorldMapCore.Runtime
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
-                        var bound = node.Bounds;
+                        var bound = node.Bound;
                         ReadOnlySpan<Vector3> points = new[]
                         {
                             new Vector3(bound.xMin, bound.yMin, ZPOSITION_REMOVED_NODES),
@@ -129,7 +129,7 @@ namespace Tools.WorldMapCore.Runtime
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
-                        var bound = node.Bounds;
+                        var bound = node.Bound;
                         ReadOnlySpan<Vector3> points = new[]
                         {
                             new Vector3(bound.xMin, bound.yMin, ZPOSITION_REMOVED_NODES),
@@ -151,7 +151,7 @@ namespace Tools.WorldMapCore.Runtime
                     for (var i = 0; i < deleted.Count; i++)
                     {
                         var node = deleted[i];
-                        var bound = node.Bounds;
+                        var bound = node.Bound;
                         ReadOnlySpan<Vector3> points = new[]
                         {
                             new Vector3(bound.xMin, bound.yMin, ZPOSITION_REMOVED_NODES),

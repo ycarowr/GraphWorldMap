@@ -17,7 +17,7 @@ namespace Tools.WorldMapCore.Runtime
         public void SetNode(WorldMapNode node)
         {
             titleText.text = node.ID.ToString();
-            transform.localPosition = node.Center;
+            transform.localPosition = node.Bound.center;
             if (IsStarting)
             {
                 titleText.text = START + titleText.text;

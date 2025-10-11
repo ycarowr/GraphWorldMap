@@ -5,19 +5,17 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class WorldMapNode : BaseGraphNode, IBound
     {
-        public readonly Rect Bounds;
         public readonly int ID;
 
         public WorldMapNode(int id, Vector2 worldPosition, Vector2 size)
         {
             ID = id;
-            Bounds = new Rect(worldPosition, size);
-            Bounds.center = worldPosition;
-            Bounds.Sanitize();
+            var bound = new Rect(worldPosition, size);
+            bound.center = worldPosition;
+            bound.Sanitize();
+            Bound = bound;
         }
-
-        public Vector3 Center => Bounds.center;
-        public Vector2 Size => Bounds.size;
-        public Rect Bound => Bounds;
+        
+        public Rect Bound { get; }
     }
 }
