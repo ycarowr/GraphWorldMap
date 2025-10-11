@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
@@ -18,6 +19,7 @@ namespace Tools.WorldMapCore.Runtime
             RegisterStartNodes(graphRegistry, data, starting, regions);
             RegisterEndNodes(graphRegistry, data, ending, regions);
             SortNodes(graphRegistry, data);
+            RegistryConnections(graphRegistry, regionConnectionsRegistry, data, starting, ending, regions);
             ConnectAllNodes(graphRegistry, starting, ending);
 
             /*
@@ -117,79 +119,171 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        private static void RegistryConnections(
-            List<Graph<WorldMapNode>> graphRegistry,
+        private static void RegistryConnections(List<Graph<WorldMapNode>> graphRegistry,
             List<Graph<WorldMapNode>> regionConnectionsRegistry,
             WorldMapStaticData data,
             List<WorldMapNode> starting,
-            List<WorldMapNode> ending)
+            List<WorldMapNode> ending,
+            List<WorldMapRegion> regions)
         {
             // Create regions connections
             if (data.Parameters.AmountOfRegionConnections > 0)
             {
                 var connections = new List<Graph<WorldMapNode>>();
-                for (var index = 0; index < graphRegistry.Count - 1; index++)
+                var regionBounds = new Rect[regions.Count];
+                for (var index = 0; index < regions.Count; index++)
                 {
-                    var connection = new Graph<WorldMapNode>();
-                    var indexNext = index + 1;
+                    var region = regions[index];
+                    regionBounds[index] = region.Bounds;
+                }
 
-                    var graph = graphRegistry[index];
-                    var graphNext = graphRegistry[indexNext];
-
-                    List<WorldMapNode> sort;
-                    List<WorldMapNode> sortNext;
-                    if (data.Parameters.Orientation == EOrientationGraph.BottomTop)
+                for (var index = 0; index < regions.Count; index++)
+                {
+                    var region = regions[index];
+                    var adjacent = FindAdjacentRects(int.MaxValue, region.Bound, regionBounds);
+                    foreach (var adjacentRegionRect in adjacent)
                     {
-                        sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
-                        sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
-                    }
-                    else
-                    {
-                        sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
-                        sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
-                    }
-
-                    foreach (var node in starting)
-                    {
-                        sort.Remove(node);
-                        sortNext.Remove(node);
-                    }
-
-                    foreach (var node in ending)
-                    {
-                        sort.Remove(node);
-                        sortNext.Remove(node);
-                    }
-
-                    for (var connectionCount = 0;
-                         connectionCount < data.Parameters.AmountOfRegionConnections;
-                         connectionCount++)
-                    {
-                        if (sort.Count <= 0)
+                        if (IsOnRight(adjacentRegionRect, region.Bounds))
                         {
-                            // The list is empty
                             continue;
                         }
 
-                        var rightMost = sort.Last();
-                        sort.Remove(rightMost);
-                        var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
-                        if (nearest != null)
+                        if (IsOnTop(adjacentRegionRect, region.Bounds))
                         {
-                            connection.Register(rightMost);
-                            connection.Register(nearest);
-                            var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
-                            connection.Connect(rightMost, nearest, distance);
+                            continue;
                         }
-                    }
 
-                    connections.Add(connection);
+                        var connection = new Graph<WorldMapNode>();
+                        var indexAdjacent = Array.IndexOf(regionBounds, adjacentRegionRect);
+                        var current = new List<WorldMapNode>(graphRegistry[index].Nodes);
+                        var currentAdjacent = new List<WorldMapNode>(graphRegistry[indexAdjacent].Nodes);
+
+
+                        foreach (var node in starting)
+                        {
+                            current.Remove(node);
+                            currentAdjacent.Remove(node);
+                        }
+
+                        foreach (var node in ending)
+                        {
+                            current.Remove(node);
+                            currentAdjacent.Remove(node);
+                        }
+
+                        var amountOfConnections = data.Parameters.AmountOfRegionConnections;
+                        for (var connectionCount = 0;
+                             connectionCount < amountOfConnections;
+                             connectionCount++)
+                        {
+                            if (current.Count <= 0)
+                            {
+                                // The list is empty
+                                continue;
+                            }
+
+                            if (currentAdjacent.Count <= 0)
+                            {
+                                continue;
+                            }
+
+                            var pair = new WorldMapNode[2];
+                            FindBorderNodes(current, currentAdjacent, ref pair);
+                            var left = pair[0];
+                            var right = pair[1];
+
+                            current.Remove(left);
+                            currentAdjacent.Remove(right);
+
+                            connection.Register(left);
+                            connection.Register(right);
+                            var distance = Vector3.Distance(left.Bounds.center, right.Bounds.center);
+                            connection.Connect(left, right, distance);
+                        }
+
+                        connections.Add(connection);
+                    }
                 }
+
+                // for (var index = 0; index < graphRegistry.Count; index++)
+                // {
+                //     var connection = new Graph<WorldMapNode>();
+                //     var graph = graphRegistry[index];
+                //     
+                //     
+                //     
+                //     List<WorldMapNode> sort;
+                //     List<WorldMapNode> sortNext;
+                //     if (data.Parameters.Orientation == EOrientationGraph.BottomTop)
+                //     {
+                //         sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
+                //         sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
+                //     }
+                //     else
+                //     {
+                //         sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
+                //         sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
+                //     }
+                //
+                //     foreach (var node in starting)
+                //     {
+                //         sort.Remove(node);
+                //         sortNext.Remove(node);
+                //     }
+                //
+                //     foreach (var node in ending)
+                //     {
+                //         sort.Remove(node);
+                //         sortNext.Remove(node);
+                //     }
+                //
+                //     for (var connectionCount = 0;
+                //          connectionCount < data.Parameters.AmountOfRegionConnections;
+                //          connectionCount++)
+                //     {
+                //         if (sort.Count <= 0)
+                //         {
+                //             // The list is empty
+                //             continue;
+                //         }
+                //
+                //         var rightMost = sort.Last();
+                //         sort.Remove(rightMost);
+                //         var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
+                //         if (nearest != null)
+                //         {
+                //             connection.Register(rightMost);
+                //             connection.Register(nearest);
+                //             var distance = Vector3.Distance(rightMost.Bounds.center, nearest.Bounds.center);
+                //             connection.Connect(rightMost, nearest, distance);
+                //         }
+                //     }
+                //
+                //     connections.Add(connection);
+                // }
 
                 // Lane connections are separated graphs
                 foreach (var connection in connections)
                 {
                     regionConnectionsRegistry.Add(connection);
+                }
+            }
+        }
+
+        private static void FindBorderNodes(List<WorldMapNode> listA, List<WorldMapNode> listB, ref WorldMapNode[] pair)
+        {
+            var minDistance = float.MaxValue;
+            foreach (var nodeA in listA)
+            {
+                foreach (var nodeB in listB)
+                {
+                    var distance = Vector3.Distance(nodeA.Bounds.center, nodeB.Bounds.center);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        pair[0] = nodeA;
+                        pair[1] = nodeB;
+                    }
                 }
             }
         }
@@ -209,11 +303,11 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     if (data.Parameters.Orientation == EOrientationGraph.LeftRight)
                     {
-                        graph.Nodes.Sort(new WorldMapNodeCompareLeftRight());
+                        graph.Nodes.Sort(WorldMapNodeCompareLeftRight.Static);
                     }
                     else
                     {
-                        graph.Nodes.Sort(new WorldMapNodeCompareBottomTop());
+                        graph.Nodes.Sort(WorldMapNodeCompareBottomTop.Static);
                     }
                 }
             }
@@ -385,20 +479,20 @@ namespace Tools.WorldMapCore.Runtime
             return FindNodeRegionIndex(nearestNode, data, regions);
         }
 
-        private static WorldMapNode FindNearest(List<WorldMapNode> nodes, WorldMapNode node,
+        private static WorldMapNode FindNearest(List<WorldMapNode> nodes, WorldMapNode target,
             List<WorldMapNode> exceptions = null)
         {
             var nearest = float.MaxValue;
             var nearestIndex = -1;
             for (var index = 0; index < nodes.Count; index++)
             {
-                var worldMapNode = nodes[index];
-                if (exceptions != null && exceptions.Contains(worldMapNode))
+                var node = nodes[index];
+                if (exceptions != null && exceptions.Contains(node))
                 {
                     continue;
                 }
 
-                var distance = Vector3.Distance(node.Bounds.center, worldMapNode.Bounds.center);
+                var distance = Vector3.Distance(target.Bounds.center, node.Bounds.center);
                 if (distance < nearest)
                 {
                     nearest = distance;
@@ -411,7 +505,7 @@ namespace Tools.WorldMapCore.Runtime
                 return nodes[nearestIndex];
             }
 
-            // Can't find a connection
+            // Can't nearest
             return null;
         }
 
