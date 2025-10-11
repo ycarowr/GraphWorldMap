@@ -4,6 +4,8 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class WorldMapNodeCompareBottomTop : IComparer<WorldMapNode>
     {
+        public static readonly WorldMapNodeCompareBottomTop Static = new();
+
         public int Compare(WorldMapNode lhs, WorldMapNode rhs)
         {
             if (ReferenceEquals(lhs, rhs))

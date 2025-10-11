@@ -4,6 +4,8 @@ namespace Tools.WorldMapCore.Runtime
 {
     public class WorldMapNodeCompareLeftRight : IComparer<WorldMapNode>
     {
+        public static readonly WorldMapNodeCompareLeftRight Static = new();
+
         public int Compare(WorldMapNode lhs, WorldMapNode rhs)
         {
             if (ReferenceEquals(lhs, rhs))
