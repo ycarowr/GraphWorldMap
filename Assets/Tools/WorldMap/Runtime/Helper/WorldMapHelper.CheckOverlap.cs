@@ -93,6 +93,11 @@ namespace Tools.WorldMapCore.Runtime
             var overlapsY = new List<Rect>();
             foreach (var current in rects)
             {
+                if (target == current)
+                {
+                    continue;
+                }
+
                 if (Vector2.Distance(current.center, target.center) > distance)
                 {
                     continue;
