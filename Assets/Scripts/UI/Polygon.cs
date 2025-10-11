@@ -42,6 +42,6 @@ public class Polygon : MonoBehaviour
     
     public void Update()
     {
-        //Debug.Log(WorldMapHelper.IsRectOverlap(two, one));
+        //Debug.Log(one.IsOnTop(two));
     }
 }

@@ -110,7 +110,8 @@ namespace Tools.WorldMapCore.Runtime
                 WorldMap?.OnDrawGizmos();
             }
 
-            WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);
+            WorldMapGraphGizmos.DrawTextDistance(WorldMap.Regions, WorldMap.GraphsRegistry, WorldMap.Data,
+                WorldMapRoot);
             Debug.Log("OnCreate - Refresh Map");
             OnPostCreate?.Invoke();
         }

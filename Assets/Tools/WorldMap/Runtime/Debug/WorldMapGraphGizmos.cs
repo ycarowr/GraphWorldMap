@@ -2,6 +2,8 @@
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Tools.WorldMapCore.Runtime
 {
@@ -18,7 +20,10 @@ namespace Tools.WorldMapCore.Runtime
             new Color(151f / 255f, 170f / 255f, 27f / 255f),
         };
 
-        public static void DrawTextDistance(List<Graph<WorldMapNode>> graphs, WorldMapStaticData data,
+        public static void DrawTextDistance(
+            List<WorldMapRegion> regions,
+            List<Graph<WorldMapNode>> graphs,
+            WorldMapStaticData data,
             GameObject worldMapRoot)
         {
             if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
@@ -46,6 +51,12 @@ namespace Tools.WorldMapCore.Runtime
                     }
                 }
             }
+
+            for (var index = 0; index < regions.Count; index++)
+            {
+                var text = index.ToString();
+                CreateText(regions[index].Bound.min, data, worldMapRoot, text);
+            }
         }
 
         private static void DrawBounders(WorldMapStaticData data, GameObject worldMapRoot)
@@ -60,7 +71,7 @@ namespace Tools.WorldMapCore.Runtime
             CreateText(topRight, data, worldMapRoot, topRight.ToString());
         }
 
-        private static void CreateText(Vector3 position, WorldMapStaticData data, GameObject worldMapRoot, string text)
+        public static void CreateText(Vector3 position, WorldMapStaticData data, GameObject worldMapRoot, string text)
         {
             var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
             tmpText.transform.position = position;
