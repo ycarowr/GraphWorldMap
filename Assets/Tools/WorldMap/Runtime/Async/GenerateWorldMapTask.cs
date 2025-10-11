@@ -56,7 +56,7 @@ namespace Tools.WorldMapCore.Runtime
             if (currentAmount == amount)
             {
                 HasValue = true;
-                Debug.Log($"Iteration index: {index} Seed:{worldMapInstance.Random.Seed} Perfect!");
+                Debug.Log($"Iteration index: {index} Seed:{worldMapInstance.Random.Seed} Perfect amount of Nodes!");
                 PerfectWorldMap = worldMapInstance;
                 Cancel();
                 return;
@@ -108,20 +108,25 @@ namespace Tools.WorldMapCore.Runtime
             
             if (!Data.Parameters.UseAsync)
             {
-                Debug.Log("Synchronous call. Dispatching single iteration...");
-                // If we don't use async we dispatch a single iteration and hope for the best.
-                GenerateWorldMapIteration(0);
+                Debug.Log("Synchronous call. Dispatching iterations...");
+                // If we don't use async we dispatch a small amount iterations and hope for the best.
+                const int amountOfIterations = 256;
+                for (var index = 0; index < amountOfIterations; index++)
+                {
+                    GenerateWorldMapIteration(index);
+                }
                 OnComplete.Invoke();
                 return;
             }
 
             var parallelIterations = Data.Parameters.ParallelIterations;
             Debug.Log($"Asynchronous call. Dispatching {parallelIterations} parallel iterations...");
+            
             // If we are using async. We schedule the tasks.
-            for (var i = 0; i < parallelIterations; i++)
+            for (var index = 0; index < parallelIterations; index++)
             {
-                var index = i;
-                AddTask(() => GenerateWorldMapIteration(index));
+                var iteration = index;
+                AddTask(() => GenerateWorldMapIteration(iteration));
             }
 
             ExecuteAll();
@@ -137,12 +142,7 @@ namespace Tools.WorldMapCore.Runtime
 
         public WorldMap GetWorldMap()
         {
-            if (PerfectWorldMap != null)
-            {
-                return PerfectWorldMap;
-            }
-
-            return NearIdealWorldMap;
+            return PerfectWorldMap ?? NearIdealWorldMap;
         }
     }
 }
