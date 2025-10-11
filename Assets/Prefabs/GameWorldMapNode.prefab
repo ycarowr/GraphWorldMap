@@ -164,6 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 660607606020897834}
   titleText: {fileID: 9137734377902128098}
+  factory: {fileID: 11400000, guid: deeec4d3893a58a4cb424dc1dff31bc4, type: 2}
 --- !u!1 &8310074702042941445
 GameObject:
   m_ObjectHideFlags: 0

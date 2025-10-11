@@ -335,6 +335,7 @@ namespace Tools.WorldMapCore.Runtime
                 }
 
                 graphRegistry[regionIndex].Register(node);
+                node.SetRegion(regionIndex);
             }
         }
 

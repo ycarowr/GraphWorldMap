@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  amountRegions: 4
+  amountRegions: 5
   minRegionSize: {x: 15, y: 15}
-  maxRegionSize: {x: 60, y: 30}
+  maxRegionSize: {x: 45, y: 25}
   amount: 45
-  nodeWorldSize: {x: 5, y: 5}
+  nodeWorldSize: {x: 4, y: 4}
   totalWorldSize: {x: 60, y: 60}
   parallelIterations: 300
   timeout: 60
-  seed: 1165351532
+  seed: 1858379155
   isRandomSeed: 1
   orientation: 1
   amountStart: 1
   amountEnd: 2
-  useAsync: 1
+  useAsync: 0
   amountOfRegionConnections: 1
   DebugValues:
     Mode: 2147483647

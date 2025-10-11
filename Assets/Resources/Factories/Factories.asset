@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05ea8a39f83347f7921975f9a2682515, type: 3}
+  m_Name: Factories
+  m_EditorClassIdentifier: 
+  factories:
+  - {fileID: 11400000, guid: d5781008cf6b3154d91988a6a4d1a71d, type: 2}
+  - {fileID: 11400000, guid: bd76958fb2506744aab05a4613ec9585, type: 2}
+  - {fileID: 11400000, guid: 1e2ceb65d639d69489f31c11743d9518, type: 2}
+  - {fileID: 11400000, guid: 124d10f7c1207214ba6272e91888b49b, type: 2}
+  - {fileID: 11400000, guid: 978066bd94adef540a8b3a4b1b031f6d, type: 2}
