@@ -21,17 +21,8 @@ namespace Tools.WorldMapCore.Runtime
             SortNodes(graphRegistry, data);
             RegistryConnections(graphRegistry, regionConnectionsRegistry, data, starting, ending, regions);
             ConnectAllNodes(graphRegistry, starting, ending);
-
-            /*
-            RegisterStartNodes(graphRegistry, starting, data);
-            IndexNodesByLanes(graphRegistry, data, nodes, starting, ending);
-            RegisterEndNodes(graphRegistry, ending);
-            SortNodes(graphRegistry, data);
-            RegistryConnections(graphRegistry, regionConnectionsRegistry, data, starting, ending);
-            ConnectAllNodes(graphRegistry, data, starting, ending);
             ConnectMissingStartNodes(graphRegistry, nodes, starting);
             ConnectMissingEndNodes(graphRegistry, nodes, ending);
-            */
         }
 
         private static void RegisterRegionGraphs(
@@ -204,63 +195,6 @@ namespace Tools.WorldMapCore.Runtime
                         connections.Add(connection);
                     }
                 }
-
-                // for (var index = 0; index < graphRegistry.Count; index++)
-                // {
-                //     var connection = new Graph<WorldMapNode>();
-                //     var graph = graphRegistry[index];
-                //     
-                //     
-                //     
-                //     List<WorldMapNode> sort;
-                //     List<WorldMapNode> sortNext;
-                //     if (data.Parameters.Orientation == EOrientationGraph.BottomTop)
-                //     {
-                //         sort = FindBorderNodes(graph, new WorldMapNodeCompareLeftRight());
-                //         sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareLeftRight());
-                //     }
-                //     else
-                //     {
-                //         sort = FindBorderNodes(graph, new WorldMapNodeCompareBottomTop());
-                //         sortNext = FindBorderNodes(graphNext, new WorldMapNodeCompareBottomTop());
-                //     }
-                //
-                //     foreach (var node in starting)
-                //     {
-                //         sort.Remove(node);
-                //         sortNext.Remove(node);
-                //     }
-                //
-                //     foreach (var node in ending)
-                //     {
-                //         sort.Remove(node);
-                //         sortNext.Remove(node);
-                //     }
-                //
-                //     for (var connectionCount = 0;
-                //          connectionCount < data.Parameters.AmountOfRegionConnections;
-                //          connectionCount++)
-                //     {
-                //         if (sort.Count <= 0)
-                //         {
-                //             // The list is empty
-                //             continue;
-                //         }
-                //
-                //         var rightMost = sort.Last();
-                //         sort.Remove(rightMost);
-                //         var nearest = FindNearest(sortNext, rightMost, connection.Nodes);
-                //         if (nearest != null)
-                //         {
-                //             connection.Register(rightMost);
-                //             connection.Register(nearest);
-                //             var distance = Vector3.Distance(rightMost.Bound.center, nearest.Bound.center);
-                //             connection.Connect(rightMost, nearest, distance);
-                //         }
-                //     }
-                //
-                //     connections.Add(connection);
-                // }
 
                 // Lane connections are separated graphs
                 foreach (var connection in connections)
