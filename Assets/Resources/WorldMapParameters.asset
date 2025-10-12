@@ -20,15 +20,15 @@ MonoBehaviour:
   totalWorldSize: {x: 60, y: 60}
   parallelIterations: 300
   timeout: 60
-  seed: 2028703114
+  seed: 910576622
   isRandomSeed: 1
-  orientation: 2
+  orientation: 1
   amountStart: 1
   amountEnd: 1
   useAsync: 1
   amountOfRegionConnections: 1
   DebugValues:
-    Mode: 2147483647
+    Mode: 1
     DeletionReason: 0
   sortMethod: 1
   debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}
