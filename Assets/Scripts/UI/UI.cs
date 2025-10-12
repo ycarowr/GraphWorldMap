@@ -13,6 +13,11 @@ namespace Game.UI
         [SerializeField] private Button generate;
         [SerializeField] private WorldMapParameters parameters;
         [SerializeField] private TMP_InputField amountInput;
+        [SerializeField] private Slider amountRegions;
+        [SerializeField] private TMP_InputField minRegionWidth;
+        [SerializeField] private TMP_InputField maxRegionWidth;
+        [SerializeField] private TMP_InputField minRegionHeight;
+        [SerializeField] private TMP_InputField maxRegionHeight;
         [SerializeField] private TMP_InputField amountConnections;
         [SerializeField] private TMP_InputField amountStartInput;
         [SerializeField] private TMP_InputField amountEndInput;
@@ -33,6 +38,7 @@ namespace Game.UI
             gameWorldMap.OnPostCreate += OnPostCreate;
             generate.onClick.AddListener(Generate);
             amountInput.onValueChanged.AddListener(SetAmount);
+            amountRegions.onValueChanged.AddListener(SetAmountRegions);
             amountConnections.onValueChanged.AddListener(SetAmountConnections);
             amountStartInput.onValueChanged.AddListener(SetAmountStart);
             amountEndInput.onValueChanged.AddListener(SetAmountEnd);
@@ -43,16 +49,20 @@ namespace Game.UI
             nodeHeightInput.onValueChanged.AddListener(SetHeightNode);
             toggleIsRandom.onValueChanged.AddListener(SetIsRandom);
             toggleAnimation.onValueChanged.AddListener(SetAnimation);
+            minRegionWidth.onValueChanged.AddListener(SetMinRegionWidth);
+            maxRegionWidth.onValueChanged.AddListener(SetMaxRegionWidth);
+            minRegionHeight.onValueChanged.AddListener(SetMinRegionHeight);
+            maxRegionHeight.onValueChanged.AddListener(SetMaxRegionHeight);
 
             orientationDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.LeftRight)));
+                new TMP_Dropdown.OptionData(nameof(EOrientationGraph.LeftRight)));
             orientationDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EOrientationGraph.BottomTop)));
+                new TMP_Dropdown.OptionData(nameof(EOrientationGraph.BottomTop)));
             orientationDropdown.onValueChanged.AddListener(SetOrientation);
 
-            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Axis)));
+            sortMethodDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(ESortMethod.Axis)));
             sortMethodDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.ESortMethod.Distance)));
+                new TMP_Dropdown.OptionData(nameof(ESortMethod.Distance)));
             sortMethodDropdown.onValueChanged.AddListener(SetSortingMethod);
 
             debugModeDropdown.options.Add(
@@ -67,15 +77,40 @@ namespace Game.UI
                 new TMP_Dropdown.OptionData(nameof(WorldMapParameters.DebugData.EDrawMode.All)));
             debugModeDropdown.onValueChanged.AddListener(SetDebugMode);
 
-            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.None)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(EDeletionReason.None)));
             deletionDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.Overlap)));
+                new TMP_Dropdown.OptionData(nameof(EDeletionReason.Overlap)));
             deletionDropdown.options.Add(
-                new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.OutOfBounds)));
-            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(WorldMapParameters.EDeletionReason.All)));
+                new TMP_Dropdown.OptionData(nameof(EDeletionReason.OutOfWorldBounds)));
+            deletionDropdown.options.Add(new TMP_Dropdown.OptionData(nameof(EDeletionReason.All)));
             deletionDropdown.onValueChanged.AddListener(SetDeletion);
 
             RefreshUI();
+        }
+
+        private void SetMaxRegionHeight(string arg0)
+        {
+            parameters.SetMaxRegionHeight(float.Parse(arg0));
+        }
+
+        private void SetMinRegionHeight(string arg0)
+        {
+            parameters.SetMinRegionHeight(float.Parse(arg0));
+        }
+
+        private void SetMaxRegionWidth(string arg0)
+        {
+            parameters.SetMaxRegionWidth(float.Parse(arg0));
+        }
+
+        private void SetMinRegionWidth(string arg0)
+        {
+            parameters.SetMinRegionWidth(float.Parse(arg0));
+        }
+
+        private void SetAmountRegions(float arg0)
+        {
+            parameters.SetAmountRegions((int)arg0);
         }
 
         private void OnPostCreate()
@@ -92,11 +127,17 @@ namespace Game.UI
         private void RefreshUI()
         {
             Debug.Log("OnPostCreate - Refresh UI...");
+            amountRegions.SetValueWithoutNotify(parameters.AmountRegions);
             amountInput.text = parameters.Amount.ToString();
             amountConnections.text = parameters.AmountOfRegionConnections.ToString();
             amountStartInput.text = parameters.AmountStart.ToString();
             amountEndInput.text = parameters.AmountEnd.ToString();
             seedInput.text = parameters.Seed.ToString();
+            minRegionWidth.text = parameters.MinRegionSize.x.ToString();
+            maxRegionWidth.text = parameters.MaxRegionSize.x.ToString();
+            minRegionHeight.text = parameters.MinRegionSize.y.ToString();
+            maxRegionHeight.text = parameters.MaxRegionSize.y.ToString();
+            
             worldWidthInput.text = parameters.TotalWorldSize.x.ToString(CultureInfo.InvariantCulture);
             worldHeightInput.text = parameters.TotalWorldSize.y.ToString(CultureInfo.InvariantCulture);
             nodeWidthInput.text = parameters.NodeWorldSize.x.ToString(CultureInfo.InvariantCulture);
@@ -104,18 +145,18 @@ namespace Game.UI
             toggleIsRandom.isOn = parameters.IsRandomSeed;
             toggleAnimation.isOn = parameters.IsAnimation;
             orientationDropdown.value = orientationDropdown.options.IndexOf(orientationDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.EOrientationGraph>(x.text) == parameters.Orientation));
+                Enum.Parse<EOrientationGraph>(x.text) == parameters.Orientation));
             sortMethodDropdown.value = sortMethodDropdown.options.IndexOf(sortMethodDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.ESortMethod>(x.text) == parameters.SortingMethod));
+                Enum.Parse<ESortMethod>(x.text) == parameters.SortingMethod));
             debugModeDropdown.value = debugModeDropdown.options.IndexOf(debugModeDropdown.options.Find(x =>
                 Enum.Parse<WorldMapParameters.DebugData.EDrawMode>(x.text) == parameters.DebugValues.Mode));
             deletionDropdown.value = deletionDropdown.options.IndexOf(deletionDropdown.options.Find(x =>
-                Enum.Parse<WorldMapParameters.EDeletionReason>(x.text) == parameters.DebugValues.DeletionReason));
+                Enum.Parse<EDeletionReason>(x.text) == parameters.DebugValues.DeletionReason));
         }
 
         private void SetDeletion(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.EDeletionReason>(deletionDropdown.options[arg0].text);
+            var value = Enum.Parse<EDeletionReason>(deletionDropdown.options[arg0].text);
             parameters.DebugValues.DeletionReason = value;
         }
 
@@ -127,13 +168,13 @@ namespace Game.UI
 
         private void SetSortingMethod(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.ESortMethod>(sortMethodDropdown.options[arg0].text);
+            var value = Enum.Parse<ESortMethod>(sortMethodDropdown.options[arg0].text);
             parameters.SortingMethod = value;
         }
 
         private void SetOrientation(int arg0)
         {
-            var value = Enum.Parse<WorldMapParameters.EOrientationGraph>(orientationDropdown.options[arg0].text);
+            var value = Enum.Parse<EOrientationGraph>(orientationDropdown.options[arg0].text);
             parameters.Orientation = value;
         }
 

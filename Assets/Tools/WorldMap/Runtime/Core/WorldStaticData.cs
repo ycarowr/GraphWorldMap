@@ -1,0 +1,94 @@
+﻿using System.Collections.Generic;
+using Tools.WorldMapCore.Database;
+using UnityEngine;
+
+namespace Tools.WorldMapCore.Runtime
+{
+    public readonly struct WorldMapStaticData
+    {
+        public readonly WorldMapParameters Parameters;
+        public readonly Rect WorldBounds;
+        public readonly List<Vector3> Start;
+        public readonly List<Vector3> End;
+
+        public WorldMapStaticData(WorldMapParameters parameters, Rect worldBounds)
+        {
+            Parameters = parameters;
+            WorldBounds = worldBounds;
+            var amountStart = parameters.AmountStart;
+            var amountEnd = parameters.AmountEnd;
+            
+            // Generate Starting
+            Start = new List<Vector3>();
+            for (var index = 0; index < amountStart; index++)
+            {
+                var worldPosition = Vector2.zero;
+                if (parameters.Orientation == EOrientationGraph.LeftRight)
+                {
+                    var segment = WorldBounds.size.y / (amountStart + 1);
+                    worldPosition.y = segment * (index + 1);
+                    worldPosition.x = WorldBounds.min.x - parameters.NodeWorldSize.x / 2;
+                }
+
+                if (parameters.Orientation == EOrientationGraph.BottomTop)
+                {
+                    var segment = WorldBounds.size.x / (amountStart + 1);
+                    worldPosition.x = segment * (index + 1);
+                    worldPosition.y = WorldBounds.min.y - parameters.NodeWorldSize.y / 2;
+                }
+
+                Start.Add(worldPosition);
+            }
+
+            // Generate Ending
+            End = new List<Vector3>();
+            for (var index = 0; index < amountEnd; index++)
+            {
+                var worldPosition = Vector2.zero;
+                if (parameters.Orientation == EOrientationGraph.LeftRight)
+                {
+                    var segment = WorldBounds.size.y / (amountEnd + 1);
+                    worldPosition.x = WorldBounds.max.x + parameters.NodeWorldSize.x / 2;
+                    worldPosition.y = segment * (index + 1);
+                }
+
+                if (parameters.Orientation == EOrientationGraph.BottomTop)
+                {
+                    var segment = WorldBounds.size.x / (amountEnd + 1);
+                    worldPosition.x = segment * (index + 1);
+                    worldPosition.y = WorldBounds.max.y + parameters.NodeWorldSize.y / 2;
+                }
+
+                End.Add(worldPosition);
+            }
+        }
+
+        public bool ValidateTotalArea()
+        {
+            var totalArea = WorldBounds.size.x * WorldBounds.size.y;
+            var nodeArea = Parameters.NodeWorldSize.x * Parameters.NodeWorldSize.y;
+            var totalNodeArea = nodeArea * Parameters.Amount;
+            return totalNodeArea < totalArea;
+        }
+
+        public bool ValidateAmount()
+        {
+            if (Parameters.Amount > Parameters.AmountStart + Parameters.AmountEnd)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool ValidateStarting()
+        {
+            return Parameters.AmountStart > 0;
+        }
+
+        public bool ValidateEnding()
+        {
+            return Parameters.AmountEnd > 0;
+        }
+    }
+}

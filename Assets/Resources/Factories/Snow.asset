@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ade898cb2514a35bceb5b2bd70612bd, type: 3}
+  m_Name: Snow
+  m_EditorClassIdentifier: 
+  objects:
+  - {fileID: 5323168980937702024, guid: 09f50f9c637cf7d488e73039a1437e3f, type: 3}
+  - {fileID: 2605286040244786390, guid: 7f0bfb915a7e1aa40875c306c764d16f, type: 3}
+  - {fileID: 3806167601286280590, guid: f37198cf54fcd4847bed700460bab760, type: 3}
+  - {fileID: 6896937246383647379, guid: 9d42671007383d94197da00e7ba42a63, type: 3}
+  - {fileID: 4470951970801367115, guid: 3a2d256c6701fc44fbcc7750b59e695b, type: 3}

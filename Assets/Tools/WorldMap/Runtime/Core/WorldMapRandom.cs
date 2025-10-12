@@ -17,12 +17,18 @@ namespace Tools.WorldMapCore.Runtime
             RandomGenerator = new Random(Seed);
         }
 
-        public Vector2 GenerateRandomPosition(WorldMapStaticData data)
+        public Vector2 GenerateRandomWorldPosition(WorldMapStaticData data)
         {
             var bounds = data.WorldBounds;
             var randX = RandomGenerator.NextDouble() * bounds.size.x;
             var randY = RandomGenerator.NextDouble() * bounds.size.y;
             return new Vector2((float)randX, (float)randY);
+        }
+
+        public float GenerateRandomBetweenMinMax(float min, float max)
+        {
+            var delta = max - min;
+            return (float)RandomGenerator.NextDouble() * delta + min;
         }
     }
 }

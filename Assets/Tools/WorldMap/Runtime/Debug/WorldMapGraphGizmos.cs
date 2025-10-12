@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Tools.WorldMapCore.Runtime
 {
@@ -19,7 +20,10 @@ namespace Tools.WorldMapCore.Runtime
             new Color(151f / 255f, 170f / 255f, 27f / 255f),
         };
 
-        public static void DrawTextDistance(List<Graph<WorldMapNode>> graphs, WorldMapStaticData data,
+        public static void DrawTextDistance(
+            List<WorldMapRegion> regions,
+            List<Graph<WorldMapNode>> graphs,
+            WorldMapStaticData data,
             GameObject worldMapRoot)
         {
             if (data.Parameters.DebugValues.Mode != WorldMapParameters.DebugData.EDrawMode.All &&
@@ -27,7 +31,7 @@ namespace Tools.WorldMapCore.Runtime
             {
                 return;
             }
-            
+
             DrawBounders(data, worldMapRoot);
 
             for (var index = 0; index < graphs.Count; index++)
@@ -39,13 +43,19 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        var midpointX = (nodeB.Key.Center.x + nodeA.Center.x) / 2;
-                        var midpointY = (nodeB.Key.Center.y + nodeA.Center.y) / 2;
+                        var midpointX = (nodeB.Key.Bound.center.x + nodeA.Bound.center.x) / 2;
+                        var midpointY = (nodeB.Key.Bound.center.y + nodeA.Bound.center.y) / 2;
                         var text = ((int)nodeB.Value).ToString();
                         var position = new Vector3(midpointX, midpointY, WorldMapGizmos.ZPOSITION_DISTANCE);
                         CreateText(position, data, worldMapRoot, text);
                     }
                 }
+            }
+
+            for (var index = 0; index < regions.Count; index++)
+            {
+                var text = index.ToString();
+                CreateText(regions[index].Bound.min, data, worldMapRoot, text);
             }
         }
 
@@ -61,7 +71,7 @@ namespace Tools.WorldMapCore.Runtime
             CreateText(topRight, data, worldMapRoot, topRight.ToString());
         }
 
-        private static void CreateText(Vector3 position, WorldMapStaticData data, GameObject worldMapRoot, string text)
+        public static void CreateText(Vector3 position, WorldMapStaticData data, GameObject worldMapRoot, string text)
         {
             var tmpText = Object.Instantiate(data.Parameters.DebugDistanceText, worldMapRoot.transform);
             tmpText.transform.position = position;
@@ -106,8 +116,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
-                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeA.Bound.center.x, nodeA.Bound.center.y) + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeB.Key.Bound.center.x, nodeB.Key.Bound.center.y)+ WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 
@@ -124,8 +134,8 @@ namespace Tools.WorldMapCore.Runtime
                     var targets = connection.Value;
                     foreach (var nodeB in targets)
                     {
-                        lines.Add(nodeA.Center + WorldMapGizmos.ZPOSITION_LINES);
-                        lines.Add(nodeB.Key.Center + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeA.Bound.center.x, nodeA.Bound.center.y) + WorldMapGizmos.ZPOSITION_LINES);
+                        lines.Add(new Vector3(nodeB.Key.Bound.center.x, nodeB.Key.Bound.center.y)+ WorldMapGizmos.ZPOSITION_LINES);
                     }
                 }
 

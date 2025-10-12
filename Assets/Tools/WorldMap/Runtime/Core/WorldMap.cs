@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Tools.Graphs;
 using Tools.WorldMapCore.Database;
@@ -5,15 +6,16 @@ using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
-    public partial class WorldMap
+    public class WorldMap
     {
         public readonly List<Graph<WorldMapNode>> ConnectionsRegistry;
         public readonly WorldMapStaticData Data;
-        private readonly Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>> Deletions;
+        private readonly Dictionary<EDeletionReason, List<WorldMapNode>> Deletions;
         public readonly List<WorldMapNode> End;
         public readonly List<Graph<WorldMapNode>> GraphsRegistry;
         public readonly List<WorldMapNode> Nodes;
         public readonly WorldMapRandom Random;
+        public readonly List<WorldMapRegion> Regions;
         public readonly List<WorldMapNode> Start;
 
         public WorldMap(WorldMapStaticData data)
@@ -24,12 +26,14 @@ namespace Tools.WorldMapCore.Runtime
             Nodes = new List<WorldMapNode>();
             Start = new List<WorldMapNode>();
             End = new List<WorldMapNode>();
+            Regions = new List<WorldMapRegion>();
             GraphsRegistry = new List<Graph<WorldMapNode>>();
             ConnectionsRegistry = new List<Graph<WorldMapNode>>();
-            Deletions = new Dictionary<WorldMapParameters.EDeletionReason, List<WorldMapNode>>
+            Deletions = new Dictionary<EDeletionReason, List<WorldMapNode>>
             {
-                { WorldMapParameters.EDeletionReason.OutOfBounds, new List<WorldMapNode>() },
-                { WorldMapParameters.EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { EDeletionReason.Overlap, new List<WorldMapNode>() },
+                { EDeletionReason.OutOfWorldBounds, new List<WorldMapNode>() },
+                { EDeletionReason.OutOfRegionBounds, new List<WorldMapNode>() },
             };
 
             // Starting
@@ -61,19 +65,22 @@ namespace Tools.WorldMapCore.Runtime
         {
             var amountToCreate = Data.Parameters.Amount;
             var count = 0;
-            var maxCount = Mathf.Max(Data.Parameters.Iterations, amountToCreate);
+            const int maxCount = 1<<20;
             while (Nodes.Count != amountToCreate && count < maxCount)
             {
-                count++;
-                var worldPosition = Random.GenerateRandomPosition(Data);
+                var worldPosition = Random.GenerateRandomWorldPosition(Data);
                 var generated = GenerateNodeAt(worldPosition);
                 if (generated != null)
                 {
                     Nodes.Add(generated);
                 }
+                count++;
             }
+        }
 
-            WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End);
+        public void GenerateGraph()
+        {
+            WorldMapHelper.CreateGraph(GraphsRegistry, ConnectionsRegistry, Data, Nodes, Start, End, Regions);
         }
 
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
@@ -87,18 +94,25 @@ namespace Tools.WorldMapCore.Runtime
                 return newNode;
             }
 
-            if (WorldMapHelper.CheckOverlap(newNode, Nodes))
+            if (WorldMapHelper.IsOverlap(newNode, Nodes))
             {
-                if (WorldMapHelper.CheckBounds(newNode, Data))
+                if (WorldMapHelper.CheckWorldBounds(newNode.Bound, Data))
                 {
-                    return newNode;
-                }
+                    if (WorldMapHelper.CheckRegionBounds(newNode, Regions, Data))
+                    {
+                        return newNode;
+                    }
 
-                Deletions[WorldMapParameters.EDeletionReason.OutOfBounds].Add(newNode);
+                    Deletions[EDeletionReason.OutOfRegionBounds].Add(newNode);
+                }
+                else
+                {
+                    Deletions[EDeletionReason.OutOfWorldBounds].Add(newNode);
+                }
             }
             else
             {
-                Deletions[WorldMapParameters.EDeletionReason.Overlap].Add(newNode);
+                Deletions[EDeletionReason.Overlap].Add(newNode);
             }
 
             return null;
@@ -106,8 +120,44 @@ namespace Tools.WorldMapCore.Runtime
 
         public void OnDrawGizmos()
         {
-            WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Deletions);
+            WorldMapGizmos.DrawGizmos(Data, Nodes, Start, End, Regions, Deletions);
             WorldMapGraphGizmos.DrawGizmos(GraphsRegistry, ConnectionsRegistry, Data);
+        }
+
+        public void GenerateRegions()
+        {
+            var amountToCreate = Data.Parameters.AmountRegions;
+            var count = 0;
+            const int maxCount = 1<<20;
+            while (Regions.Count != amountToCreate && count < maxCount)
+            {
+                var generated = GenerateRegion();
+                if (generated != null)
+                {
+                    Regions.Add(generated);
+                }
+                count++;
+            }
+        }
+
+        private WorldMapRegion GenerateRegion()
+        {
+            var worldPosition = Random.GenerateRandomWorldPosition(Data);
+            var sizeX = Random.GenerateRandomBetweenMinMax(Data.Parameters.MinRegionSize.x,
+                Data.Parameters.MaxRegionSize.x);
+            var sizeY = Random.GenerateRandomBetweenMinMax(Data.Parameters.MinRegionSize.y,
+                Data.Parameters.MaxRegionSize.y);
+            var region = new WorldMapRegion(worldPosition, new Vector2(sizeX, sizeY));
+
+            if (WorldMapHelper.IsOverlap(region, Regions))
+            {
+                if (WorldMapHelper.CheckWorldBounds(region.Bound, Data))
+                {
+                    return region;
+                }
+            }
+
+            return null;
         }
     }
 }

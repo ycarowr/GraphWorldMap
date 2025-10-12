@@ -12,6 +12,7 @@ namespace Tools.WorldMapCore.Runtime
     }
 
     // Base generalized class for the map controller
+    [ExecuteAlways]
     public abstract class BaseWorldMapController<TNode, TParameter>
         : BaseWorldMapController
         where TNode : BaseWorldMapNode
@@ -49,12 +50,12 @@ namespace Tools.WorldMapCore.Runtime
         }
 
         /// <summary>
-        ///  Dispatched once the World is Created.
+        ///     Dispatched once the World is Created.
         /// </summary>
         public event Action OnCreate = () => { };
-        
+
         /// <summary>
-        ///  Dispatched right after the World is Created.
+        ///     Dispatched right after the World is Created.
         /// </summary>
         public event Action OnPostCreate = () => { };
 
@@ -65,7 +66,7 @@ namespace Tools.WorldMapCore.Runtime
             SetupRoot();
 
             var data = WorldMapParameters.CreateData();
-            GenerateWorldMapTask = new GenerateWorldMapTask(data, RefreshAsync);
+            GenerateWorldMapTask = new GenerateWorldMapTask(data, OnComplete);
             GenerateWorldMapTask.Dispatch();
         }
 
@@ -94,10 +95,12 @@ namespace Tools.WorldMapCore.Runtime
                 {
                     worldMapNode.IsStarting = true;
                 }
+
                 if (WorldMap.End.Contains(node))
                 {
                     worldMapNode.IsEnding = true;
                 }
+
                 worldMapNode.SetNode(node);
             }
 
@@ -107,8 +110,9 @@ namespace Tools.WorldMapCore.Runtime
                 WorldMap?.OnDrawGizmos();
             }
 
-            WorldMapGraphGizmos.DrawTextDistance(WorldMap.GraphsRegistry, WorldMap.Data, WorldMapRoot);
-            Debug.Log("Refresh Map");
+            WorldMapGraphGizmos.DrawTextDistance(WorldMap.Regions, WorldMap.GraphsRegistry, WorldMap.Data,
+                WorldMapRoot);
+            Debug.Log("OnCreate - Refresh Map");
             OnPostCreate?.Invoke();
         }
 
@@ -130,11 +134,12 @@ namespace Tools.WorldMapCore.Runtime
             DestroyImmediate(WorldMapRoot);
         }
 
-        private void RefreshAsync()
+        private void OnComplete()
         {
+            // Fetch the data.
             WorldMap = GenerateWorldMapTask.GetWorldMap();
+            Debug.Log($"Refresh: {WorldMap.Random.Seed}");
             OnCreate.Invoke();
-            Debug.Log($"Refresh Async: {WorldMap.Random.Seed}");
         }
     }
 }

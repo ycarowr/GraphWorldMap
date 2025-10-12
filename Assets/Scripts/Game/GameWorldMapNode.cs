@@ -4,5 +4,6 @@ namespace Game
 {
     public class GameWorldMapNode : BaseWorldMapNode
     {
+        
     }
 }

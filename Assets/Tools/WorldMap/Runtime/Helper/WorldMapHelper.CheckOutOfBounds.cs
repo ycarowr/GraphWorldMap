@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Tools.WorldMapCore.Runtime
 {
     public static partial class WorldMapHelper
     {
-        public static bool CheckBounds(WorldMapNode node, WorldMapStaticData data)
+        public static bool CheckWorldBounds(Rect rect, WorldMapStaticData data)
         {
             var worldBounds = data.WorldBounds;
-            var nodeBounds = node.Bounds;
-            return CheckRectContains(worldBounds, nodeBounds);
+            return CheckRectContains(worldBounds, rect);
         }
 
         private static bool CheckRectContains(Rect rectA, Rect rectB)
@@ -22,6 +22,40 @@ namespace Tools.WorldMapCore.Runtime
                    rectA.Contains(point1) &&
                    rectA.Contains(point2) &&
                    rectA.Contains(point3);
+        }
+
+        public static bool CheckRegionBounds(WorldMapNode newNode, List<WorldMapRegion> regions,
+            WorldMapStaticData data)
+        {
+            var nodeBounds = newNode.Bound;
+
+            var isOutOfBounds = false;
+            foreach (var region in regions)
+            {
+                isOutOfBounds |= CheckRectContains(region.Bounds, nodeBounds);
+            }
+
+            return isOutOfBounds;
+        }
+
+        public static bool IsOnLeft(this Rect rectA, Rect rectB)
+        {
+            return rectA.xMax <= rectB.xMin;
+        }
+
+        public static bool IsOnRight(this Rect rectA, Rect rectB)
+        {
+            return rectA.xMin >= rectB.xMax;
+        }
+
+        public static bool IsOnTop(this Rect rectA, Rect rectB)
+        {
+            return rectA.yMin >= rectB.yMax;
+        }
+
+        public static bool IsOnBottom(this Rect rectA, Rect rectB)
+        {
+            return rectA.yMax <= rectB.yMin;
         }
     }
 }

@@ -12,36 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a17967416886246affc9e770cc0dfd, type: 3}
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
-  RegionParameters:
-  - Bounds:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 30
-      height: 60
-  - Bounds:
-      serializedVersion: 2
-      x: 30
-      y: 0
-      width: 30
-      height: 60
-  amount: 10
-  nodeWorldSize: {x: 6, y: 6}
+  amountRegions: 4
+  minRegionSize: {x: 7, y: 15}
+  maxRegionSize: {x: 50, y: 25}
+  amount: 40
+  nodeWorldSize: {x: 4, y: 4}
   totalWorldSize: {x: 60, y: 60}
-  iterations: 65536
   parallelIterations: 300
   timeout: 60
-  seed: 729022684
+  seed: 2028703114
   isRandomSeed: 1
   orientation: 2
-  amountStart: 2
+  amountStart: 1
   amountEnd: 1
-  useAsync: 0
+  useAsync: 1
   amountOfRegionConnections: 1
   DebugValues:
     Mode: 2147483647
     DeletionReason: 0
   sortMethod: 1
   debugDistanceText: {fileID: 5325749279638350786, guid: 8174ec64a0ae0bc4ba17f5dc16000819, type: 3}
-  isAutoRegion: 1
-  isAnimation: 1
+  isAnimation: 0

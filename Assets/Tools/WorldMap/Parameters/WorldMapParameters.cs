@@ -1,5 +1,4 @@
 ﻿using System;
-using Game;
 using TMPro;
 using Tools.Attributes;
 using Tools.WorldMapCore.Runtime;
@@ -10,32 +9,12 @@ namespace Tools.WorldMapCore.Database
     [CreateAssetMenu(menuName = "Database/WorldMap/Parameters")]
     public class WorldMapParameters : ScriptableObject
     {
-        public enum EDeletionReason
-        {
-            None = 0,
-            Overlap = 1,
-            OutOfBounds = 2,
+        [SerializeField] [Tooltip("Total amount of regions that will be created.")]
+        private int amountRegions = 6;
 
-            All = int.MaxValue,
-        }
+        [SerializeField] private Vector2 minRegionSize = Vector2.one;
 
-        // Orientation is used to sort and display the graph.
-        public enum EOrientationGraph
-        {
-            None = 0,
-            LeftRight = 1, // the direction is Left to Right
-            BottomTop = 2, // the direction is Bottom to Top
-        }
-
-        // Sorting method is used to order the nodes in the graph.
-        public enum ESortMethod
-        {
-            None = 0,
-            Axis = 1, // the order of the nodes is created based on the X or Y position.
-            Distance = 2, // the order of the nodes is created based on the distance to the end point.
-        }
-
-        [SerializeField] private Region[] RegionParameters;
+        [SerializeField] private Vector2 maxRegionSize = Vector2.one;
 
         [SerializeField] [Tooltip("Total amount of nodes that will be created.")]
         private int amount = 32;
@@ -45,9 +24,6 @@ namespace Tools.WorldMapCore.Database
 
         [SerializeField] [Tooltip("Total world map size in world units.")]
         private Vector2 totalWorldSize = new(90, 60);
-
-        [SerializeField] [Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
-        private int iterations = 65535;
 
         [SerializeField] [Tooltip("Maximum amount of attempts to generate a map with the provided parameters.")]
         private int parallelIterations = 100;
@@ -81,8 +57,6 @@ namespace Tools.WorldMapCore.Database
         private ESortMethod sortMethod = ESortMethod.Distance;
 
         [SerializeField] private TMP_Text debugDistanceText;
-
-        [SerializeField] private bool isAutoRegion = true;
         
         [SerializeField] private bool isAnimation = true;
 
@@ -91,15 +65,7 @@ namespace Tools.WorldMapCore.Database
             get => isAnimation;
             set => isAnimation = value;
         }
-
-        public bool IsAutoRegion => isAutoRegion;
-
-        public Region[] Regions
-        {
-            get => RegionParameters;
-            set => RegionParameters = value;
-        }
-
+        
         public int Amount
         {
             get => amount;
@@ -118,7 +84,15 @@ namespace Tools.WorldMapCore.Database
             set => totalWorldSize = value;
         }
 
-        public int Iterations => iterations;
+        public Vector2 MinRegionSize => minRegionSize;
+
+        public Vector2 MaxRegionSize => maxRegionSize;
+
+        public int AmountRegions
+        {
+            get => amountRegions;
+            set => amountRegions = value;
+        }
 
         public int ParallelIterations => parallelIterations;
 
@@ -177,7 +151,7 @@ namespace Tools.WorldMapCore.Database
             get => sortMethod;
             set => sortMethod = value;
         }
-        
+
         public float FontSize
         {
             get
@@ -207,7 +181,7 @@ namespace Tools.WorldMapCore.Database
         public WorldMapStaticData CreateData()
         {
             var center = totalWorldSize / 2;
-            var bounds = new Rect(center, totalWorldSize); // + WorldMapStaticData.SMALL_VECTOR);
+            var bounds = new Rect(center, totalWorldSize);
             bounds.center = center;
             return new WorldMapStaticData(this, bounds);
         }
@@ -229,6 +203,11 @@ namespace Tools.WorldMapCore.Database
         public class Region
         {
             public Rect Bounds;
+
+            public Region(Rect bounds)
+            {
+                Bounds = bounds;
+            }
         }
 
         [Serializable]
@@ -245,6 +224,31 @@ namespace Tools.WorldMapCore.Database
 
             public EDrawMode Mode = EDrawMode.All;
             public EDeletionReason DeletionReason = EDeletionReason.All;
+        }
+
+        public void SetAmountRegions(int regionsAmount)
+        {
+            amountRegions = regionsAmount;
+        }
+
+        public void SetMaxRegionHeight(float parse)
+        {
+            maxRegionSize.y = parse;
+        }
+
+        public void SetMinRegionHeight(float parse)
+        {
+            minRegionSize.y = parse;
+        }
+
+        public void SetMaxRegionWidth(float parse)
+        {
+            maxRegionSize.x = parse;
+        }
+
+        public void SetMinRegionWidth(float parse)
+        {
+            minRegionSize.x = parse;
         }
     }
 }

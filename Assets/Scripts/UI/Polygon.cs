@@ -1,48 +1,47 @@
+using System;
+using System.Linq;
+using Tools.WorldMapCore.Runtime;
+using Unity.VisualScripting;
 using UnityEngine;
-
+/// <summary>
+/// /// (x:144.616837, y:110.736389, width:39.2478371, height:35.2059364)
+/// (x:43.6880569, y:138.950775, width:49.7264061, height:19.8072186)
+/// (x:146.974487, y:108.479897, width:22.2342281, height:45.3999443)
+/// </summary>
 [ExecuteAlways]
 public class Polygon : MonoBehaviour
 {
-    public Vector3[] vertices;
-    public LineRenderer lineRenderer;
+    public Rect one;
+    public Rect two;
+    public Rect three;
+    public Rect four;
+    public Rect five;
 
-    public void Awake()
+    public Rect[] adjacents;
+
+    public void OnDrawGizmos()
     {
-        lineRenderer.SetPositions(vertices);
-        lineRenderer.loop = true;
-        lineRenderer.positionCount = vertices.Length;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(one.center, one.size);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(two.center, two.size);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(three.center, three.size);
+        four = WorldMapHelper.FindRectIntersection(one, two);
+        five = WorldMapHelper.FindRectIntersection(one, three);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(four.center, four.size);
+        Gizmos.DrawWireCube(five.center, five.size);
+
+        adjacents = WorldMapHelper.FindAdjacentRects(2, one, new[]
+        {
+            two, three,
+        });
     }
 
-    public void OnEnable()
+    
+    public void Update()
     {
-        lineRenderer.SetPositions(vertices);
-        lineRenderer.loop = true;
-        lineRenderer.positionCount = vertices.Length;
-    }
-
-    //public void OnDrawGizmos()
-    //{
-    //Gizmos.color = Color.cyan;
-    //Gizmos.DrawLineStrip(vertices, true);
-    //Gizmos.DrawWireSphere(CalcCentroid(), 1);
-    //}
-
-
-    public Vector3 CalcCentroid()
-    {
-        if (vertices == null || vertices.Length < 3)
-        {
-            return Vector3.zero;
-        }
-
-        var centroid = Vector3.zero;
-        foreach (var v in vertices)
-        {
-            centroid += v;
-        }
-
-        centroid /= vertices.Length;
-
-        return centroid;
+        //Debug.Log(one.IsOnTop(two));
     }
 }
