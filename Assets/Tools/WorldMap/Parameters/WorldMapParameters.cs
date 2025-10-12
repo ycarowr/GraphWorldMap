@@ -225,5 +225,30 @@ namespace Tools.WorldMapCore.Database
             public EDrawMode Mode = EDrawMode.All;
             public EDeletionReason DeletionReason = EDeletionReason.All;
         }
+
+        public void SetAmountRegions(int regionsAmount)
+        {
+            amountRegions = regionsAmount;
+        }
+
+        public void SetMaxRegionHeight(float parse)
+        {
+            maxRegionSize.y = parse;
+        }
+
+        public void SetMinRegionHeight(float parse)
+        {
+            minRegionSize.y = parse;
+        }
+
+        public void SetMaxRegionWidth(float parse)
+        {
+            maxRegionSize.x = parse;
+        }
+
+        public void SetMinRegionWidth(float parse)
+        {
+            minRegionSize.x = parse;
+        }
     }
 }

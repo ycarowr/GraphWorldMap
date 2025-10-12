@@ -41,6 +41,14 @@ namespace Tools.WorldMapCore.Runtime
                     };
                     Lines.DrawLineStrip(points, Color.red);
                 }
+                
+                Lines.DrawLineStrip( new Vector3[]
+                {
+                    data.WorldBounds.min,
+                    data.WorldBounds.min + new Vector2(data.WorldBounds.xMax, 0),
+                    data.WorldBounds.max,
+                    data.WorldBounds.min + new Vector2(0, data.WorldBounds.yMax),
+                }, new Color(200f / 255f, 90f / 255f, 96f / 255f));
             }
 
             {

@@ -13,6 +13,11 @@ namespace Game.UI
         [SerializeField] private Button generate;
         [SerializeField] private WorldMapParameters parameters;
         [SerializeField] private TMP_InputField amountInput;
+        [SerializeField] private Slider amountRegions;
+        [SerializeField] private TMP_InputField minRegionWidth;
+        [SerializeField] private TMP_InputField maxRegionWidth;
+        [SerializeField] private TMP_InputField minRegionHeight;
+        [SerializeField] private TMP_InputField maxRegionHeight;
         [SerializeField] private TMP_InputField amountConnections;
         [SerializeField] private TMP_InputField amountStartInput;
         [SerializeField] private TMP_InputField amountEndInput;
@@ -33,6 +38,7 @@ namespace Game.UI
             gameWorldMap.OnPostCreate += OnPostCreate;
             generate.onClick.AddListener(Generate);
             amountInput.onValueChanged.AddListener(SetAmount);
+            amountRegions.onValueChanged.AddListener(SetAmountRegions);
             amountConnections.onValueChanged.AddListener(SetAmountConnections);
             amountStartInput.onValueChanged.AddListener(SetAmountStart);
             amountEndInput.onValueChanged.AddListener(SetAmountEnd);
@@ -43,6 +49,10 @@ namespace Game.UI
             nodeHeightInput.onValueChanged.AddListener(SetHeightNode);
             toggleIsRandom.onValueChanged.AddListener(SetIsRandom);
             toggleAnimation.onValueChanged.AddListener(SetAnimation);
+            minRegionWidth.onValueChanged.AddListener(SetMinRegionWidth);
+            maxRegionWidth.onValueChanged.AddListener(SetMaxRegionWidth);
+            minRegionHeight.onValueChanged.AddListener(SetMinRegionHeight);
+            maxRegionHeight.onValueChanged.AddListener(SetMaxRegionHeight);
 
             orientationDropdown.options.Add(
                 new TMP_Dropdown.OptionData(nameof(EOrientationGraph.LeftRight)));
@@ -78,6 +88,31 @@ namespace Game.UI
             RefreshUI();
         }
 
+        private void SetMaxRegionHeight(string arg0)
+        {
+            parameters.SetMaxRegionHeight(float.Parse(arg0));
+        }
+
+        private void SetMinRegionHeight(string arg0)
+        {
+            parameters.SetMinRegionHeight(float.Parse(arg0));
+        }
+
+        private void SetMaxRegionWidth(string arg0)
+        {
+            parameters.SetMaxRegionWidth(float.Parse(arg0));
+        }
+
+        private void SetMinRegionWidth(string arg0)
+        {
+            parameters.SetMinRegionWidth(float.Parse(arg0));
+        }
+
+        private void SetAmountRegions(float arg0)
+        {
+            parameters.SetAmountRegions((int)arg0);
+        }
+
         private void OnPostCreate()
         {
             seedInput.text = gameWorldMap.WorldMap.Random.Seed.ToString();
@@ -92,11 +127,17 @@ namespace Game.UI
         private void RefreshUI()
         {
             Debug.Log("OnPostCreate - Refresh UI...");
+            amountRegions.SetValueWithoutNotify(parameters.AmountRegions);
             amountInput.text = parameters.Amount.ToString();
             amountConnections.text = parameters.AmountOfRegionConnections.ToString();
             amountStartInput.text = parameters.AmountStart.ToString();
             amountEndInput.text = parameters.AmountEnd.ToString();
             seedInput.text = parameters.Seed.ToString();
+            minRegionWidth.text = parameters.MinRegionSize.x.ToString();
+            maxRegionWidth.text = parameters.MaxRegionSize.x.ToString();
+            minRegionHeight.text = parameters.MinRegionSize.y.ToString();
+            maxRegionHeight.text = parameters.MaxRegionSize.y.ToString();
+            
             worldWidthInput.text = parameters.TotalWorldSize.x.ToString(CultureInfo.InvariantCulture);
             worldHeightInput.text = parameters.TotalWorldSize.y.ToString(CultureInfo.InvariantCulture);
             nodeWidthInput.text = parameters.NodeWorldSize.x.ToString(CultureInfo.InvariantCulture);
