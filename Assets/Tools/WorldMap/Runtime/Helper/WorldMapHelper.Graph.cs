@@ -363,57 +363,6 @@ namespace Tools.WorldMapCore.Runtime
             }
         }
 
-        private static int FindNearestRegionIndex(WorldMapNode node, WorldMapStaticData data,
-            List<WorldMapRegion> regions)
-        {
-            var nearest = float.MaxValue;
-            var nearestEdge = float.MaxValue;
-            var nearestIndex = -1;
-            for (var index = 0; index < regions.Count; index++)
-            {
-                var region = regions[index];
-                var distance = Vector3.Distance(node.Bound.center, region.Bound.center);
-                var distanceEdge =
-                    data.Parameters.Orientation == EOrientationGraph.BottomTop
-                        ? Mathf.Abs(region.Bound.yMin - node.Bound.center.y)
-                        : Mathf.Abs(region.Bound.xMin - node.Bound.center.x);
-                if (distance < nearest && distanceEdge < nearestEdge)
-                {
-                    nearest = distance;
-                    nearestEdge = distanceEdge;
-                    nearestIndex = index;
-                }
-            }
-
-            return nearestIndex;
-        }
-
-        private static int FindNearestRegionIndex(WorldMapStaticData data,
-            List<WorldMapNode> nodes,
-            WorldMapNode start,
-            List<WorldMapNode> exceptions,
-            List<WorldMapRegion> regions)
-        {
-            WorldMapNode nearestNode = null;
-            var nearestNodeDistance = float.MaxValue;
-            foreach (var node in nodes)
-            {
-                if (exceptions.Contains(node))
-                {
-                    continue;
-                }
-
-                var distance = Vector3.Distance(start.Bound.center, node.Bound.center);
-                if (distance < nearestNodeDistance)
-                {
-                    nearestNode = node;
-                    nearestNodeDistance = distance;
-                }
-            }
-
-            return FindNodeRegionIndex(nearestNode, data, regions);
-        }
-
         private static WorldMapNode FindNearest(List<WorldMapNode> nodes, WorldMapNode target,
             List<WorldMapNode> exceptions = null)
         {
@@ -442,15 +391,6 @@ namespace Tools.WorldMapCore.Runtime
 
             // Can't nearest
             return null;
-        }
-
-        private static List<WorldMapNode> FindBorderNodes(Graph<WorldMapNode> graphNodes,
-            IComparer<WorldMapNode> comparer)
-        {
-            var borderNodes = new List<WorldMapNode>();
-            borderNodes.AddRange(graphNodes.Nodes);
-            borderNodes.Sort(comparer);
-            return borderNodes;
         }
 
         private static int FindNearestIndex(Graph<WorldMapNode> graphNodes, List<WorldMapNode> nodes)
