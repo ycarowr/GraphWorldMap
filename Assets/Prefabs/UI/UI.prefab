@@ -3819,7 +3819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7028285497928321972, guid: ab01b0cbffd3f2f48b2ae995f1bf7001, type: 3}
       propertyPath: m_MaxValue
-      value: 5
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7028285497928321972, guid: ab01b0cbffd3f2f48b2ae995f1bf7001, type: 3}
       propertyPath: m_MinValue
