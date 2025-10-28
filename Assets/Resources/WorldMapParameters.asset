@@ -15,13 +15,13 @@ MonoBehaviour:
   amountRegions: 9
   minRegionSize: {x: 10, y: 20}
   maxRegionSize: {x: 50, y: 30}
-  minDistance: 2.2
-  amount: 60
+  minDistance: 2.5
+  amount: 55
   nodeWorldSize: {x: 4, y: 4}
-  totalWorldSize: {x: 120, y: 60}
+  totalWorldSize: {x: 140, y: 60}
   parallelIterations: 300
   timeout: 60
-  seed: 2074898332
+  seed: 431027263
   isRandomSeed: 1
   orientation: 1
   amountStart: 1
