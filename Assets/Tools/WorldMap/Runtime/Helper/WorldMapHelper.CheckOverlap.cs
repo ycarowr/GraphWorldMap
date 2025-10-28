@@ -27,13 +27,13 @@ namespace Tools.WorldMapCore.Runtime
             return isHit;
         }
 
-        public static bool IsOverlap<T>(T instance, List<T> list) where T : IBound
+        public static bool IsOverlap<T>(T instance, List<T> list, float offset = 0) where T : IBound
         {
             var count = list.Count;
             for (var index = 0; index < count; index++)
             {
                 var current = list[index];
-                if (IsRectOverlap(instance.Bound, current.Bound))
+                if (IsRectOverlap(instance.Bound, current.Bound, offset))
                 {
                     return false;
                 }
@@ -46,12 +46,12 @@ namespace Tools.WorldMapCore.Runtime
         ///     Checks whether two rectangles overlap.
         ///     Lots of things can be optimized.
         /// </summary>
-        public static bool IsRectOverlap(Rect rectA, Rect rectB)
+        public static bool IsRectOverlap(Rect rectA, Rect rectB,  float offset = 0)
         {
-            return rectA.x < rectB.x + rectB.size.x &&
-                   rectA.y < rectB.y + rectB.size.y &&
-                   rectB.x < rectA.x + rectA.size.x &&
-                   rectB.y < rectA.y + rectA.size.y;
+            return rectA.x < rectB.x + rectB.size.x+ offset &&
+                   rectA.y < rectB.y + rectB.size.y+ offset &&
+                   rectB.x < rectA.x + rectA.size.x+ offset &&
+                   rectB.y < rectA.y + rectA.size.y+ offset;
         }
 
         private static bool IsOverlapX(Rect lhs, Rect rhs)

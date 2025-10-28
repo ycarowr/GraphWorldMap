@@ -13,19 +13,20 @@ MonoBehaviour:
   m_Name: WorldMapParameters
   m_EditorClassIdentifier: 
   amountRegions: 9
-  minRegionSize: {x: 7, y: 15}
-  maxRegionSize: {x: 50, y: 25}
+  minRegionSize: {x: 10, y: 20}
+  maxRegionSize: {x: 50, y: 30}
+  minDistance: 2.2
   amount: 60
   nodeWorldSize: {x: 4, y: 4}
-  totalWorldSize: {x: 90, y: 60}
+  totalWorldSize: {x: 120, y: 60}
   parallelIterations: 300
   timeout: 60
-  seed: 415332106
+  seed: 2074898332
   isRandomSeed: 1
   orientation: 1
   amountStart: 1
   amountEnd: 1
-  useAsync: 0
+  useAsync: 1
   amountOfRegionConnections: 1
   DebugValues:
     Mode: 1

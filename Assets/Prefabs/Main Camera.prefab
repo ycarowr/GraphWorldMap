@@ -153,8 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDontDestroyOnLoad: 0
   isSilent: 1
-  zoomSpeed: 10
-  zoomScrollSpeed: 500
+  zoomSpeed: 30
+  zoomScrollSpeed: 1700
   offset: {x: 0, y: 0, z: -5}
   gameWorldMap: {fileID: 0}
 --- !u!114 &5092007861405093355
@@ -169,5 +169,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23ba3043fc78f94abc1c12ff2773d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragSpeed: 75
+  dragSpeed: 225
   dragThreshold: 0.1

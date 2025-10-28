@@ -86,6 +86,7 @@ namespace Tools.WorldMapCore.Runtime
         private WorldMapNode GenerateNodeAt(Vector2 worldPosition, bool skipChecks = false)
         {
             var worldSize = Data.Parameters.NodeWorldSize;
+            var offset = Data.Parameters.MinDistance;
             var nodeID = WorldMapHelper.GenerateID();
             var newNode = new WorldMapNode(nodeID, worldPosition, worldSize);
 
@@ -94,7 +95,7 @@ namespace Tools.WorldMapCore.Runtime
                 return newNode;
             }
 
-            if (WorldMapHelper.IsOverlap(newNode, Nodes))
+            if (WorldMapHelper.IsOverlap(newNode, Nodes, offset))
             {
                 if (WorldMapHelper.CheckWorldBounds(newNode.Bound, Data))
                 {
